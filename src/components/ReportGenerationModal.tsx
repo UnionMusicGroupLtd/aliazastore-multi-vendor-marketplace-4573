@@ -187,25 +187,26 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="w-full max-w-2xl mx-4 my-8 max-h-[calc(100vh-4rem)] overflow-y-auto sm:max-h-[80vh]">
-        <DialogHeader>
+      <DialogContent className="w-full h-[100dvh] sm:w-auto sm:h-auto sm:max-w-2xl sm:max-h-[calc(100vh-4rem)] sm:overflow-y-auto sm:rounded-lg sm:border bg-white sm:shadow-lg overflow-y-auto flex flex-col">
+        <DialogHeader className="flex-shrink-0 px-4 pt-6 pb-2 sm:px-6">
           <div className="flex items-start justify-between">
-            <div className="flex-1">
-              <DialogTitle>Generate Platform Report</DialogTitle>
-              <DialogDescription>
+            <div className="flex-1 pr-8">
+              <DialogTitle className="text-lg sm:text-xl">Generate Platform Report</DialogTitle>
+              <DialogDescription className="text-sm">
                 Create comprehensive reports for platform analytics and insights
               </DialogDescription>
             </div>
             <button
               onClick={handleClose}
-              className="sm:hidden ml-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-md text-sm font-medium text-gray-700"
+              className="sm:hidden absolute right-4 top-6 rounded-full p-2 bg-gray-100 hover:bg-gray-200"
             >
-              Close
+              <X className="h-5 w-5" />
+              <span className="sr-only">Close</span>
             </button>
           </div>
         </DialogHeader>
         
-        <div className="space-y-4"> {/* Add padding at bottom for action buttons */}
+        <div className="flex-1 overflow-y-auto px-4 pb-24 sm:px-6 sm:pb-6 space-y-4"> {/* Add padding at bottom for action buttons */}
           {/* Report Type Selection */}
           <div>
             <Label className="text-base font-semibold mb-3 block">Select Report Type</Label>
@@ -315,9 +316,9 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
             </div>
           )}
 
-          {/* Actions */}
-          <div className="flex flex-col-reverse sm:flex-row justify-between pt-4 border-t gap-3 mt-4">
-            <Button variant="outline" onClick={handleClose} className="w-full sm:w-auto">
+          {/* Actions - Fixed at bottom on mobile */}
+          <div className="flex flex-col-reverse sm:flex-row justify-between pt-4 border-t gap-3 fixed bottom-0 left-0 right-0 bg-white px-4 py-4 sm:static sm:bg-transparent sm:px-0 sm:py-4 z-50 shadow-2xl sm:shadow-none">
+            <Button variant="outline" onClick={handleClose} className="w-full sm:w-auto h-12 sm:h-auto">
               Cancel
             </Button>
             <div className="flex items-center space-x-2 w-full sm:w-auto">
@@ -330,7 +331,7 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
               <Button
                 onClick={handleGenerate}
                 disabled={!selectedReportType || generating}
-                className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 w-full sm:w-auto"
+                className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 w-full sm:w-auto h-12 sm:h-auto"
               >
                 {generating ? (
                   <>

@@ -70,29 +70,40 @@ const DialogContent = React.forwardRef<
   
   return (
     <>
+      {/* Mobile-only overlay - hidden on desktop */}
       <div
         onClick={handleOverlayClick}
-        className="fixed inset-0 z-50 bg-black/80 animate-in fade-in-0"
+        className="sm:hidden fixed inset-0 z-50 bg-black/60 animate-in fade-in-0"
+      />
+      {/* Desktop overlay */}
+      <div
+        onClick={handleOverlayClick}
+        className="hidden sm:block fixed inset-0 z-50 bg-black/80 animate-in fade-in-0"
       />
       <div
         ref={ref}
         className={cn(
-          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg gap-4 border bg-white shadow-lg rounded-lg animate-in zoom-in-95 fade-in-0",
-          "mx-4", // Add horizontal margin on mobile
-          "my-4", // Add vertical margin on mobile
-          "max-h-[calc(100vh-2rem)]", // Limit height with better mobile calculation
-          "overflow-y-auto", // Enable scrolling for tall content
-          "sm:p-6 p-4", // Responsive padding
-          "self-center", // Better centering on mobile
-          "justify-self-center", // Ensure proper alignment
+          // Base positioning
+          "fixed left-[50%] top-[50%] z-50 grid gap-4 bg-white shadow-lg animate-in zoom-in-95 fade-in-0",
+          // Mobile-specific: full screen
+          "sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg sm:border",
+          // Desktop positioning
+          "w-full h-[100dvh] sm:w-auto sm:h-auto sm:max-w-lg",
+          // Height and scrolling
+          "sm:max-h-[calc(100vh-2rem)] sm:overflow-y-auto",
+          // Padding
+          "sm:p-6 p-0", // No padding on mobile, full control in parent
+          // Mobile-specific adjustments
+          "sm:my-4 sm:mx-4",
           className
         )}
         {...props}
       >
         {children}
+        {/* Desktop close button only */}
         <button
           onClick={() => onOpenChange?.(false)}
-          className="absolute right-4 top-4 z-50 rounded-full p-2 bg-white hover:bg-gray-100 transition-opacity hover:opacity-100 opacity-70 shadow-md border border-gray-200"
+          className="hidden sm:block absolute right-4 top-4 z-50 rounded-full p-2 bg-white hover:bg-gray-100 transition-opacity hover:opacity-100 opacity-70 shadow-md border border-gray-200"
         >
           <X className="h-5 w-5" />
           <span className="sr-only">Close</span>
