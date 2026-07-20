@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// Force cache clear - App component rebuild at 15:18 - ALL RADIX UI DEPENDENCIES REMOVED + SIMPLE IMPLEMENTATIONS
-console.log("App component loaded - PRODUCTION BUILD FIX - ALL RADIX UI DEPENDENCIES REMOVED + SIMPLE IMPLEMENTATIONS - ", new Date().toISOString());
+// Force cache clear - App component rebuild at 15:25 - ADMIN DASHBOARD MOBILE FIX
+console.log("App component loaded - PRODUCTION BUILD FIX - ADMIN DASHBOARD MOBILE RESPONSIVE FIX - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

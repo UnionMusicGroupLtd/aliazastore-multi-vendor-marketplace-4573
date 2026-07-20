@@ -187,7 +187,7 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+      <DialogContent className="w-full max-w-2xl max-h-[85vh] overflow-y-auto mx-4">
         <DialogHeader>
           <DialogTitle>Generate Platform Report</DialogTitle>
           <DialogDescription>
@@ -195,11 +195,11 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
           </DialogDescription>
         </DialogHeader>
         
-        <div className="space-y-6">
+        <div className="space-y-6 pb-20"> {/* Add padding at bottom for action buttons */}
           {/* Report Type Selection */}
           <div>
             <Label className="text-base font-semibold mb-3 block">Select Report Type</Label>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {reportTypes.map((report) => (
                 <Card
                   key={report.id}
@@ -212,7 +212,7 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
                 >
                   <CardContent className="p-4">
                     <div className="flex items-start space-x-3">
-                      <div className={`w-10 h-10 bg-gradient-to-br ${report.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br ${report.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
                         <report.icon className="w-5 h-5 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -297,14 +297,21 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
             </div>
           )}
 
-          {/* Actions */}
-          <div className="flex justify-between pt-4 border-t">
-            <Button variant="outline" onClick={handleClose}>
+          {/* Mobile Success Message */}
+          {generated && (
+            <div className="sm:hidden fixed bottom-20 left-4 right-4 bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-center space-x-2 z-50">
+              <CheckCircle className="w-5 h-5" />
+              <span className="font-medium">Report generated successfully!</span>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row justify-between pt-4 border-t gap-3 sm:gap-0 sticky bottom-0 bg-white py-4">
+            <Button variant="outline" onClick={handleClose} className="w-full sm:w-auto">
               Cancel
             </Button>
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 w-full sm:w-auto">
               {generated && (
-                <div className="flex items-center space-x-1 text-green-600 text-sm mr-2">
+                <div className="flex items-center space-x-1 text-green-600 text-sm mr-2 hidden sm:flex">
                   <CheckCircle className="w-4 h-4" />
                   <span>Report generated successfully!</span>
                 </div>
@@ -312,7 +319,7 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
               <Button
                 onClick={handleGenerate}
                 disabled={!selectedReportType || generating}
-                className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+                className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 w-full sm:w-auto"
               >
                 {generating ? (
                   <>

@@ -77,7 +77,11 @@ const DialogContent = React.forwardRef<
       <div
         ref={ref}
         className={cn(
-          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg rounded-lg animate-in zoom-in-95 fade-in-0",
+          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white shadow-lg rounded-lg animate-in zoom-in-95 fade-in-0",
+          "mx-4", // Add horizontal margin on mobile
+          "max-h-[90vh]", // Limit height
+          "overflow-y-auto", // Enable scrolling for tall content
+          "sm:p-6 p-4", // Responsive padding
           className
         )}
         {...props}
@@ -85,7 +89,7 @@ const DialogContent = React.forwardRef<
         {children}
         <button
           onClick={() => onOpenChange?.(false)}
-          className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
+          className="absolute right-4 top-4 z-10 rounded-full p-1 bg-white/80 hover:bg-white transition-opacity hover:opacity-100 opacity-70"
         >
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
