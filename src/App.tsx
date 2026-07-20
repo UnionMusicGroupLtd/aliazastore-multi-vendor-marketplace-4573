@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// Force cache clear - App component rebuild at 13:45 - RADIX UI PRIMITIVE REMOVED
-console.log("App component loaded - PRODUCTION BUILD FIX - RADIX UI PRIMITIVE v1.0.1 + POLYFILL - ", new Date().toISOString());
+// Force cache clear - App component rebuild at 15:18 - ALL RADIX UI DEPENDENCIES REMOVED + SIMPLE IMPLEMENTATIONS
+console.log("App component loaded - PRODUCTION BUILD FIX - ALL RADIX UI DEPENDENCIES REMOVED + SIMPLE IMPLEMENTATIONS - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, Children, cloneElement, isValidElement } from "react";
 
-console.log("SimpleTabs component loaded - PRODUCTION BUILD FIX - RADIX UI PRIMITIVE v1.0.1 + POLYFILL - ", new Date().toISOString());
+console.log("SimpleTabs component loaded - PRODUCTION BUILD FIX - ALL RADIX UI DEPENDENCIES REMOVED + SIMPLE IMPLEMENTATIONS - ", new Date().toISOString());
 
 interface SimpleTabsProps {
   defaultValue: string;

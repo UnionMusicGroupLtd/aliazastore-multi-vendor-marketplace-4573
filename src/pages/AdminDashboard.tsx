@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-// import { Avatar, AvatarFallback } from "@/components/ui/avatar"; // Temporarily disabled due to React hooks issue
-// import ReportGenerationModal from "@/components/ReportGenerationModal"; // Temporarily disabled due to React hooks issue
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import ReportGenerationModal from "@/components/ReportGenerationModal";
 import { 
   Users, Store, Package, ShoppingCart, DollarSign, TrendingUp,
   Settings, Shield, Bell, LogOut, ChevronRight, BarChart3,
@@ -29,6 +29,7 @@ const AdminDashboard = () => {
   });
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [reportModalOpen, setReportModalOpen] = useState(false);
 
   useEffect(() => {
     loadAdminData();
@@ -179,10 +180,9 @@ const AdminDashboard = () => {
                   7
                 </span>
               </Button>
-              {/* Temporarily disabled Avatar due to React hooks issue */}
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold">
-                A
-              </div>
+              <Avatar className="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600">
+                <AvatarFallback className="text-white">A</AvatarFallback>
+              </Avatar>
               <Button variant="ghost" size="icon" onClick={handleSignOut}>
                 <LogOut className="w-6 h-6" />
               </Button>
@@ -194,11 +194,20 @@ const AdminDashboard = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Welcome Section */}
         <div className="mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900">
-              Admin Dashboard
-            </h1>
-            <p className="text-slate-600">Platform overview and management</p>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900">
+                Admin Dashboard
+              </h1>
+              <p className="text-slate-600">Platform overview and management</p>
+            </div>
+            <Button 
+              className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
+              onClick={() => setReportModalOpen(true)}
+            >
+              <BarChart3 className="mr-2 w-4 h-4" />
+              Generate Report
+            </Button>
           </div>
         </div>
 
@@ -422,6 +431,12 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Report Generation Modal */}
+      <ReportGenerationModal 
+        open={reportModalOpen}
+        onClose={() => setReportModalOpen(false)}
+      />
     </div>
   );
 };

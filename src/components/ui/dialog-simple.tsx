@@ -55,36 +55,6 @@ const DialogTrigger = React.forwardRef<
 ))
 DialogTrigger.displayName = "DialogTrigger"
 
-const DialogPortal = ({ children }: { children: React.ReactNode }) => <>{children}</>
-
-const DialogClose = React.forwardRef<
-  HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, onClick, ...props }, ref) => (
-  <button
-    ref={ref}
-    className={className}
-    onClick={onClick}
-    {...props}
-  />
-))
-DialogClose.displayName = "DialogClose"
-
-const DialogOverlay = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "fixed inset-0 z-50 bg-black/80 animate-in fade-in-0",
-      className
-    )}
-    {...props}
-  />
-))
-DialogOverlay.displayName = "DialogOverlay"
-
 const DialogContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLAttributes<HTMLDivElement> & { 
@@ -99,8 +69,11 @@ const DialogContent = React.forwardRef<
   }
   
   return (
-    <DialogPortal>
-      <DialogOverlay onClick={handleOverlayClick as any} />
+    <>
+      <div
+        onClick={handleOverlayClick}
+        className="fixed inset-0 z-50 bg-black/80 animate-in fade-in-0"
+      />
       <div
         ref={ref}
         className={cn(
@@ -110,15 +83,15 @@ const DialogContent = React.forwardRef<
         {...props}
       >
         {children}
-        <DialogClose 
+        <button
           onClick={() => onOpenChange?.(false)}
           className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100"
         >
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>
-        </DialogClose>
+        </button>
       </div>
-    </DialogPortal>
+    </>
   )
 })
 DialogContent.displayName = "DialogContent"
@@ -136,20 +109,6 @@ const DialogHeader = ({
   />
 )
 DialogHeader.displayName = "DialogHeader"
-
-const DialogFooter = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn(
-      "flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2",
-      className
-    )}
-    {...props}
-  />
-)
-DialogFooter.displayName = "DialogFooter"
 
 const DialogTitle = React.forwardRef<
   HTMLHeadingElement,
@@ -180,13 +139,9 @@ DialogDescription.displayName = "DialogDescription"
 
 export {
   Dialog,
-  DialogPortal,
-  DialogOverlay,
-  DialogClose,
   DialogTrigger,
   DialogContent,
   DialogHeader,
-  DialogFooter,
   DialogTitle,
   DialogDescription,
 }
