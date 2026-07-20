@@ -11,7 +11,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { 
   Download, FileText, BarChart3, Users, Store, ShoppingCart, 
-  DollarSign, Package, CheckCircle
+  DollarSign, Package, CheckCircle, X
 } from "lucide-react";
 
 interface ReportGenerationModalProps {
