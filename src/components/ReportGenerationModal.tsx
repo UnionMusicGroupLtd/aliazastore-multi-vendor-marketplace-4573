@@ -187,15 +187,25 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="w-full max-w-2xl max-h-[85vh] overflow-y-auto mx-4">
+      <DialogContent className="w-full max-w-2xl mx-4 my-8 max-h-[calc(100vh-4rem)] overflow-y-auto sm:max-h-[80vh]">
         <DialogHeader>
-          <DialogTitle>Generate Platform Report</DialogTitle>
-          <DialogDescription>
-            Create comprehensive reports for platform analytics and insights
-          </DialogDescription>
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <DialogTitle>Generate Platform Report</DialogTitle>
+              <DialogDescription>
+                Create comprehensive reports for platform analytics and insights
+              </DialogDescription>
+            </div>
+            <button
+              onClick={handleClose}
+              className="sm:hidden ml-2 px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-md text-sm font-medium text-gray-700"
+            >
+              Close
+            </button>
+          </div>
         </DialogHeader>
         
-        <div className="space-y-6 pb-20"> {/* Add padding at bottom for action buttons */}
+        <div className="space-y-4"> {/* Add padding at bottom for action buttons */}
           {/* Report Type Selection */}
           <div>
             <Label className="text-base font-semibold mb-3 block">Select Report Type</Label>
@@ -305,7 +315,8 @@ const ReportGenerationModal = ({ open, onClose }: ReportGenerationModalProps) =>
             </div>
           )}
 
-          <div className="flex flex-col sm:flex-row justify-between pt-4 border-t gap-3 sm:gap-0 sticky bottom-0 bg-white py-4">
+          {/* Actions */}
+          <div className="flex flex-col-reverse sm:flex-row justify-between pt-4 border-t gap-3 mt-4">
             <Button variant="outline" onClick={handleClose} className="w-full sm:w-auto">
               Cancel
             </Button>
