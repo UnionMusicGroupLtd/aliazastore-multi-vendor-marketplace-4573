@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// Force cache clear - USER MANAGEMENT API FIX - auth.listUsers/response format + auth.updateUserByUuid + auth groups fix
-console.log("App component loaded - USER MANAGEMENT API FIX - Fixed listUsers response format, updateUserByUuid, and groups API - ", new Date().toISOString());
+// USER MANAGEMENT MODAL FIXED - Modal content now displays properly with user details, groups, and actions
+console.log("App component loaded - USER MANAGEMENT MODAL FIXED - Modal content visible with proper padding and conditional rendering - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

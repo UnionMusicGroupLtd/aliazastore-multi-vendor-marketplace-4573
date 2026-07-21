@@ -24,7 +24,7 @@ const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
   }
   
   if (!isOpen) {
-    return <>{children}</>
+    return null
   }
   
   return (
@@ -90,9 +90,9 @@ const DialogContent = React.forwardRef<
           // Desktop positioning
           "w-full h-[100dvh] sm:w-auto sm:h-auto sm:max-w-lg",
           // Height and scrolling
-          "sm:max-h-[calc(100vh-2rem)] sm:overflow-y-auto",
-          // Padding
-          "sm:p-6 p-0", // No padding on mobile, full control in parent
+          "sm:max-h-[calc(100vh-2rem)] sm:overflow-y-auto overflow-y-auto",
+          // Padding - added mobile padding for visibility
+          "p-6 sm:p-6", 
           // Mobile-specific adjustments
           "sm:my-4 sm:mx-4",
           className
