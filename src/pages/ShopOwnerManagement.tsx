@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { 
@@ -13,7 +12,7 @@ import {
 } from "lucide-react";
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger 
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog-simple";
 import { Textarea } from "@/components/ui/textarea";
 import db from "@/lib/shared/kliv-database.js";
 
@@ -502,11 +501,11 @@ const ShopOwnerManagement = () => {
                 <div key={owner._row_id} className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-4">
-                      <Avatar className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600">
-                        <AvatarFallback className="text-white">
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span className="text-white font-medium">
                           {owner.owner_name?.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
+                        </span>
+                      </div>
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
                           <h3 className="font-semibold text-slate-900">{owner.name}</h3>

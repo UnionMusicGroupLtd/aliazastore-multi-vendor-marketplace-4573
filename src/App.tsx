@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// Force cache clear - App component rebuild at 16:20 - ADMIN CARDS CLICKABILITY FIXED
-console.log("App component loaded - ADMIN CARDS CLICKABILITY FIXED - PROPER NAVIGATION - ", new Date().toISOString());
+// Force cache clear - App component rebuild at 16:30 - USER MANAGEMENT MODAL FIXED + ADMIN PAGES REPAIRED
+console.log("App component loaded - USER MANAGEMENT MODAL FIXED - DIALOG/AVATAR REPAIRED - ALL ADMIN PAGES - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

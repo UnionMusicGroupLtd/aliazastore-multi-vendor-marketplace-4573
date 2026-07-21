@@ -14,8 +14,7 @@ import {
 } from "@/components/ui/select";
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle 
-} from "@/components/ui/dialog";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+} from "@/components/ui/dialog-simple";
 import auth from "@/lib/shared/kliv-auth.js";
 
 const UserManagement = () => {
@@ -61,7 +60,10 @@ const UserManagement = () => {
   const handleToggleUserStatus = async (user: any) => {
     try {
       setError("");
-      await user.setEnabled(user.enabled === 0 ? 1 : 0, user.user_uuid);
+      const newEnabledStatus = user.enabled === 0 ? 1 : 0;
+      await auth.update(user.user_uuid, {
+        enabled: newEnabledStatus
+      });
       setSuccess(`User ${user.enabled ? "disabled" : "enabled"} successfully!`);
       loadUsers();
     } catch (err) {
@@ -300,11 +302,11 @@ const UserManagement = () => {
                       <tr key={user.user_uuid} className="border-b border-slate-100 hover:bg-slate-50">
                         <td className="p-4">
                           <div className="flex items-center space-x-3">
-                            <Avatar className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600">
-                              <AvatarFallback className="text-white text-sm">
+                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm font-medium">
                                 {getInitials(user.first_name, user.last_name)}
-                              </AvatarFallback>
-                            </Avatar>
+                              </span>
+                            </div>
                             <div>
                               <p className="font-medium">{user.first_name} {user.last_name}</p>
                               <p className="text-sm text-slate-600">{user.user_uuid?.substring(0, 8)}...</p>
@@ -379,11 +381,11 @@ const UserManagement = () => {
               <>
                 <div className="bg-slate-50 p-4 rounded-lg">
                   <div className="flex items-center space-x-3">
-                    <Avatar className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600">
-                      <AvatarFallback className="text-white">
+                    <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center">
+                      <span className="text-white font-medium">
                         {getInitials(selectedUser.first_name, selectedUser.last_name)}
-                      </AvatarFallback>
-                    </Avatar>
+                      </span>
+                    </div>
                     <div>
                       <p className="font-semibold">{selectedUser.first_name} {selectedUser.last_name}</p>
                       <p className="text-sm text-slate-600">{selectedUser.email}</p>

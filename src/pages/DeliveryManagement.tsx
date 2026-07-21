@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/select";
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle 
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog-simple";
 import db from "@/lib/shared/kliv-database.js";
 
 const DeliveryManagement = () => {
