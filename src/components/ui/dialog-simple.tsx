@@ -23,9 +23,7 @@ const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
     }
   }
   
-  if (!isOpen) {
-    return null
-  }
+  // Always render so triggers stay visible; DialogContent guards its own open state
   
   return (
     <>
@@ -44,15 +42,38 @@ const Dialog = ({ open, onOpenChange, children }: DialogProps) => {
 
 const DialogTrigger = React.forwardRef<
   HTMLButtonElement,
-  React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, onClick, ...props }, ref) => (
-  <button
-    ref={ref}
-    className={className}
-    onClick={onClick}
-    {...props}
-  />
-))
+  React.ButtonHTMLAttributes<HTMLButtonElement> & {
+    asChild?: boolean
+    open?: boolean
+    onOpenChange?: (open: boolean) => void
+  }
+>(({ className, onClick, asChild, children, open, onOpenChange, ...props }, ref) => {
+  if (asChild && React.isValidElement(children)) {
+    const child = children as React.ReactElement<any>
+    return React.cloneElement(child, {
+      ref,
+      onClick: (event: React.MouseEvent<HTMLElement>) => {
+        child.props.onClick?.(event)
+        onClick?.(event as React.MouseEvent<HTMLButtonElement>)
+        onOpenChange?.(true)
+      },
+    })
+  }
+
+  return (
+    <button
+      ref={ref}
+      className={className}
+      onClick={(event) => {
+        onClick?.(event)
+        onOpenChange?.(true)
+      }}
+      {...props}
+    >
+      {children}
+    </button>
+  )
+})
 DialogTrigger.displayName = "DialogTrigger"
 
 const DialogContent = React.forwardRef<
@@ -62,6 +83,8 @@ const DialogContent = React.forwardRef<
     onOpenChange?: (open: boolean) => void
   }
 >(({ className, children, open, onOpenChange, ...props }, ref) => {
+  if (!open) return null
+
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onOpenChange?.(false)

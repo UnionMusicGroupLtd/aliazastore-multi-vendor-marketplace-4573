@@ -34,7 +34,7 @@ const SubscriptionManagement = () => {
 
   const loadPaymentMethods = async () => {
     try {
-      const methods = await db.query("payment_methods", { enabled: "eq.1" });
+      const methods = await db.query("payment_methods", { is_enabled: "eq.1" });
       setPaymentMethods(methods);
       
       // Find GCash configuration

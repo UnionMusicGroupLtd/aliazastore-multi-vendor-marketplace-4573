@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// COMPREHENSIVE ADMIN DIALOG FIX - All admin pages now use dialog-simple: ReviewManagement, ShopOwnerDocuments, CategoryManagement, ComplaintManagement, ProductModeration, ShopOwnerPaymentManagement, PaymentGatewayManagement
-console.log("App component loaded - COMPREHENSIVE ADMIN DIALOG FIX COMPLETE - All admin modals now functional - ", new Date().toISOString());
+// ADMIN SETTINGS DROPDOWN FIX - Fixed timezone/currency dropdowns with proper select component and database saving
+console.log("App component loaded - ADMIN SETTINGS DROPDOWN FIX COMPLETE - Timezone & Currency dropdowns working with proper database persistence - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

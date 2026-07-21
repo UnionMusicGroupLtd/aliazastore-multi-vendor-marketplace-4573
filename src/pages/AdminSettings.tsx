@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { SimpleTabs, SimpleTabsList, SimpleTabsTrigger, SimpleTabsContent } from "@/components/ui/simple-tabs";
+import db from '@/lib/shared/kliv-database.js';
 
 console.log("AdminSettings component loaded - production build fix applied");
 
@@ -25,11 +26,54 @@ const AdminSettings = () => {
   const [generalSettings, setGeneralSettings] = useState({
     siteName: "AliazaStore",
     siteDescription: "Multi-Vendor Marketplace",
-    contactEmail: "support@aliazastore.com",
+    contactEmail: "info@unionmusicgroup.co.uk",
     contactPhone: "+63 912 345 6789",
     timezone: "Asia/Manila",
     language: "en-US"
   });
+
+  // Load existing settings on mount
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        setLoading(true);
+        const { data } = await db.query('platform_settings', {});
+        
+        if (data && data.length > 0) {
+          data.forEach((setting: any) => {
+            try {
+              const parsedSettings = JSON.parse(setting.settings);
+              switch (setting.section) {
+                case 'general':
+                  setGeneralSettings(parsedSettings);
+                  break;
+                case 'payment':
+                  setPaymentSettings(parsedSettings);
+                  break;
+                case 'email':
+                  setEmailSettings(parsedSettings);
+                  break;
+                case 'security':
+                  setSecuritySettings(parsedSettings);
+                  break;
+                case 'marketplace':
+                  setMarketplaceSettings(parsedSettings);
+                  break;
+              }
+            } catch (parseErr) {
+              console.error(`Error parsing settings for ${setting.section}:`, parseErr);
+            }
+          });
+        }
+      } catch (err) {
+        console.log('No existing settings found, using defaults');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadSettings();
+  }, []);
 
   const [paymentSettings, setPaymentSettings] = useState({
     enableGCash: true,
@@ -71,16 +115,64 @@ const AdminSettings = () => {
       
       console.log(`Saving ${section} settings...`);
       
-      // Simulate saving settings with better feedback
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Get the settings object for the current section
+      let settingsToSave;
+      switch(section.toLowerCase()) {
+        case 'general':
+          settingsToSave = generalSettings;
+          break;
+        case 'payment':
+          settingsToSave = paymentSettings;
+          break;
+        case 'email':
+          settingsToSave = emailSettings;
+          break;
+        case 'security':
+          settingsToSave = securitySettings;
+          break;
+        case 'marketplace':
+          settingsToSave = marketplaceSettings;
+          break;
+        default:
+          throw new Error(`Unknown section: ${section}`);
+      }
       
-      console.log(`${section} settings saved:`, {
-        general: generalSettings,
-        payment: paymentSettings,
-        email: emailSettings,
-        security: securitySettings,
-        marketplace: marketplaceSettings
+      // Convert to JSON string for storage
+      const settingsJson = JSON.stringify(settingsToSave);
+      
+      // Check if settings already exist
+      const { data: existingSettings } = await db.query('platform_settings', { 
+        section: `eq.${section.toLowerCase()}` 
       });
+      
+      if (existingSettings && existingSettings.length > 0) {
+        // Update existing settings
+        const { error } = await db.update('platform_settings', 
+          { _row_id: `eq.${existingSettings[0]._row_id}` }, 
+          { settings: settingsJson }
+        );
+        
+        if (error) {
+          console.error('Database error:', error);
+          setError(`Failed to save ${section} settings. Please try again.`);
+          return;
+        }
+      } else {
+        // Insert new settings
+        const { error } = await db.insert('platform_settings', {
+          id: `admin-settings-${section.toLowerCase()}`,
+          section: section.toLowerCase(),
+          settings: settingsJson
+        });
+        
+        if (error) {
+          console.error('Database error:', error);
+          setError(`Failed to save ${section} settings. Please try again.`);
+          return;
+        }
+      }
+      
+      console.log(`${section} settings saved successfully`);
       
       setSuccess(`${section} settings saved successfully! Changes will take effect immediately.`);
       setTimeout(() => setSuccess(""), 5000);
@@ -176,14 +268,62 @@ const AdminSettings = () => {
                   <div>
                     <Label>Timezone</Label>
                     <Select value={generalSettings.timezone} onValueChange={(value) => setGeneralSettings({...generalSettings, timezone: value})}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="Asia/Manila">Asia/Manila</SelectItem>
-                        <SelectItem value="America/New_York">America/New_York</SelectItem>
-                        <SelectItem value="Europe/London">Europe/London</SelectItem>
-                        <SelectItem value="Asia/Tokyo">Asia/Tokyo</SelectItem>
+                        <SelectItem value="Asia/Manila">Asia/Manila (Philippines - UTC+8)</SelectItem>
+                        <SelectItem value="Asia/Shanghai">Asia/Shanghai (China UTC+8)</SelectItem>
+                        <SelectItem value="Asia/Singapore">Asia/Singapore (Singapore UTC+8)</SelectItem>
+                        <SelectItem value="Asia/Hong_Kong">Asia/Hong_Kong (Hong Kong UTC+8)</SelectItem>
+                        <SelectItem value="Asia/Taipei">Asia/Taipei (Taiwan UTC+8)</SelectItem>
+                        <SelectItem value="Asia/Tokyo">Asia/Tokyo (Japan UTC+9)</SelectItem>
+                        <SelectItem value="Asia/Seoul">Asia/Seoul (South Korea UTC+9)</SelectItem>
+                        <SelectItem value="Asia/Jakarta">Asia/Jakarta (Indonesia UTC+7)</SelectItem>
+                        <SelectItem value="Asia/Bangkok">Asia/Bangkok (Thailand UTC+7)</SelectItem>
+                        <SelectItem value="Asia/Kuala_Lumpur">Asia/Kuala_Lumpur (Malaysia UTC+8)</SelectItem>
+                        <SelectItem value="Pacific/Port_Moresby">Pacific/Port_Moresby (Papua New Guinea UTC+10)</SelectItem>
+                        <SelectItem value="Australia/Sydney">Australia/Sydney (Australia UTC+10/+11)</SelectItem>
+                        <SelectItem value="Australia/Melbourne">Australia/Melbourne (Australia UTC+10/+11)</SelectItem>
+                        <SelectItem value="Pacific/Auckland">Pacific/Auckland (New Zealand UTC+12/+13)</SelectItem>
+                        <SelectItem value="America/New_York">America/New_York (Eastern US UTC-5/-4)</SelectItem>
+                        <SelectItem value="America/Chicago">America/Chicago (Central US UTC-6/-5)</SelectItem>
+                        <SelectItem value="America/Denver">America/Denver (Mountain US UTC-7/-6)</SelectItem>
+                        <SelectItem value="America/Los_Angeles">America/Los_Angeles (Pacific US UTC-8/-7)</SelectItem>
+                        <SelectItem value="America/Toronto">America/Toronto (Canada UTC-5/-4)</SelectItem>
+                        <SelectItem value="America/Vancouver">America/Vancouver (Canada UTC-8/-7)</SelectItem>
+                        <SelectItem value="Europe/London">Europe/London (UK UTC+0/+1)</SelectItem>
+                        <SelectItem value="Europe/Paris">Europe/Paris (France UTC+1/+2)</SelectItem>
+                        <SelectItem value="Europe/Berlin">Europe/Berlin (Germany UTC+1/+2)</SelectItem>
+                        <SelectItem value="Europe/Amsterdam">Europe/Amsterdam (Netherlands UTC+1/+2)</SelectItem>
+                        <SelectItem value="Europe/Rome">Europe/Rome (Italy UTC+1/+2)</SelectItem>
+                        <SelectItem value="Europe/Madrid">Europe/Madrid (Spain UTC+1/+2)</SelectItem>
+                        <SelectItem value="Europe/Zurich">Europe/Zurich (Switzerland UTC+1/+2)</SelectItem>
+                        <SelectItem value="Europe/Brussels">Europe/Brussels (Belgium UTC+1/+2)</SelectItem>
+                        <SelectItem value="Europe/Vienna">Europe/Vienna (Austria UTC+1/+2)</SelectItem>
+                        <SelectItem value="Asia/Dubai">Asia/Dubai (UAE UTC+4)</SelectItem>
+                        <SelectItem value="Asia/Riyadh">Asia/Riyadh (Saudi Arabia UTC+3)</SelectItem>
+                        <SelectItem value="Asia/Kuwait">Asia/Kuwait (Kuwait UTC+3)</SelectItem>
+                        <SelectItem value="Asia/Bahrain">Asia/Bahrain (Bahrain UTC+3)</SelectItem>
+                        <SelectItem value="Asia/Qatar">Asia/Qatar (Qatar UTC+3)</SelectItem>
+                        <SelectItem value="Asia/Muscat">Asia/Muscat (Oman UTC+4)</SelectItem>
+                        <SelectItem value="Indian/Mauritius">Indian/Mauritius (Mauritius UTC+4)</SelectItem>
+                        <SelectItem value="Asia/Kolkata">Asia/Kolkata (India UTC+5:30)</SelectItem>
+                        <SelectItem value="Asia/Mumbai">Asia/Mumbai (India UTC+5:30)</SelectItem>
+                        <SelectItem value="Asia/Colombo">Asia/Colombo (Sri Lanka UTC+5:30)</SelectItem>
+                        <SelectItem value="Asia/Dhaka">Asia/Dhaka (Bangladesh UTC+6)</SelectItem>
+                        <SelectItem value="Asia/Karachi">Asia/Karachi (Pakistan UTC+5)</SelectItem>
+                        <SelectItem value="Asia/Lahore">Asia/Lahore (Pakistan UTC+5)</SelectItem>
+                        <SelectItem value="Asia/Tehran">Asia/Tehran (Iran UTC+3:30)</SelectItem>
+                        <SelectItem value="Asia/Baghdad">Asia/Baghdad (Iraq UTC+3)</SelectItem>
+                        <SelectItem value="Asia/Jerusalem">Asia/Jerusalem (Israel UTC+2/+3)</SelectItem>
+                        <SelectItem value="Africa/Cairo">Africa/Cairo (Egypt UTC+2)</SelectItem>
+                        <SelectItem value="Africa/Johannesburg">Africa/Johannesburg (South Africa UTC+2)</SelectItem>
+                        <SelectItem value="Africa/Lagos">Africa/Lagos (Nigeria UTC+1)</SelectItem>
+                        <SelectItem value="Africa/Nairobi">Africa/Nairobi (Kenya UTC+3)</SelectItem>
+                        <SelectItem value="America/Sao_Paulo">America/Sao_Paulo (Brazil UTC-3/-2)</SelectItem>
+                        <SelectItem value="America/Mexico_City">America/Mexico_City (Mexico UTC-6/-5)</SelectItem>
+                        <SelectItem value="America/Argentina/Buenos_Aires">America/Argentina/Buenos_Aires (Argentina UTC-3)</SelectItem>
+                        <SelectItem value="Pacific/Honolulu">Pacific/Honolulu (Hawaii UTC-10)</SelectItem>
+                        <SelectItem value="Pacific/Fiji">Pacific/Fiji (Fiji UTC+12/+13)</SelectItem>
+                        <SelectItem value="UTC">UTC (Coordinated Universal Time)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -486,13 +626,32 @@ const AdminSettings = () => {
                   <div>
                     <Label>Currency</Label>
                     <Select value={marketplaceSettings.currency} onValueChange={(value) => setMarketplaceSettings({...marketplaceSettings, currency: value})}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="PHP">Philippine Peso (PHP)</SelectItem>
                         <SelectItem value="USD">US Dollar (USD)</SelectItem>
                         <SelectItem value="EUR">Euro (EUR)</SelectItem>
+                        <SelectItem value="GBP">British Pound (GBP)</SelectItem>
+                        <SelectItem value="JPY">Japanese Yen (JPY)</SelectItem>
+                        <SelectItem value="AUD">Australian Dollar (AUD)</SelectItem>
+                        <SelectItem value="CAD">Canadian Dollar (CAD)</SelectItem>
+                        <SelectItem value="SGD">Singapore Dollar (SGD)</SelectItem>
+                        <SelectItem value="HKD">Hong Kong Dollar (HKD)</SelectItem>
+                        <SelectItem value="CNY">Chinese Yuan (CNY)</SelectItem>
+                        <SelectItem value="INR">Indian Rupee (INR)</SelectItem>
+                        <SelectItem value="AED">UAE Dirham (AED)</SelectItem>
+                        <SelectItem value="SAR">Saudi Riyal (SAR)</SelectItem>
+                        <SelectItem value="MYR">Malaysian Ringgit (MYR)</SelectItem>
+                        <SelectItem value="THB">Thai Baht (THB)</SelectItem>
+                        <SelectItem value="IDR">Indonesian Rupiah (IDR)</SelectItem>
+                        <SelectItem value="VND">Vietnamese Dong (VND)</SelectItem>
+                        <SelectItem value="BND">Brunei Dollar (BND)</SelectItem>
+                        <SelectItem value="NZD">New Zealand Dollar (NZD)</SelectItem>
+                        <SelectItem value="ZAR">South African Rand (ZAR)</SelectItem>
+                        <SelectItem value="BRL">Brazilian Real (BRL)</SelectItem>
+                        <SelectItem value="MXN">Mexican Peso (MXN)</SelectItem>
+                        <SelectItem value="KRW">South Korean Won (KRW)</SelectItem>
+                        <SelectItem value="TRY">Turkish Lira (TRY)</SelectItem>
+                        <SelectItem value="RUB">Russian Ruble (RUB)</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

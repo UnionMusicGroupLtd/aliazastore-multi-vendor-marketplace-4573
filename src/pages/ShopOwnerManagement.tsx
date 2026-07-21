@@ -77,23 +77,27 @@ const ShopOwnerManagement = () => {
         order: "_created_at.desc"
       });
       
-      // Enhance with mock user data and additional info
-      const enrichedOwners = stores.map((store: any) => {
+      // Enrich each store with real product/order counts and derived trial info
+      const enrichedOwners = await Promise.all(stores.map(async (store: any) => {
         const now = Date.now();
         const dayInMs = 24 * 60 * 60 * 1000;
         const trialEnd = store.trial_end_date || (store._created_at + (14 * dayInMs));
         const daysLeft = Math.max(0, Math.ceil((trialEnd - now) / dayInMs));
-        
+
+        const [products, orders] = await Promise.all([
+          db.query("products", { store_id: `eq.${store._row_id}`, limit: "1000" }).catch(() => []),
+          db.query("orders", { store_id: `eq.${store._row_id}`, limit: "1000" }).catch(() => [])
+        ]);
+
         return {
           ...store,
           owner_name: store.name?.split(' ')[0] || 'Unknown',
-          owner_email: `owner${store._row_id}@example.com`,
-          products_count: Math.floor(Math.random() * 100) + 5,
-          orders_count: Math.floor(Math.random() * 50) + 1,
-            trial_days_left: daysLeft,
+          products_count: Array.isArray(products) ? products.length : 0,
+          orders_count: Array.isArray(orders) ? orders.length : 0,
+          trial_days_left: daysLeft,
           is_trial_expired: daysLeft === 0
         };
-      });
+      }));
       
       setShopOwners(enrichedOwners);
       setFilteredOwners(enrichedOwners);
