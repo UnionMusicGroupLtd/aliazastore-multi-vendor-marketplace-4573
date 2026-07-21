@@ -171,22 +171,18 @@ const AdminDashboard = () => {
             </div>
             
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <Link to="/admin/security">
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    7
-                  </span>
-                </Button>
-              </Link>
-              <Link to="/admin/settings">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm sm:text-base font-medium cursor-pointer hover:ring-2 hover:ring-purple-400 transition-all">
-                  A
-                </div>
-              </Link>
-              <Button variant="ghost" size="icon" onClick={handleSignOut} className="hidden sm:flex">
+              <Button variant="ghost" size="icon" className="relative">
+                <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
+                <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                  7
+                </span>
+              </Button>
+              <Button variant="ghost" size="icon" onClick={handleSignOut}>
                 <LogOut className="w-5 h-5 sm:w-6 sm:h-6" />
               </Button>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm sm:text-base font-medium cursor-pointer hover:ring-2 hover:ring-purple-400 transition-all">
+                A
+              </div>
             </div>
           </div>
         </div>

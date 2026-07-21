@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// NOTIFICATION & PROFILE NAVIGATION FIX - Fixed clickable notification bell and profile avatar across all dashboards
-console.log("App component loaded - NOTIFICATION & PROFILE NAVIGATION FIX COMPLETE - Bell icon and profile avatar now clickable with proper navigation - ", new Date().toISOString());
+// HEADER NAVIGATION FIX - Fixed notification bell, profile avatar, and logout button visibility
+console.log("App component loaded - HEADER NAVIGATION FIX COMPLETE - Bell and profile are now decorative indicators, logout button visible on all screens - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
