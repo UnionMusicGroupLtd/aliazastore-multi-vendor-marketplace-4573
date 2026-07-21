@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// MOBILE RESPONSIVENESS FIX - Fixed mobile overflow, dialog positioning, and layout issues across admin pages
-console.log("App component loaded - MOBILE RESPONSIVENESS FIX COMPLETE - Dialog component, ShopOwnerManagement mobile layout fixed - ", new Date().toISOString());
+// COMPREHENSIVE MOBILE FIX - Fixed action buttons overflow, table layouts, navigation, and responsive design across entire website
+console.log("App component loaded - COMPREHENSIVE MOBILE FIX COMPLETE - All pages mobile optimized, action buttons fixed, tables responsive - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

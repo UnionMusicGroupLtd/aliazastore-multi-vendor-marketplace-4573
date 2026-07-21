@@ -570,12 +570,12 @@ const ShopOwnerManagement = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center space-x-2 flex-shrink-0">
+                    <div className="flex flex-wrap items-center gap-2 flex-shrink-0">
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => openStoreDetail(owner)}
-                        className="text-xs sm:text-sm"
+                        className="text-xs sm:text-sm flex-1 sm:flex-none min-w-[60px]"
                       >
                         <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
                         <span className="hidden sm:inline">Manage</span>
@@ -584,40 +584,40 @@ const ShopOwnerManagement = () => {
 
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" className="flex-1 sm:flex-none min-w-[40px]">
                             <Eye className="w-4 h-4" />
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="max-w-2xl">
+                        <DialogContent className="max-w-2xl max-h-[100dvh] sm:max-h-[90vh] overflow-y-auto">
                           <DialogHeader>
                             <DialogTitle>{owner.name} - Details</DialogTitle>
                             <DialogDescription>Complete shop owner information</DialogDescription>
                           </DialogHeader>
                           <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                               <div>
-                                <Label className="text-sm text-slate-600">Status</Label>
-                                <p className="font-medium">{owner.status}</p>
+                                <Label className="text-xs sm:text-sm text-slate-600">Status</Label>
+                                <p className="font-medium text-sm">{owner.status}</p>
                               </div>
                               <div>
-                                <Label className="text-sm text-slate-600">Email</Label>
-                                <p className="font-medium">{owner.owner_email}</p>
+                                <Label className="text-xs sm:text-sm text-slate-600">Email</Label>
+                                <p className="font-medium text-sm">{owner.owner_email}</p>
                               </div>
                               <div>
-                                <Label className="text-sm text-slate-600">Products</Label>
-                                <p className="font-medium">{owner.products_count}</p>
+                                <Label className="text-xs sm:text-sm text-slate-600">Products</Label>
+                                <p className="font-medium text-sm">{owner.products_count}</p>
                               </div>
                               <div>
-                                <Label className="text-sm text-slate-600">Orders</Label>
-                                <p className="font-medium">{owner.orders_count}</p>
+                                <Label className="text-xs sm:text-sm text-slate-600">Orders</Label>
+                                <p className="font-medium text-sm">{owner.orders_count}</p>
                               </div>
                               <div>
-                                <Label className="text-sm text-slate-600">Trial Days Left</Label>
-                                <p className="font-medium">{owner.trial_days_left}</p>
+                                <Label className="text-xs sm:text-sm text-slate-600">Trial Days Left</Label>
+                                <p className="font-medium text-sm">{owner.trial_days_left}</p>
                               </div>
                               <div>
-                                <Label className="text-sm text-slate-600">Free Trials Granted</Label>
-                                <p className="font-medium">{owner.admin_granted_free_trials}</p>
+                                <Label className="text-xs sm:text-sm text-slate-600">Free Trials Granted</Label>
+                                <p className="font-medium text-sm">{owner.admin_granted_free_trials}</p>
                               </div>
                             </div>
                           </div>
@@ -627,22 +627,24 @@ const ShopOwnerManagement = () => {
                       {owner.status !== 'active' && (
                         <Button
                           size="sm"
-                          className="bg-green-500 hover:bg-green-600"
+                          className="bg-green-500 hover:bg-green-600 text-xs sm:text-sm flex-1 sm:flex-none min-w-[70px]"
                           onClick={() => setActionDialog({ open: true, type: 'activate', owner })}
                         >
-                          <CheckCircle className="w-4 h-4 mr-1" />
-                          Activate
+                          <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                          <span className="hidden xs:inline">Activate</span>
+                          <span className="xs:hidden">✓</span>
                         </Button>
                       )}
 
                       {owner.status !== 'trial' && (
                         <Button
                           size="sm"
-                          className="bg-blue-500 hover:bg-blue-600"
+                          className="bg-blue-500 hover:bg-blue-600 text-xs sm:text-sm flex-1 sm:flex-none min-w-[70px]"
                           onClick={() => setActionDialog({ open: true, type: 'grant_trial', owner })}
                         >
-                          <Gift className="w-4 h-4 mr-1" />
-                          Grant Trial
+                          <Gift className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                          <span className="hidden sm:inline">Trial</span>
+                          <span className="sm:hidden">🎁</span>
                         </Button>
                       )}
 
@@ -650,21 +652,24 @@ const ShopOwnerManagement = () => {
                         <Button
                           size="sm"
                           variant="destructive"
+                          className="text-xs sm:text-sm flex-1 sm:flex-none min-w-[70px]"
                           onClick={() => setActionDialog({ open: true, type: 'suspend', owner })}
                         >
-                          <Ban className="w-4 h-4 mr-1" />
-                          Suspend
+                          <Ban className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                          <span className="hidden sm:inline">Suspend</span>
+                          <span className="sm:hidden">⛔</span>
                         </Button>
                       )}
 
                       {owner.status !== 'held' && (
                         <Button
                           size="sm"
-                          className="bg-orange-500 hover:bg-orange-600"
+                          className="bg-orange-500 hover:bg-orange-600 text-xs sm:text-sm flex-1 sm:flex-none min-w-[60px]"
                           onClick={() => setActionDialog({ open: true, type: 'hold', owner })}
                         >
-                          <Pause className="w-4 h-4 mr-1" />
-                          Hold
+                          <Pause className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                          <span className="hidden sm:inline">Hold</span>
+                          <span className="sm:hidden">⏸</span>
                         </Button>
                       )}
                     </div>

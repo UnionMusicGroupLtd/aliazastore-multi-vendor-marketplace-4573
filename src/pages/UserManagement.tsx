@@ -202,17 +202,17 @@ const UserManagement = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center space-x-4">
-            <Link to="/dashboard/admin" className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 sm:space-x-4 overflow-hidden">
+            <Link to="/dashboard/admin" className="flex items-center space-x-2 flex-shrink-0">
               <ArrowLeft className="w-5 h-5 text-slate-600" />
             </Link>
-            <div className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                <Users className="w-6 h-6 text-white" />
+            <div className="flex items-center space-x-2 overflow-hidden">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center flex-shrink-0">
+                <Users className="w-4 h-4 sm:w-6 sm:h-6 text-white" />
               </div>
-              <div>
-                <span className="text-xl font-bold">User Management</span>
-                <p className="text-sm text-slate-600">Manage platform users and permissions</p>
+              <div className="min-w-0">
+                <span className="text-base sm:text-xl font-bold truncate">User Management</span>
+                <p className="text-xs sm:text-sm text-slate-600 truncate hidden sm:block">Manage platform users and permissions</p>
               </div>
             </div>
           </div>
@@ -288,21 +288,21 @@ const UserManagement = () => {
 
         {/* Filters */}
         <Card className="mb-6 border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-          <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row gap-4">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <div className="flex-1">
                 <div className="relative">
-                  <Search className="absolute left-3 top-3 text-slate-400 w-5 h-5" />
+                  <Search className="absolute left-3 top-3 text-slate-400 w-4 h-4 sm:w-5 sm:h-5" />
                   <Input
                     placeholder="Search users..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 text-sm"
                   />
                 </div>
               </div>
               <Select value={roleFilter} onValueChange={setRoleFilter}>
-                <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px] text-sm">
                   <SelectValue placeholder="Filter by role" />
                 </SelectTrigger>
                 <SelectContent>
@@ -313,7 +313,7 @@ const UserManagement = () => {
                 </SelectContent>
               </Select>
               <Select value={statusFilter} onValueChange={setStatusFilter}>
-                <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectTrigger className="w-full sm:w-[180px] text-sm">
                   <SelectValue placeholder="Filter by status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -328,12 +328,13 @@ const UserManagement = () => {
 
         {/* Users Table */}
         <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle>All Users</CardTitle>
-            <CardDescription>Manage user accounts and permissions</CardDescription>
+          <CardHeader className="p-4 sm:p-6">
+            <CardTitle className="text-lg sm:text-xl">All Users</CardTitle>
+            <CardDescription className="text-sm">Manage user accounts and permissions</CardDescription>
           </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
+          <CardContent className="p-0 sm:p-6">
+            {/* Desktop Table */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-slate-200">
@@ -414,6 +415,68 @@ const UserManagement = () => {
                   })}
                 </tbody>
               </table>
+            </div>
+            
+            {/* Mobile Card Layout */}
+            <div className="md:hidden space-y-4 p-4">
+              {filteredUsers().map((user) => {
+                const roleBadge = getRoleBadge(user.groups);
+                return (
+                  <div key={user.user_uuid} className="bg-white border border-slate-200 rounded-lg p-4 space-y-3">
+                    <div className="flex items-start space-x-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-sm font-medium">
+                          {getInitials(user.first_name, user.last_name)}
+                        </span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium truncate">{user.first_name} {user.last_name}</p>
+                        <p className="text-sm text-slate-600 truncate">{user.email}</p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Badge className={`text-xs ${roleBadge.color}`}>{roleBadge.label}</Badge>
+                          <Badge className={`text-xs ${user.enabled ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+                            {user.enabled ? "Active" : "Disabled"}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+                      <span className="text-xs text-slate-600">
+                        Joined: {user.created_at ? new Date(user.created_at * 1000).toLocaleDateString() : "N/A"}
+                      </span>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => openUserModal(user)}
+                          className="text-xs"
+                        >
+                          <Edit className="w-3 h-3 mr-1" />
+                          Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant={user.enabled ? "destructive" : "outline"}
+                          onClick={() => handleToggleUserStatus(user)}
+                          className="text-xs"
+                        >
+                          {user.enabled ? (
+                            <>
+                              <Ban className="w-3 h-3 mr-1" />
+                              Disable
+                            </>
+                          ) : (
+                            <>
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Enable
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
