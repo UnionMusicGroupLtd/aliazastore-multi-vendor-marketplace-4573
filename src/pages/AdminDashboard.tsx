@@ -117,6 +117,7 @@ const AdminDashboard = () => {
     { icon: CreditCard, label: "Payment Gateways", description: "Configure payment methods", href: "/admin/payment-gateways", count: 4 },
     { icon: Wallet, label: "Withdrawals", description: "Process withdrawal requests", href: "/admin/withdrawals", count: 8 },
     { icon: DollarSign, label: "Currency Management", description: "Manage currencies", href: "/admin/currencies", count: 10 },
+    { icon: Bell, label: "Notifications", description: "Platform alerts & updates", href: "/admin/notifications", count: 7 },
     { icon: TrendingUp, label: "Analytics", description: "Platform insights", href: "/admin/analytics" },
     { icon: Shield, label: "Security", description: "Platform security", href: "/admin/security" },
     { icon: Settings, label: "Settings", description: "System configuration", href: "/admin/settings" },
@@ -171,7 +172,7 @@ const AdminDashboard = () => {
             </div>
             
             <div className="flex items-center space-x-2 sm:space-x-4">
-              <Link to="/admin/security">
+              <Link to="/admin/notifications">
                 <Button variant="ghost" size="icon" className="relative">
                   <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
                   <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">

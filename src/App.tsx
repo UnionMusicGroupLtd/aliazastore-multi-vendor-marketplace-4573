@@ -67,6 +67,7 @@ import OrderManagement from "./pages/OrderManagement";
 import Analytics from "./pages/Analytics";
 import Security from "./pages/Security";
 import AdminPasswordManagement from "./pages/AdminPasswordManagement";
+import AdminNotifications from "./pages/AdminNotifications";
 import PaymentDemo from "./pages/PaymentDemo";
 import SubscriptionManagement from "./pages/SubscriptionManagement";
 import SellerSubscription from "./pages/SellerSubscription";
@@ -148,6 +149,7 @@ const App = () => (
           
           {/* Admin Routes */}
           <Route path="/dashboard/admin" element={<AdminDashboard />} />
+          <Route path="/admin/notifications" element={<AdminNotifications />} />
           <Route path="/admin/users" element={<UserManagement />} />
           <Route path="/admin/settings" element={<AdminSettings />} />
           <Route path="/admin/products" element={<ProductModeration />} />
