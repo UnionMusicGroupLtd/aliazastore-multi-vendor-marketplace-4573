@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// USER MANAGEMENT MODAL FIXED - Modal content now displays properly with user details, groups, and actions
-console.log("App component loaded - USER MANAGEMENT MODAL FIXED - Modal content visible with proper padding and conditional rendering - ", new Date().toISOString());
+// COMPREHENSIVE ADMIN DIALOG FIX - All admin pages now use dialog-simple: ReviewManagement, ShopOwnerDocuments, CategoryManagement, ComplaintManagement, ProductModeration, ShopOwnerPaymentManagement, PaymentGatewayManagement
+console.log("App component loaded - COMPREHENSIVE ADMIN DIALOG FIX COMPLETE - All admin modals now functional - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

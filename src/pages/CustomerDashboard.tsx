@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+// Avatar replaced with div-based avatars
 import { 
   ShoppingBag, Heart, Package, Settings, 
   MapPin, CreditCard, Bell, HelpCircle, LogOut,
@@ -158,11 +158,9 @@ const CustomerDashboard = () => {
         {/* Welcome Section */}
         <div className="mb-8">
           <div className="flex items-center space-x-4 mb-4">
-            <Avatar className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600">
-              <AvatarFallback className="text-white text-xl">
-                {user?.firstName?.[0] || user?.email?.[0]?.toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
+            <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white text-xl font-medium">
+              {user?.firstName?.[0] || user?.email?.[0]?.toUpperCase()}
+            </div>
             <div>
               <h1 className="text-3xl font-bold text-slate-900">
                 Welcome back, {user?.firstName || user?.email?.split('@')[0]}!

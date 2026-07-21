@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/select";
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle 
-} from "@/components/ui/dialog";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+} from "@/components/ui/dialog-simple";
+// Avatar replaced with div-based avatars
 import { formatPrice } from "@/lib/currency";
 import db from "@/lib/shared/kliv-database.js";
 
@@ -359,11 +359,9 @@ const WithdrawalManagement = () => {
                       <tr key={withdrawal._row_id} className="border-b border-slate-100 hover:bg-slate-50">
                         <td className="p-4">
                           <div className="flex items-center space-x-3">
-                            <Avatar className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600">
-                              <AvatarFallback className="text-white text-xs">
-                                {getInitials(withdrawal.store_owner_name)}
-                              </AvatarFallback>
-                            </Avatar>
+                            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white text-xs font-medium">
+                              {getInitials(withdrawal.store_owner_name)}
+                            </div>
                             <div>
                               <p className="font-medium">{withdrawal.store_name}</p>
                               <p className="text-sm text-slate-600">{withdrawal.store_owner_name}</p>
@@ -430,11 +428,9 @@ const WithdrawalManagement = () => {
           {selectedWithdrawal && (
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
-                <Avatar className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600">
-                  <AvatarFallback className="text-white font-semibold">
-                    {getInitials(selectedWithdrawal.store_owner_name)}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-semibold">
+                  {getInitials(selectedWithdrawal.store_owner_name)}
+                </div>
                 <div>
                   <h3 className="font-semibold">{selectedWithdrawal.store_name}</h3>
                   <p className="text-sm text-slate-600">{selectedWithdrawal.store_owner_name}</p>
