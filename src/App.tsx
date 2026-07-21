@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// Force cache clear - App component rebuild at 16:00 - WHITE SCREEN FIX - MISSING X IMPORT
-console.log("App component loaded - WHITE SCREEN FIX - MISSING X IMPORT ADDED - ", new Date().toISOString());
+// Force cache clear - App component rebuild at 16:10 - REPORT MODAL REMOVED FROM ADMIN DASHBOARD
+console.log("App component loaded - REPORT MODAL REMOVED - CLEAN ADMIN DASHBOARD - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
