@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { 
   Dialog, DialogContent, DialogHeader, DialogTitle 
-} from "@/components/ui/dialog";
+} from "@/components/ui/dialog-simple";
 import db from "@/lib/shared/kliv-database.js";
 
 const OrderManagement = () => {

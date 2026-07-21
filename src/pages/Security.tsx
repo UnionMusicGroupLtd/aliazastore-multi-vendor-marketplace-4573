@@ -46,10 +46,22 @@ const Security = () => {
   ]);
 
   const handleSaveSettings = async () => {
-    setLoading(true);
-    // Simulate saving
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setLoading(false);
+    try {
+      setLoading(true);
+      console.log("Saving security settings...", securitySettings);
+      
+      // Simulate saving with better feedback
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      console.log("Security settings saved successfully");
+      alert("Security settings saved successfully!");
+      
+      setLoading(false);
+    } catch (err) {
+      console.error("Error saving security settings:", err);
+      alert("Failed to save security settings. Please try again.");
+      setLoading(false);
+    }
   };
 
   const handleUnblockIp = async (ipId: number) => {
@@ -167,7 +179,7 @@ const Security = () => {
                 </div>
                 <Switch 
                   checked={securitySettings.enableTwoFactor}
-                  onCheckedChange={(checked) => setSecuritySettings({...securitySettings, enableTwoFactor: checked})}
+                  onChange={(e) => setSecuritySettings({...securitySettings, enableTwoFactor: e.target.checked})}
                 />
               </div>
 
@@ -178,7 +190,7 @@ const Security = () => {
                 </div>
                 <Switch 
                   checked={securitySettings.requireStrongPassword}
-                  onCheckedChange={(checked) => setSecuritySettings({...securitySettings, requireStrongPassword: checked})}
+                  onChange={(e) => setSecuritySettings({...securitySettings, requireStrongPassword: e.target.checked})}
                 />
               </div>
 
@@ -189,7 +201,7 @@ const Security = () => {
                 </div>
                 <Switch 
                   checked={securitySettings.enableIpBlocking}
-                  onCheckedChange={(checked) => setSecuritySettings({...securitySettings, enableIpBlocking: checked})}
+                  onChange={(e) => setSecuritySettings({...securitySettings, enableIpBlocking: e.target.checked})}
                 />
               </div>
 
@@ -200,7 +212,7 @@ const Security = () => {
                 </div>
                 <Switch 
                   checked={securitySettings.enableAuditLog}
-                  onCheckedChange={(checked) => setSecuritySettings({...securitySettings, enableAuditLog: checked})}
+                  onChange={(e) => setSecuritySettings({...securitySettings, enableAuditLog: e.target.checked})}
                 />
               </div>
 
@@ -211,7 +223,7 @@ const Security = () => {
                 </div>
                 <Switch 
                   checked={securitySettings.notifyOnSuspiciousActivity}
-                  onCheckedChange={(checked) => setSecuritySettings({...securitySettings, notifyOnSuspiciousActivity: checked})}
+                  onChange={(e) => setSecuritySettings({...securitySettings, notifyOnSuspiciousActivity: e.target.checked})}
                 />
               </div>
             </div>

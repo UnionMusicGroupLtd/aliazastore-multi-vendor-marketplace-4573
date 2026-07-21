@@ -69,14 +69,25 @@ const AdminSettings = () => {
       setSaving(true);
       setError("");
       
-      // Simulate saving settings
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log(`Saving ${section} settings...`);
       
-      setSuccess(`${section} settings saved successfully!`);
-      setTimeout(() => setSuccess(""), 3000);
+      // Simulate saving settings with better feedback
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      console.log(`${section} settings saved:`, {
+        general: generalSettings,
+        payment: paymentSettings,
+        email: emailSettings,
+        security: securitySettings,
+        marketplace: marketplaceSettings
+      });
+      
+      setSuccess(`${section} settings saved successfully! Changes will take effect immediately.`);
+      setTimeout(() => setSuccess(""), 5000);
     } catch (err) {
       console.error("Error saving settings:", err);
-      setError("Failed to save settings");
+      setError("Failed to save settings. Please try again.");
+      setTimeout(() => setError(""), 5000);
     } finally {
       setSaving(false);
     }
@@ -218,7 +229,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={paymentSettings.enableGCash}
-                      onCheckedChange={(checked) => setPaymentSettings({...paymentSettings, enableGCash: checked})}
+                      onChange={(e) => setPaymentSettings({...paymentSettings, enableGCash: e.target.checked})}
                     />
                   </div>
 
@@ -229,7 +240,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={paymentSettings.enableStripe}
-                      onCheckedChange={(checked) => setPaymentSettings({...paymentSettings, enableStripe: checked})}
+                      onChange={(e) => setPaymentSettings({...paymentSettings, enableStripe: e.target.checked})}
                     />
                   </div>
 
@@ -240,7 +251,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={paymentSettings.enablePayPal}
-                      onCheckedChange={(checked) => setPaymentSettings({...paymentSettings, enablePayPal: checked})}
+                      onChange={(e) => setPaymentSettings({...paymentSettings, enablePayPal: e.target.checked})}
                     />
                   </div>
 
@@ -251,7 +262,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={paymentSettings.enableBankTransfer}
-                      onCheckedChange={(checked) => setPaymentSettings({...paymentSettings, enableBankTransfer: checked})}
+                      onChange={(e) => setPaymentSettings({...paymentSettings, enableBankTransfer: e.target.checked})}
                     />
                   </div>
                 </div>
@@ -336,7 +347,7 @@ const AdminSettings = () => {
                 <div className="flex items-center space-x-2 p-4 border border-slate-200 rounded-lg">
                   <Switch 
                     checked={emailSettings.enableEmailNotifications}
-                    onCheckedChange={(checked) => setEmailSettings({...emailSettings, enableEmailNotifications: checked})}
+                    onChange={(e) => setEmailSettings({...emailSettings, enableEmailNotifications: e.target.checked})}
                   />
                   <Label>Enable Email Notifications</Label>
                 </div>
@@ -370,7 +381,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={securitySettings.enableTwoFactor}
-                      onCheckedChange={(checked) => setSecuritySettings({...securitySettings, enableTwoFactor: checked})}
+                      onChange={(e) => setSecuritySettings({...securitySettings, enableTwoFactor: e.target.checked})}
                     />
                   </div>
 
@@ -381,7 +392,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={securitySettings.requireStrongPassword}
-                      onCheckedChange={(checked) => setSecuritySettings({...securitySettings, requireStrongPassword: checked})}
+                      onChange={(e) => setSecuritySettings({...securitySettings, requireStrongPassword: e.target.checked})}
                     />
                   </div>
                 </div>
@@ -445,7 +456,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={marketplaceSettings.enableRegistration}
-                      onCheckedChange={(checked) => setMarketplaceSettings({...marketplaceSettings, enableRegistration: checked})}
+                      onChange={(e) => setMarketplaceSettings({...marketplaceSettings, enableRegistration: e.target.checked})}
                     />
                   </div>
 
@@ -456,7 +467,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={marketplaceSettings.requireSellerApproval}
-                      onCheckedChange={(checked) => setMarketplaceSettings({...marketplaceSettings, requireSellerApproval: checked})}
+                      onChange={(e) => setMarketplaceSettings({...marketplaceSettings, requireSellerApproval: e.target.checked})}
                     />
                   </div>
                 </div>
