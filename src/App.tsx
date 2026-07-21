@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// Force cache clear - App component rebuild at 16:10 - REPORT MODAL REMOVED FROM ADMIN DASHBOARD
-console.log("App component loaded - REPORT MODAL REMOVED - CLEAN ADMIN DASHBOARD - ", new Date().toISOString());
+// Force cache clear - App component rebuild at 16:20 - ADMIN CARDS CLICKABILITY FIXED
+console.log("App component loaded - ADMIN CARDS CLICKABILITY FIXED - PROPER NAVIGATION - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

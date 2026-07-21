@@ -334,26 +334,35 @@ const AdminDashboard = () => {
           <div className="lg:col-span-2 space-y-6">
             <div className="grid sm:grid-cols-2 gap-4">
               {menuItems.map((item) => (
-                <Link key={item.label} to={item.href}>
-                  <Card className="group hover:shadow-lg transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm cursor-pointer">
+                <Link 
+                  key={item.label} 
+                  to={item.href}
+                  className="block group"
+                  onClick={(e) => {
+                    // Ensure navigation works even if Link fails
+                    e.preventDefault();
+                    window.location.href = item.href;
+                  }}
+                >
+                  <Card className="group-hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm cursor-pointer hover:scale-[1.02] active:scale-[0.98] touch-manipulation">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-4">
-                          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <item.icon className="w-6 h-6 text-white" />
+                          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform touch-manipulation">
+                            <item.icon className="w-6 h-6 text-white pointer-events-none" />
                           </div>
-                          <div>
-                            <h3 className="font-semibold text-slate-900 mb-1">{item.label}</h3>
-                            <p className="text-sm text-slate-600">{item.description}</p>
+                          <div className="flex-1 min-w-0">
+                            <h3 className="font-semibold text-slate-900 mb-1 group-hover:text-purple-700 transition-colors pointer-events-none">{item.label}</h3>
+                            <p className="text-sm text-slate-600 pointer-events-none">{item.description}</p>
                           </div>
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 flex-shrink-0">
                           {item.count !== undefined && (
-                            <Badge className="bg-purple-100 text-purple-700">
+                            <Badge className="bg-purple-100 text-purple-700 group-hover:bg-purple-200 transition-colors pointer-events-none">
                               {item.count}
                             </Badge>
                           )}
-                          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-purple-600 transition-colors" />
+                          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all pointer-events-none" />
                         </div>
                       </div>
                     </CardContent>
@@ -398,22 +407,30 @@ const AdminDashboard = () => {
                 <CardTitle className="text-lg">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <Button variant="outline" className="w-full justify-start">
-                  <CheckCircle className="mr-2 w-4 h-4 text-green-600" />
-                  Review Pending Stores (32)
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Package className="mr-2 w-4 h-4 text-orange-600" />
-                  Review Flagged Products (15)
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <AlertTriangle className="mr-2 w-4 h-4 text-red-600" />
-                  Security Alerts (3)
-                </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Clock className="mr-2 w-4 h-4 text-blue-600" />
-                  Pending Withdrawals (8)
-                </Button>
+                <Link to="/admin/shop-owners?status=pending">
+                  <Button variant="outline" className="w-full justify-start hover:bg-green-50 hover:border-green-300 transition-colors">
+                    <CheckCircle className="mr-2 w-4 h-4 text-green-600" />
+                    Review Pending Stores (32)
+                  </Button>
+                </Link>
+                <Link to="/admin/products?status=flagged">
+                  <Button variant="outline" className="w-full justify-start hover:bg-orange-50 hover:border-orange-300 transition-colors">
+                    <Package className="mr-2 w-4 h-4 text-orange-600" />
+                    Review Flagged Products (15)
+                  </Button>
+                </Link>
+                <Link to="/admin/security">
+                  <Button variant="outline" className="w-full justify-start hover:bg-red-50 hover:border-red-300 transition-colors">
+                    <AlertTriangle className="mr-2 w-4 h-4 text-red-600" />
+                    Security Alerts (3)
+                  </Button>
+                </Link>
+                <Link to="/admin/withdrawals?status=pending">
+                  <Button variant="outline" className="w-full justify-start hover:bg-blue-50 hover:border-blue-300 transition-colors">
+                    <Clock className="mr-2 w-4 h-4 text-blue-600" />
+                    Pending Withdrawals (8)
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
           </div>
