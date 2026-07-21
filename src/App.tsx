@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// ADMIN SETTINGS DROPDOWN FIX - Fixed timezone/currency dropdowns with proper select component and database saving
-console.log("App component loaded - ADMIN SETTINGS DROPDOWN FIX COMPLETE - Timezone & Currency dropdowns working with proper database persistence - ", new Date().toISOString());
+// MOBILE RESPONSIVENESS FIX - Fixed mobile overflow, dialog positioning, and layout issues across admin pages
+console.log("App component loaded - MOBILE RESPONSIVENESS FIX COMPLETE - Dialog component, ShopOwnerManagement mobile layout fixed - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

@@ -351,19 +351,19 @@ const ShopOwnerManagement = () => {
       {/* Header */}
       <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Link to="/dashboard/admin" className="flex items-center space-x-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div className="flex items-center space-x-4 overflow-hidden">
+              <Link to="/dashboard/admin" className="flex items-center space-x-2 flex-shrink-0">
                 <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
                   <Store className="w-6 h-6 text-white" />
                 </div>
-                <div>
+                <div className="hidden sm:block">
                   <span className="text-xl font-bold">AliazaStore</span>
                   <Badge className="ml-2 bg-purple-100 text-purple-700">Admin</Badge>
                 </div>
               </Link>
-              <div className="h-6 w-px bg-slate-300"></div>
-              <h1 className="text-xl font-semibold">Shop Owner Management</h1>
+              <div className="h-6 w-px bg-slate-300 flex-shrink-0"></div>
+              <h1 className="text-lg sm:text-xl font-semibold truncate">Shop Owner Management</h1>
             </div>
           </div>
         </div>
@@ -447,22 +447,22 @@ const ShopOwnerManagement = () => {
 
         {/* Search and Filters */}
         <Card className="mb-6 border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row gap-4">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <Input
                   placeholder="Search by name or email..."
-                  className="pl-10"
+                  className="pl-10 text-sm"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
               <div className="flex items-center space-x-2">
-                <Label htmlFor="status-filter">Status:</Label>
+                <Label htmlFor="status-filter" className="text-sm whitespace-nowrap">Status:</Label>
                 <select
                   id="status-filter"
-                  className="px-3 py-2 border border-slate-300 rounded-lg bg-white"
+                  className="px-3 py-2 border border-slate-300 rounded-lg bg-white text-sm"
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
                 >
@@ -479,22 +479,24 @@ const ShopOwnerManagement = () => {
 
         {/* Shop Owners List */}
         <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-          <CardHeader>
-            <div className="flex items-center justify-between">
+          <CardHeader className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
-                <CardTitle>Shop Owners</CardTitle>
-                <CardDescription>Manage shop owner accounts, trials, and subscriptions</CardDescription>
+                <CardTitle className="text-lg sm:text-xl">Shop Owners</CardTitle>
+                <CardDescription className="text-sm">Manage shop owner accounts, trials, and subscriptions</CardDescription>
               </div>
               <div className="flex items-center space-x-2">
-                <Badge className="bg-purple-100 text-purple-700">
+                <Badge className="bg-purple-100 text-purple-700 text-sm">
                   {filteredOwners.length} owners
                 </Badge>
                 <Button 
                   onClick={() => setShowCreateStoreModal(true)}
                   className="bg-gradient-to-r from-orange-500 to-orange-600"
+                  size="sm"
                 >
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add New Store
+                  <Plus className="w-4 h-4 mr-1 sm:mr-2" />
+                  <span className="hidden sm:inline">Add New Store</span>
+                  <span className="sm:hidden">Add</span>
                 </Button>
               </div>
             </div>
@@ -502,17 +504,17 @@ const ShopOwnerManagement = () => {
           <CardContent>
             <div className="space-y-4">
               {filteredOwners.map((owner) => (
-                <div key={owner._row_id} className="p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
-                        <span className="text-white font-medium">
+                <div key={owner._row_id} className="p-3 sm:p-4 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                    <div className="flex items-start space-x-3 sm:space-x-4 overflow-hidden">
+                      <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white font-medium text-sm">
                           {owner.owner_name?.charAt(0).toUpperCase()}
                         </span>
                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <h3 className="font-semibold text-slate-900">{owner.name}</h3>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-2 mb-1 flex-wrap">
+                          <h3 className="font-semibold text-slate-900 truncate">{owner.name}</h3>
                           <Badge className={`text-xs ${getStatusColor(owner.status)}`}>
                             <div className="flex items-center space-x-1">
                               {getStatusIcon(owner.status)}
@@ -520,7 +522,7 @@ const ShopOwnerManagement = () => {
                             </div>
                           </Badge>
                         </div>
-                        <p className="text-sm text-slate-600 mb-2">{owner.owner_email}</p>
+                        <p className="text-xs sm:text-sm text-slate-600 mb-2 truncate">{owner.owner_email}</p>
                         
                         {/* Trial Info */}
                         {owner.status === 'trial' && (
@@ -538,19 +540,19 @@ const ShopOwnerManagement = () => {
                         )}
 
                         {/* Stats */}
-                        <div className="flex items-center space-x-4 text-sm text-slate-600">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-600">
                           <div className="flex items-center space-x-1">
-                            <Package className="w-4 h-4" />
+                            <Package className="w-3 h-3 sm:w-4 sm:h-4" />
                             <span>{owner.products_count} products</span>
                           </div>
                           <div className="flex items-center space-x-1">
-                            <ShoppingCart className="w-4 h-4" />
+                            <ShoppingCart className="w-3 h-3 sm:w-4 sm:h-4" />
                             <span>{owner.orders_count} orders</span>
                           </div>
                           {owner.admin_granted_free_trials > 0 && (
                             <div className="flex items-center space-x-1">
-                              <Gift className="w-4 h-4 text-purple-500" />
-                              <span>{owner.admin_granted_free_trials} free trials granted</span>
+                              <Gift className="w-3 h-3 sm:w-4 sm:h-4 text-purple-500" />
+                              <span>{owner.admin_granted_free_trials} free trials</span>
                             </div>
                           )}
                         </div>
@@ -568,14 +570,16 @@ const ShopOwnerManagement = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2 flex-shrink-0">
                       <Button
                         size="sm"
                         variant="outline"
                         onClick={() => openStoreDetail(owner)}
+                        className="text-xs sm:text-sm"
                       >
-                        <Edit className="w-4 h-4 mr-1" />
-                        Manage
+                        <Edit className="w-3 h-3 sm:w-4 sm:h-4 mr-1" />
+                        <span className="hidden sm:inline">Manage</span>
+                        <span className="sm:hidden">Edit</span>
                       </Button>
 
                       <Dialog>
@@ -812,37 +816,37 @@ const ShopOwnerManagement = () => {
 
       {/* Store Detail Modal */}
       <Dialog open={showStoreDetailModal} onOpenChange={setShowStoreDetailModal}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[100dvh] sm:max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Store Management</DialogTitle>
-            <DialogDescription>Manage store details and products</DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Store Management</DialogTitle>
+            <DialogDescription className="text-sm">Manage store details and products</DialogDescription>
           </DialogHeader>
           
           {selectedStore && (
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6">
               {/* Store Information */}
-              <div className="bg-slate-50 p-4 rounded-lg">
-                <h3 className="font-semibold mb-4">Store Information</h3>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="bg-slate-50 p-3 sm:p-4 rounded-lg">
+                <h3 className="font-semibold mb-3 sm:mb-4 text-base sm:text-lg">Store Information</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <Label className="text-sm text-slate-600">Store Name</Label>
+                    <Label className="text-xs sm:text-sm text-slate-600">Store Name</Label>
                     <Input
                       value={selectedStore.name}
                       onChange={(e) => setSelectedStore({ ...selectedStore, name: e.target.value })}
-                      className="mt-1"
+                      className="mt-1 text-sm"
                     />
                   </div>
                   <div>
-                    <Label className="text-sm text-slate-600">Owner Email</Label>
+                    <Label className="text-xs sm:text-sm text-slate-600">Owner Email</Label>
                     <Input
                       type="email"
                       value={selectedStore.owner_email}
                       onChange={(e) => setSelectedStore({ ...selectedStore, owner_email: e.target.value })}
-                      className="mt-1"
+                      className="mt-1 text-sm"
                     />
                   </div>
-                  <div className="col-span-2">
-                    <Label className="text-sm text-slate-600">Description</Label>
+                  <div className="col-span-1 sm:col-span-2">
+                    <Label className="text-xs sm:text-sm text-slate-600">Description</Label>
                     <Input
                       value={selectedStore.description}
                       onChange={(e) => setSelectedStore({ ...selectedStore, description: e.target.value })}

@@ -107,23 +107,34 @@ const DialogContent = React.forwardRef<
         ref={ref}
         className={cn(
           // Base positioning
-          "fixed left-[50%] top-[50%] z-50 grid gap-4 bg-white shadow-lg animate-in zoom-in-95 fade-in-0",
-          // Mobile-specific: full screen
-          "sm:translate-x-[-50%] sm:translate-y-[-50%] sm:rounded-lg sm:border",
-          // Desktop positioning
-          "w-full h-[100dvh] sm:w-auto sm:h-auto sm:max-w-lg",
-          // Height and scrolling
-          "sm:max-h-[calc(100vh-2rem)] sm:overflow-y-auto overflow-y-auto",
-          // Padding - added mobile padding for visibility
-          "p-6 sm:p-6", 
-          // Mobile-specific adjustments
+          "fixed z-50 grid gap-4 bg-white shadow-lg",
+          // Mobile: FULL SCREEN from edges, no transforms
+          "inset-0 sm:inset-auto",
+          "sm:left-[50%] sm:top-[50%]", 
+          "sm:translate-x-[-50%] sm:translate-y-[-50%]",
+          // Desktop styling
+          "sm:rounded-lg sm:border sm:max-w-lg",
+          "sm:max-h-[calc(100vh-2rem)] sm:overflow-y-auto",
+          // Mobile padding (smaller), desktop padding (larger)
+          "p-4 sm:p-6",
+          // Mobile-specific: ensure no overflow
+          "overflow-y-auto max-h-[100dvh]",
+          // Desktop margin
           "sm:my-4 sm:mx-4",
           className
         )}
         {...props}
       >
         {children}
-        {/* Desktop close button only */}
+        {/* Mobile close button - always visible on mobile */}
+        <button
+          onClick={() => onOpenChange?.(false)}
+          className="sm:hidden absolute left-3 top-3 z-50 rounded-full p-2 bg-gray-100 hover:bg-gray-200 shadow-md"
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </button>
+        {/* Desktop close button */}
         <button
           onClick={() => onOpenChange?.(false)}
           className="hidden sm:block absolute right-4 top-4 z-50 rounded-full p-2 bg-white hover:bg-gray-100 transition-opacity hover:opacity-100 opacity-70 shadow-md border border-gray-200"
