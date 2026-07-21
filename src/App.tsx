@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// COMPREHENSIVE MOBILE FIX - Fixed action buttons overflow, table layouts, navigation, and responsive design across entire website
-console.log("App component loaded - COMPREHENSIVE MOBILE FIX COMPLETE - All pages mobile optimized, action buttons fixed, tables responsive - ", new Date().toISOString());
+// NOTIFICATION & PROFILE NAVIGATION FIX - Fixed clickable notification bell and profile avatar across all dashboards
+console.log("App component loaded - NOTIFICATION & PROFILE NAVIGATION FIX COMPLETE - Bell icon and profile avatar now clickable with proper navigation - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
