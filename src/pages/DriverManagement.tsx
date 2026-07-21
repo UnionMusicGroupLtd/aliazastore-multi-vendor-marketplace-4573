@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/select";
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle 
-} from "@/components/ui/dialog";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+} from "@/components/ui/dialog-simple";
+
 import db from "@/lib/shared/kliv-database.js";
 
 const DriverManagement = () => {
@@ -387,11 +387,11 @@ const DriverManagement = () => {
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center space-x-4">
-                      <Avatar className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600">
-                        <AvatarFallback className="text-white font-semibold">
+                      <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span className="text-white font-semibold">
                           {getInitials(driver.name)}
-                        </AvatarFallback>
-                      </Avatar>
+                        </span>
+                      </div>
                       <div>
                         <CardTitle className="text-lg">{driver.name}</CardTitle>
                         <CardDescription className="flex items-center gap-1 mt-1">
@@ -729,11 +729,11 @@ const DriverManagement = () => {
           {selectedDriver && (
             <div className="space-y-4">
               <div className="flex items-center space-x-4">
-                <Avatar className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600">
-                  <AvatarFallback className="text-white text-xl font-semibold">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl font-semibold">
                     {getInitials(selectedDriver.name)}
-                  </AvatarFallback>
-                </Avatar>
+                  </span>
+                </div>
                 <div>
                   <h3 className="text-xl font-semibold">{selectedDriver.name}</h3>
                   <p className="text-sm text-slate-600">{selectedDriver.email}</p>

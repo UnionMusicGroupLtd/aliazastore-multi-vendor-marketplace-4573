@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/select";
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle 
-} from "@/components/ui/dialog";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+} from "@/components/ui/dialog-simple";
+
 import db from "@/lib/shared/kliv-database.js";
 
 const DeliveryOptionsManagement = () => {
@@ -502,11 +502,11 @@ const DeliveryOptionsManagement = () => {
                     <tr key={owner._row_id} className="border-b border-slate-100 hover:bg-slate-50">
                       <td className="p-4">
                         <div className="flex items-center space-x-3">
-                          <Avatar className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600">
-                            <AvatarFallback className="text-white text-sm">
+                          <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+                            <span className="text-white text-sm font-medium">
                               {getInitials(owner.owner_name)}
-                            </AvatarFallback>
-                          </Avatar>
+                            </span>
+                          </div>
                           <div>
                             <p className="font-medium">{owner.owner_name}</p>
                             <p className="text-sm text-slate-600">{owner.owner_email}</p>
@@ -767,11 +767,11 @@ const DeliveryOptionsManagement = () => {
             {selectedShopOwner && (
               <div className="bg-slate-50 p-4 rounded-lg">
                 <div className="flex items-center space-x-3">
-                  <Avatar className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600">
-                    <AvatarFallback className="text-white">
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center">
+                    <span className="text-white font-medium">
                       {getInitials(selectedShopOwner.owner_name)}
-                    </AvatarFallback>
-                  </Avatar>
+                    </span>
+                  </div>
                   <div>
                     <p className="font-semibold">{selectedShopOwner.store_name}</p>
                     <p className="text-sm text-slate-600">{selectedShopOwner.owner_name}</p>
