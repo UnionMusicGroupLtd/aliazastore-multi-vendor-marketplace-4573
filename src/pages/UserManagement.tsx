@@ -46,12 +46,16 @@ const UserManagement = () => {
       // Get all users using auth.listUsers
       const response = await auth.listUsers();
       
-      if (response && response.users) {
-        setUsers(response.users);
+      // Response format is {data: Array, totalCount: number}
+      if (response && response.data) {
+        setUsers(response.data);
+      } else {
+        setUsers([]);
       }
     } catch (err) {
       console.error("Error loading users:", err);
       setError("Failed to load users");
+      setUsers([]);
     } finally {
       setLoading(false);
     }
@@ -61,7 +65,7 @@ const UserManagement = () => {
     try {
       setError("");
       const newEnabledStatus = user.enabled === 0 ? 1 : 0;
-      await auth.update(user.user_uuid, {
+      await auth.updateUserByUuid(user.user_uuid, {
         enabled: newEnabledStatus
       });
       setSuccess(`User ${user.enabled ? "disabled" : "enabled"} successfully!`);
@@ -75,7 +79,11 @@ const UserManagement = () => {
   const handleUpdateUserGroups = async () => {
     try {
       setError("");
-      await auth.setGroups(selectedUser.user_uuid, userForm.groups);
+      // Update user groups using the correct API method
+      await auth.updateUserByUuid(selectedUser.user_uuid, {
+        groups: userForm.groups,
+        enabled: userForm.enabled
+      });
       setSuccess("User groups updated successfully!");
       setShowUserModal(false);
       loadUsers();

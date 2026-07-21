@@ -79,8 +79,8 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
-// Force cache clear - App component rebuild - ALL ADMIN DIALOG/MODAL/AVATAR ISSUES FIXED - Driver, Delivery, ShopOwner, User Management
-console.log("App component loaded - COMPREHENSIVE ADMIN FIX - ALL DIALOG/MODAL/AVATAR ISSUES RESOLVED - Driver, Delivery, ShopOwner, User Management FIXED - ", new Date().toISOString());
+// Force cache clear - USER MANAGEMENT API FIX - auth.listUsers/response format + auth.updateUserByUuid + auth groups fix
+console.log("App component loaded - USER MANAGEMENT API FIX - Fixed listUsers response format, updateUserByUuid, and groups API - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
