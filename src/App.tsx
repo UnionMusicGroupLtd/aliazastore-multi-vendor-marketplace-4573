@@ -81,7 +81,7 @@ import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 
 // HEADER NAVIGATION FIX - CORRECTED IMPLEMENTATION - CLICKABLE ELEMENTS + LOGOUT AFTER AVATAR
-console.log("App component loaded - SHOP VERIFICATION SYSTEM COMPLETE - Admin verification controls + blue tick badges - ", new Date().toISOString());
+console.log("App component loaded - ACTION DIALOG BUTTONS FIXED - Cancel/Activate buttons now working with proper error handling - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

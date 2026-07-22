@@ -274,14 +274,14 @@ const ShopOwnerManagement = () => {
   const handleAction = async () => {
     try {
       const { type, owner } = actionDialog;
-      const now = Date.now();
-      const dayInMs = 24 * 60 * 60 * 1000;
+      const now = Math.floor(Date.now() / 1000); // Use seconds for database consistency
+      const dayInSec = 24 * 60 * 60;
 
       let updateData: any = {};
 
       switch (type) {
         case 'grant_trial':
-          const newTrialEnd = now + (actionData.trialDays * dayInMs);
+          const newTrialEnd = now + (actionData.trialDays * dayInSec);
           updateData = {
             trial_start_date: now,
             trial_end_date: newTrialEnd,
@@ -315,14 +315,77 @@ const ShopOwnerManagement = () => {
           break;
       }
 
-      await db.update("stores", { _row_id: `eq.${owner._row_id}` }, updateData);
+      console.log('Performing action with data:', updateData);
+      console.log('Target store ID:', owner._row_id, 'Store name:', owner.name);
+      
+      // Use a workaround with direct database update via fetch
+      try {
+        // Build SQL update statement manually
+        const setClauses = [];
+        const values = [];
+        
+        for (const [key, value] of Object.entries(updateData)) {
+          if (value === null) {
+            setClauses.push(`${key} = NULL`);
+          } else if (typeof value === 'number') {
+            setClauses.push(`${key} = ${value}`);
+          } else if (typeof value === 'string') {
+            setClauses.push(`${key} = '${value}'`);
+          }
+        }
+        
+        // Add _updated_at
+        setClauses.push(`_updated_at = ${now}`);
+        
+        const sql = `UPDATE stores SET ${setClauses.join(', ')} WHERE _row_id = ${owner._row_id}`;
+        console.log('SQL update:', sql);
+        
+        // Use the database execute tool through a direct API call
+        const response = await fetch('/api/v2/database/stores', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            _row_id: owner._row_id,
+            ...updateData,
+            _updated_at: now
+          })
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+          console.error('Database update error:', errorData);
+          alert(`Failed to ${type} shop owner: ${errorData.error || 'Unknown error'}`);
+          return;
+        }
+        
+        console.log('Database update completed successfully');
+        
+      } catch (dbError) {
+        console.error('Database update exception:', dbError);
+        alert(`Database error: ${dbError instanceof Error ? dbError.message : 'Unknown database error'}`);
+        return;
+      }
       
       // Refresh data
       await loadShopOwners();
       setActionDialog({ open: false, type: null, owner: null });
       setActionData({ trialDays: 14, reason: "", notes: "" });
+      
+      // Show success message
+      const actionMessages = {
+        'activate': 'Shop owner activated successfully!',
+        'grant_trial': 'Free trial granted successfully!',
+        'suspend': 'Shop owner suspended successfully!',
+        'hold': 'Shop owner placed on hold successfully!'
+      };
+      alert(actionMessages[type as keyof typeof actionMessages]);
+      
     } catch (error) {
       console.error("Error performing action:", error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      alert(`Failed to perform action: ${errorMessage}`);
     }
   };
 
