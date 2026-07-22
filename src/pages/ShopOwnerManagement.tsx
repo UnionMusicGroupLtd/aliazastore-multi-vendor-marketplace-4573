@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { 
   Store, Users, Clock, AlertCircle, CheckCircle, 
   Pause, Ban, Gift, Search, X, Eye,
-  Package, ShoppingCart, Plus, Edit, Trash2
+  Package, ShoppingCart, Plus, Edit, Trash2, Verified
 } from "lucide-react";
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger 
@@ -515,6 +515,12 @@ const ShopOwnerManagement = () => {
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2 mb-1 flex-wrap">
                           <h3 className="font-semibold text-slate-900 truncate">{owner.name}</h3>
+                          {owner.is_verified && (
+                            <div className="flex items-center space-x-1 bg-blue-100 px-2 py-0.5 rounded-full">
+                              <Verified className="w-3 h-3 text-blue-600" />
+                              <span className="text-xs font-semibold text-blue-900">Verified</span>
+                            </div>
+                          )}
                           <Badge className={`text-xs ${getStatusColor(owner.status)}`}>
                             <div className="flex items-center space-x-1">
                               {getStatusIcon(owner.status)}

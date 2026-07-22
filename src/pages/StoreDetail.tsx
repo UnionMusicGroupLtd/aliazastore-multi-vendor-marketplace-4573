@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { 
   Store, ArrowLeft, Plus, Edit, Trash2, Package, ShoppingCart, 
   TrendingUp, Users, CheckCircle, AlertCircle, Clock, Phone, MapPin,
-  Facebook, FileText, QrCode
+  Facebook, FileText, QrCode, Verified
 } from "lucide-react";
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle 
@@ -76,7 +76,9 @@ const StoreDetail = () => {
 
   const handleUpdateStore = async () => {
     try {
-      await db.update("stores", { _row_id: `eq.${storeId}` }, {
+      if (!store) return;
+      
+      const updateData: any = {
         name: store.name,
         description: store.description,
         owner_email: store.owner_email,
@@ -86,7 +88,22 @@ const StoreDetail = () => {
         owner_facebook_id: store.owner_facebook_id,
         owner_govt_id: store.owner_govt_id,
         store_bio: store.store_bio
-      });
+      };
+      
+      // Include is_verified if it exists in the state
+      if (store.hasOwnProperty('is_verified')) {
+        updateData.is_verified = store.is_verified ? 1 : 0;
+      }
+      
+      console.log('Updating store with data:', updateData);
+      
+      const result = await db.update("stores", { _row_id: `eq.${storeId}` }, updateData);
+      
+      if (result.error) {
+        console.error('Database update error:', result.error);
+        alert(`Failed to update store: ${result.error.message || 'Unknown error'}`);
+        return;
+      }
       
       setSuccess("Store updated successfully!");
       setShowEditStoreModal(false);
@@ -94,6 +111,7 @@ const StoreDetail = () => {
       loadStoreData();
     } catch (error) {
       console.error("Error updating store:", error);
+      alert(`Failed to update store: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -192,7 +210,15 @@ const StoreDetail = () => {
                 </div>
                 <div>
                   <span className="text-xl font-bold">{store.name}</span>
-                  <Badge className={`ml-2 ${statusBadge.color}`}>{statusBadge.label}</Badge>
+                  <div className="flex items-center space-x-2 mt-1">
+                    {store.is_verified && (
+                      <div className="flex items-center space-x-1 bg-blue-100 px-2 py-0.5 rounded-full">
+                        <Verified className="w-3 h-3 text-blue-600" />
+                        <span className="text-xs font-semibold text-blue-900">Verified</span>
+                      </div>
+                    )}
+                    <Badge className={statusBadge.color}>{statusBadge.label}</Badge>
+                  </div>
                 </div>
               </div>
             </div>
@@ -566,6 +592,36 @@ const StoreDetail = () => {
                 onChange={(e) => setStore({ ...store, store_bio: e.target.value })}
               />
             </div>
+            
+            {/* Verification Controls - Admin Only */}
+            <div className="pt-4 border-t border-slate-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label className="text-sm font-semibold text-slate-900">Verified Shop</Label>
+                  <p className="text-xs text-slate-500">Only admin can verify shops</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  {store.is_verified ? (
+                    <div className="flex items-center space-x-1 text-blue-600">
+                      <Verified className="w-5 h-5" />
+                      <span className="text-sm font-semibold">Verified</span>
+                    </div>
+                  ) : (
+                    <span className="text-xs text-slate-500">Not verified</span>
+                  )}
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={store.is_verified || false}
+                      onChange={(e) => setStore({ ...store, is_verified: e.target.checked })}
+                      className="sr-only peer"
+                    />
+                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
             <div className="flex justify-end space-x-2 pt-4">
               <Button variant="outline" onClick={() => setShowEditStoreModal(false)}>
                 Cancel
