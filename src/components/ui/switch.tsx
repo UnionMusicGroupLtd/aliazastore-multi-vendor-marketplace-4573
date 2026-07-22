@@ -3,14 +3,22 @@ import { cn } from "@/lib/utils"
 
 const Switch = React.forwardRef<
   HTMLInputElement,
-  React.InputHTMLAttributes<HTMLInputElement> & { checked?: boolean }
->(({ className, checked, ...props }, ref) => (
+  React.InputHTMLAttributes<HTMLInputElement> & { checked?: boolean; onCheckedChange?: (checked: boolean) => void }
+>(({ className, checked, onCheckedChange, onChange, ...props }, ref) => (
   <label className="relative inline-flex items-center cursor-pointer">
     <input
       type="checkbox"
       ref={ref}
       checked={checked}
       className="sr-only peer"
+      onChange={(e) => {
+        if (onChange) {
+          onChange(e);
+        }
+        if (onCheckedChange) {
+          onCheckedChange(e.target.checked);
+        }
+      }}
       {...props}
     />
     <div
