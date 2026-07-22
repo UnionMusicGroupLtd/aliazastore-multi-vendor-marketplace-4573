@@ -3,6 +3,8 @@
  * Checks if a store has an active subscription/trial and what features are available
  */
 
+import { Gift, CheckCircle, Lock, Clock, XCircle, AlertCircle } from "lucide-react";
+
 export interface SubscriptionStatus {
   status: 'trial' | 'active' | 'trial_ended' | 'subscription_expired' | 'suspended' | 'cancelled';
   canAddProducts: boolean;
@@ -26,7 +28,7 @@ export const checkSubscriptionStatus = (storeData: any): SubscriptionStatus => {
       canReceiveOrders: true,
       storeVisible: true,
       showSubscribeNotice: false,
-      icon: null,
+      icon: Gift,
       color: "bg-purple-100 text-purple-700",
       message: "No store data available",
       actionText: "Subscribe Now",
@@ -38,16 +40,6 @@ export const checkSubscriptionStatus = (storeData: any): SubscriptionStatus => {
   const trialEnd = storeData.trial_end_date ? new Date(storeData.trial_end_date) : null;
   const subscriptionEnd = storeData.subscription_end_date ? new Date(storeData.subscription_end_date) : null;
 
-  // Import icons dynamically to avoid circular dependencies
-  const icons = {
-    Gift: 'Gift',
-    CheckCircle: 'CheckCircle', 
-    Lock: 'Lock',
-    Clock: 'Clock',
-    XCircle: 'XCircle',
-    AlertCircle: 'AlertCircle'
-  };
-
   // Check if store is suspended or cancelled
   if (storeData.subscription_status === "suspended" || storeData.subscription_status === "cancelled") {
     return {
@@ -56,7 +48,7 @@ export const checkSubscriptionStatus = (storeData: any): SubscriptionStatus => {
       canReceiveOrders: false,
       storeVisible: false,
       showSubscribeNotice: true,
-      icon: icons.XCircle,
+      icon: XCircle,
       color: "bg-red-100 text-red-700",
       message: "Your subscription has been suspended. Subscribe to continue selling.",
       actionText: "Reactivate Subscription",
@@ -73,7 +65,7 @@ export const checkSubscriptionStatus = (storeData: any): SubscriptionStatus => {
       canReceiveOrders: true,
       storeVisible: true,
       showSubscribeNotice: daysRemaining <= 3, // Show notice in last 3 days
-      icon: icons.Gift,
+      icon: Gift,
       color: "bg-purple-100 text-purple-700",
       message: `Free Trial - ${daysRemaining} days remaining`,
       actionText: "Subscribe Now",
@@ -90,7 +82,7 @@ export const checkSubscriptionStatus = (storeData: any): SubscriptionStatus => {
       canReceiveOrders: false,
       storeVisible: false,
       showSubscribeNotice: true,
-      icon: icons.Lock,
+      icon: Lock,
       color: "bg-red-100 text-red-700",
       message: "Trial ended. Subscribe to continue selling.",
       actionText: "Subscribe Now",
@@ -108,7 +100,7 @@ export const checkSubscriptionStatus = (storeData: any): SubscriptionStatus => {
       canReceiveOrders: true,
       storeVisible: true,
       showSubscribeNotice: daysRemaining <= 3, // Show notice in last 3 days
-      icon: icons.CheckCircle,
+      icon: CheckCircle,
       color: "bg-green-100 text-green-700",
       message: `Subscription active - ${daysRemaining} days remaining`,
       actionText: "Manage Subscription",
@@ -125,7 +117,7 @@ export const checkSubscriptionStatus = (storeData: any): SubscriptionStatus => {
       canReceiveOrders: false,
       storeVisible: false,
       showSubscribeNotice: true,
-      icon: icons.Clock,
+      icon: Clock,
       color: "bg-red-100 text-red-700",
       message: "Subscription expired. Subscribe to continue selling.",
       actionText: "Renew Subscription",
@@ -141,7 +133,7 @@ export const checkSubscriptionStatus = (storeData: any): SubscriptionStatus => {
     canReceiveOrders: true,
     storeVisible: true,
     showSubscribeNotice: false,
-    icon: icons.Gift,
+    icon: Gift,
     color: "bg-purple-100 text-purple-700",
     message: "Free trial period",
     actionText: "Subscribe Now",
