@@ -78,10 +78,12 @@ import Categories from "./pages/Categories";
 import SubscriptionDebug from "./pages/SubscriptionDebug";
 import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
+import Cookies from "./pages/Cookies";
+import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
 // HEADER NAVIGATION FIX - CORRECTED IMPLEMENTATION - CLICKABLE ELEMENTS + LOGOUT AFTER AVATAR
-console.log("App component loaded - ACTION DIALOG BUTTONS FIXED - Cancel/Activate buttons now working with proper error handling - ", new Date().toISOString());
+console.log("App component loaded - COOKIES AND SITEMAP PAGES ADDED - Fixed 404 errors for /cookies and /sitemap routes - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -109,6 +111,8 @@ const App = () => (
           <Route path="/order-tracking" element={<OrderTracking />} />
           <Route path="/payment-methods" element={<PaymentMethods />} />
           <Route path="/admin-direct" element={<AdminDirect />} />
+          <Route path="/cookies" element={<Cookies />} />
+          <Route path="/sitemap" element={<Sitemap />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/categories" element={<Categories />} />
