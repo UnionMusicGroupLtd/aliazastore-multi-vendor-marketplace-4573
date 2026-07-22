@@ -19,7 +19,7 @@ import auth from "@/lib/shared/kliv-auth.js";
 import db from "@/lib/shared/kliv-database.js";
 
 const SellerDashboard = () => {
-  const [, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
   const [store, setStore] = useState<any>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [orders, setOrders] = useState<any[]>([]);
@@ -33,11 +33,14 @@ const SellerDashboard = () => {
 
   const loadDashboardData = async () => {
     try {
+      console.log("🔄 Loading seller dashboard data...");
       const currentUser = await auth.getUser();
       if (!currentUser) {
+        console.log("❌ No user found, redirecting to login");
         window.location.href = "/login";
         return;
       }
+      console.log("✅ User authenticated:", currentUser.email);
       setUser(currentUser);
 
       // Load seller's store
@@ -45,14 +48,31 @@ const SellerDashboard = () => {
         owner_uuid: `eq.${currentUser.userUuid}`
       });
       
+      console.log("📦 Stores found:", stores.length);
+      
       if (stores.length === 0) {
-        console.log("No store found");
+        console.log("⚠️ No store found for seller");
+        setStore(null);
+        setSubscriptionStatus({
+          status: 'trial',
+          canAddProducts: true,
+          canReceiveOrders: true,
+          storeVisible: true,
+          showSubscribeNotice: true,
+          icon: Gift,
+          color: "bg-purple-100 text-purple-700",
+          message: "Create your store to get started",
+          actionText: "Create Store",
+          daysRemaining: 14
+        });
       } else {
         const storeData = stores[0];
+        console.log("✅ Store loaded:", storeData.name);
         setStore(storeData);
 
         // Initialize trial if not set
         if (!storeData.trial_start_date && !storeData.subscription_start_date) {
+          console.log("🎁 Initializing 14-day trial for store...");
           const now = new Date();
           const trialEnd = new Date(now.getTime() + (14 * 24 * 60 * 60 * 1000));
           
@@ -68,39 +88,70 @@ const SellerDashboard = () => {
           storeData.trial_end_date = trialEnd.toISOString();
           storeData.subscription_status = "trial";
           storeData.subscription_price = 200.00;
+          console.log("✅ Trial initialized:", trialEnd);
         }
 
         // Check subscription status
+        console.log("🔍 Checking subscription status...");
         const status = checkSubscriptionStatus(storeData);
+        console.log("📋 Subscription status:", status);
         setSubscriptionStatus(status);
 
         // Load store products only if subscription is active
         if (status.canAddProducts) {
+          console.log("📦 Loading products...");
           const storeProducts = await db.query("products", {
             store_id: `eq.${storeData._row_id}`,
             order: "_created_at.desc",
             limit: "5"
           });
+          console.log("✅ Products loaded:", storeProducts.length);
           setProducts(storeProducts);
         } else {
+          console.log("🔒 Products locked - subscription not active");
           setProducts([]);
         }
 
         // Load store orders only if subscription is active
         if (status.canReceiveOrders) {
+          console.log("📋 Loading orders...");
           const storeOrders = await db.query("orders", {
             store_id: `eq.${storeData._row_id}`,
             order: "_created_at.desc",
             limit: "5"
           });
+          console.log("✅ Orders loaded:", storeOrders.length);
           setOrders(storeOrders);
         } else {
+          console.log("🔒 Orders locked - subscription not active");
           setOrders([]);
         }
       }
     } catch (error) {
-      console.error("Error loading dashboard data:", error);
+      console.error("❌ Error loading dashboard data:", error);
+      console.error("Error details:", error.message, error.stack);
+      // Set default values to prevent white screen
+      setStore({
+        name: "Error Loading Store",
+        owner_govt_id_uploaded: 1,
+        store_logo_uploaded: 1
+      });
+      setProducts([]);
+      setOrders([]);
+      setSubscriptionStatus({
+        status: 'trial',
+        canAddProducts: true,
+        canReceiveOrders: true,
+        storeVisible: true,
+        showSubscribeNotice: true,
+        icon: AlertCircle,
+        color: "bg-red-100 text-red-700",
+        message: "Error loading store data. Please refresh the page.",
+        actionText: "Retry",
+        daysRemaining: 0
+      });
     } finally {
+      console.log("✅ Dashboard data loading complete");
       setLoading(false);
     }
   };
@@ -221,7 +272,13 @@ const SellerDashboard = () => {
     },
   ];
 
-  if (loading) {
+  console.log("🎨 SellerDashboard component rendering...");
+console.log("👤 User state:", user);
+console.log("🏪 Store state:", store);
+console.log("⚡ Loading state:", loading);
+console.log("📊 Subscription status:", subscriptionStatus);
+
+if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <div className="text-center">
