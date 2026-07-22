@@ -26,7 +26,7 @@ const AdminSettings = () => {
   const [generalSettings, setGeneralSettings] = useState({
     siteName: "AliazaStore",
     siteDescription: "Multi-Vendor Marketplace",
-    contactEmail: "info@unionmusicgroup.co.uk",
+    contactEmail: "info@aliazastore.com",
     contactPhone: "+63 912 345 6789",
     timezone: "Asia/Manila",
     language: "en-US"
@@ -37,7 +37,10 @@ const AdminSettings = () => {
     const loadSettings = async () => {
       try {
         setLoading(true);
-        const { data } = await db.query('platform_settings', {});
+        const result = await db.query('platform_settings', {});
+        console.log('Load settings result:', result);
+        
+        const data = result?.data || result;
         
         if (data && data.length > 0) {
           data.forEach((setting: any) => {
@@ -141,33 +144,53 @@ const AdminSettings = () => {
       const settingsJson = JSON.stringify(settingsToSave);
       
       // Check if settings already exist
-      const { data: existingSettings } = await db.query('platform_settings', { 
+      console.log(`Checking for existing ${section} settings...`);
+      const queryResult = await db.query('platform_settings', { 
         section: `eq.${section.toLowerCase()}` 
       });
       
+      console.log('Query result:', queryResult);
+      
+      const existingSettings = queryResult?.data || queryResult;
+      console.log(`Existing settings found:`, existingSettings ? existingSettings.length : 0);
+      
+      // Always update or insert based on section, not _row_id
+      // This avoids UNIQUE constraint issues
       if (existingSettings && existingSettings.length > 0) {
-        // Update existing settings
-        const { error } = await db.update('platform_settings', 
-          { _row_id: `eq.${existingSettings[0]._row_id}` }, 
+        // Update existing settings using section instead of _row_id
+        console.log('Updating existing settings for section:', section.toLowerCase());
+        console.log('Settings to save:', settingsJson);
+        
+        const result = await db.update('platform_settings', 
+          { section: `eq.${section.toLowerCase()}` }, 
           { settings: settingsJson }
         );
         
-        if (error) {
-          console.error('Database error:', error);
-          setError(`Failed to save ${section} settings. Please try again.`);
+        console.log('Update result:', result);
+        
+        if (result.error) {
+          console.error('Database update error:', result.error);
+          const errorMessage = result.error instanceof Error ? result.error.message : JSON.stringify(result.error);
+          setError(`Failed to save ${section} settings. Database error: ${errorMessage}`);
           return;
         }
       } else {
         // Insert new settings
-        const { error } = await db.insert('platform_settings', {
+        console.log('Inserting new settings');
+        console.log('Settings to save:', settingsJson);
+        
+        const result = await db.insert('platform_settings', {
           id: `admin-settings-${section.toLowerCase()}`,
           section: section.toLowerCase(),
           settings: settingsJson
         });
         
-        if (error) {
-          console.error('Database error:', error);
-          setError(`Failed to save ${section} settings. Please try again.`);
+        console.log('Insert result:', result);
+        
+        if (result.error) {
+          console.error('Database insert error:', result.error);
+          const errorMessage = result.error instanceof Error ? result.error.message : JSON.stringify(result.error);
+          setError(`Failed to save ${section} settings. Database error: ${errorMessage}`);
           return;
         }
       }
@@ -178,7 +201,8 @@ const AdminSettings = () => {
       setTimeout(() => setSuccess(""), 5000);
     } catch (err) {
       console.error("Error saving settings:", err);
-      setError("Failed to save settings. Please try again.");
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
+      setError(`Failed to save settings. ${errorMessage}`);
       setTimeout(() => setError(""), 5000);
     } finally {
       setSaving(false);
@@ -268,6 +292,9 @@ const AdminSettings = () => {
                   <div>
                     <Label>Timezone</Label>
                     <Select value={generalSettings.timezone} onValueChange={(value) => setGeneralSettings({...generalSettings, timezone: value})}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select timezone" />
+                      </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Asia/Manila">Asia/Manila (Philippines - UTC+8)</SelectItem>
                         <SelectItem value="Asia/Shanghai">Asia/Shanghai (China UTC+8)</SelectItem>
@@ -369,7 +396,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={paymentSettings.enableGCash}
-                      onChange={(e) => setPaymentSettings({...paymentSettings, enableGCash: e.target.checked})}
+                      onCheckedChange={(checked) => setPaymentSettings({...paymentSettings, enableGCash: checked})}
                     />
                   </div>
 
@@ -380,7 +407,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={paymentSettings.enableStripe}
-                      onChange={(e) => setPaymentSettings({...paymentSettings, enableStripe: e.target.checked})}
+                      onCheckedChange={(checked) => setPaymentSettings({...paymentSettings, enableStripe: checked})}
                     />
                   </div>
 
@@ -391,7 +418,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={paymentSettings.enablePayPal}
-                      onChange={(e) => setPaymentSettings({...paymentSettings, enablePayPal: e.target.checked})}
+                      onCheckedChange={(checked) => setPaymentSettings({...paymentSettings, enablePayPal: checked})}
                     />
                   </div>
 
@@ -402,7 +429,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={paymentSettings.enableBankTransfer}
-                      onChange={(e) => setPaymentSettings({...paymentSettings, enableBankTransfer: e.target.checked})}
+                      onCheckedChange={(checked) => setPaymentSettings({...paymentSettings, enableBankTransfer: checked})}
                     />
                   </div>
                 </div>
@@ -487,7 +514,7 @@ const AdminSettings = () => {
                 <div className="flex items-center space-x-2 p-4 border border-slate-200 rounded-lg">
                   <Switch 
                     checked={emailSettings.enableEmailNotifications}
-                    onChange={(e) => setEmailSettings({...emailSettings, enableEmailNotifications: e.target.checked})}
+                    onCheckedChange={(checked) => setEmailSettings({...emailSettings, enableEmailNotifications: checked})}
                   />
                   <Label>Enable Email Notifications</Label>
                 </div>
@@ -521,7 +548,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={securitySettings.enableTwoFactor}
-                      onChange={(e) => setSecuritySettings({...securitySettings, enableTwoFactor: e.target.checked})}
+                      onCheckedChange={(checked) => setSecuritySettings({...securitySettings, enableTwoFactor: checked})}
                     />
                   </div>
 
@@ -532,7 +559,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={securitySettings.requireStrongPassword}
-                      onChange={(e) => setSecuritySettings({...securitySettings, requireStrongPassword: e.target.checked})}
+                      onCheckedChange={(checked) => setSecuritySettings({...securitySettings, requireStrongPassword: checked})}
                     />
                   </div>
                 </div>
@@ -596,7 +623,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={marketplaceSettings.enableRegistration}
-                      onChange={(e) => setMarketplaceSettings({...marketplaceSettings, enableRegistration: e.target.checked})}
+                      onCheckedChange={(checked) => setMarketplaceSettings({...marketplaceSettings, enableRegistration: checked})}
                     />
                   </div>
 
@@ -607,7 +634,7 @@ const AdminSettings = () => {
                     </div>
                     <Switch 
                       checked={marketplaceSettings.requireSellerApproval}
-                      onChange={(e) => setMarketplaceSettings({...marketplaceSettings, requireSellerApproval: e.target.checked})}
+                      onCheckedChange={(checked) => setMarketplaceSettings({...marketplaceSettings, requireSellerApproval: checked})}
                     />
                   </div>
                 </div>
