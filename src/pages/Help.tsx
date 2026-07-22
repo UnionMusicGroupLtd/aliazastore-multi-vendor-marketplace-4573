@@ -471,7 +471,7 @@ const Help = () => {
             <Link to="/help" className="text-slate-400 hover:text-white transition-colors">Help Center</Link>
           </div>
           <p className="text-slate-500 text-sm">
-            © 2025 AliazaStore. All rights reserved.
+            © 2026 AliazaStore. All rights reserved.
           </p>
         </div>
       </footer>

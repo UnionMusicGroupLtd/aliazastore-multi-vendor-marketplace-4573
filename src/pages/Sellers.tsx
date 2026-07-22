@@ -471,7 +471,7 @@ const Sellers = () => {
             Your premium multi-vendor marketplace for buying and selling amazing products.
           </p>
           <p className="text-slate-500 text-sm">
-            © 2025 AliazaStore. All rights reserved.
+            © 2026 AliazaStore. All rights reserved.
           </p>
         </div>
       </footer>

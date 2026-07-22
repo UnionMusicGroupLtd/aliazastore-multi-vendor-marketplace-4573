@@ -237,7 +237,7 @@ const Sitemap = () => {
         {/* Footer Note */}
         <div className="mt-8 text-center text-slate-500 text-sm">
           <p>
-            Last updated: January 2025 | For the most current information, visit our <Link to="/help" className="text-orange-600 hover:underline">Help Center</Link>
+            Last updated: January 2026 | For the most current information, visit our <Link to="/help" className="text-orange-600 hover:underline">Help Center</Link>
           </p>
         </div>
       </div>

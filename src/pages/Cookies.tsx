@@ -22,7 +22,7 @@ const Cookies = () => {
               </div>
               <div>
                 <CardTitle className="text-3xl">Cookie Policy</CardTitle>
-                <CardDescription>Last updated: January 2025</CardDescription>
+                <CardDescription>Last updated: January 2026</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -188,7 +188,7 @@ const Cookies = () => {
                   regularly to stay informed about how we use cookies.
                 </p>
                 <p className="text-sm">
-                  <strong>Effective Date:</strong> January 2025
+                  <strong>Effective Date:</strong> January 2026
                 </p>
               </div>
             </section>

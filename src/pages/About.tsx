@@ -45,7 +45,7 @@ const About = () => {
       color: "from-red-500 to-red-600"
     },
     {
-      year: "2025",
+      year: "2026",
       title: "Global Leadership",
       description: "Leading multi-vendor marketplace with millions of products and thousands of successful entrepreneurs.",
       icon: TrendingUp,
@@ -451,7 +451,7 @@ const About = () => {
             Empowering entrepreneurs since 2008. Your trusted global marketplace.
           </p>
           <p className="text-slate-500 text-sm">
-            © 2025 AliazaStore. All rights reserved.
+            © 2026 AliazaStore. All rights reserved.
           </p>
         </div>
       </footer>

@@ -151,7 +151,7 @@ const Terms = () => {
         <div className="max-w-4xl mx-auto text-center">
           <FileText className="w-16 h-16 mx-auto mb-6 opacity-50" />
           <h1 className="text-4xl lg:text-5xl font-bold mb-4">Terms of Service</h1>
-          <p className="text-xl text-white/90 mb-2">Last Updated: January 2025</p>
+          <p className="text-xl text-white/90 mb-2">Last Updated: January 2026</p>
           <p className="text-white/80">
             By using AliazaStore, you agree to these terms compliant with Philippine laws. Please read them carefully.
           </p>
@@ -317,7 +317,7 @@ const Terms = () => {
             <Link to="/help" className="text-slate-400 hover:text-white transition-colors">Help Center</Link>
           </div>
           <p className="text-slate-500 text-sm">
-            © 2025 AliazaStore. All rights reserved.
+            © 2026 AliazaStore. All rights reserved.
           </p>
         </div>
       </footer>
