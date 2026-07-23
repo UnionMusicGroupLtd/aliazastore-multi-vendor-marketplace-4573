@@ -12,11 +12,14 @@ import {
 import { formatPrice } from "@/lib/currency";
 import auth from "@/lib/shared/kliv-auth.js";
 import db from "@/lib/shared/kliv-database.js";
+import { useCart } from "@/context/CartContext";
 
 const CustomerDashboard = () => {
   const [user, setUser] = useState<any>(null);
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
+  const { getCartCount } = useCart();
 
   useEffect(() => {
     loadUserData();
@@ -75,6 +78,19 @@ const CustomerDashboard = () => {
         // Don't fail the entire dashboard if orders fail to load
         setOrders([]);
       }
+
+      // Load unread notification count
+      try {
+        const customerNotifications = await db.query("customer_notifications", {
+          customer_uuid: `eq.${currentUser.userUuid}`,
+          read: "eq.false"
+        });
+        console.log(`🔔 Loaded ${customerNotifications.length} unread notifications`);
+        setUnreadNotificationCount(customerNotifications.length);
+      } catch (notifError) {
+        console.log("⚠️ Could not load notification count:", notifError);
+        setUnreadNotificationCount(0);
+      }
     } catch (error) {
       console.error("💥 Error loading user data:", error);
       // Don't redirect to login on general errors, just show what we can
@@ -105,11 +121,11 @@ const CustomerDashboard = () => {
 
   const menuItems = [
     { icon: Package, label: "My Orders", description: "Track and manage your orders", href: "/dashboard/orders", count: orders.length },
-    { icon: ShoppingBag, label: "Shopping Cart", description: "View items in your cart", href: "/cart", count: 3 },
+    { icon: ShoppingBag, label: "Shopping Cart", description: "View items in your cart", href: "/cart", count: getCartCount() },
     { icon: Heart, label: "Wishlist", description: "View your saved products", href: "/wishlist", count: 12 },
     { icon: MapPin, label: "Addresses", description: "Manage shipping addresses", href: "/dashboard/addresses" },
     { icon: CreditCard, label: "Payment Methods", description: "Manage payment options", href: "/dashboard/payments" },
-    { icon: Bell, label: "Notifications", description: "View your notifications", href: "/dashboard/notifications" },
+    { icon: Bell, label: "Notifications", description: "View your notifications", href: "/dashboard/notifications", count: unreadNotificationCount },
     { icon: Settings, label: "Settings", description: "Account and preferences", href: "/dashboard/settings" },
     { icon: HelpCircle, label: "Help & Support", description: "Get help with your orders", href: "/dashboard/support" },
   ];
@@ -178,17 +194,21 @@ const CustomerDashboard = () => {
               <Link to="/dashboard/notifications">
                 <Button variant="ghost" size="icon" className="relative">
                   <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
-                    7
-                  </span>
+                  {unreadNotificationCount > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {unreadNotificationCount}
+                    </span>
+                  )}
                 </Button>
               </Link>
               <Link to="/cart">
                 <Button variant="ghost" size="icon" className="relative">
                   <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
-                    3
-                  </span>
+                  {getCartCount() > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {getCartCount()}
+                    </span>
+                  )}
                 </Button>
               </Link>
               <Link to="/dashboard/settings">

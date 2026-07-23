@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// CUSTOMER NOTIFICATIONS & AUTH FIX - CUSTOMER NOTIFICATIONS NOW DATABASE-BACKED WITH MARK/DELETE FUNCTIONALITY + IMPROVED AUTH RETRY LOGIC
-console.log("App component loaded - CUSTOMER NOTIFICATIONS FIXED - Users can now mark notifications as read/delete and improved auth retry logic prevents false sign-outs - ", new Date().toISOString());
+// CUSTOMER NOTIFICATIONS & CART BADGES FIX - REAL DATA INTEGRATION
+console.log("App component loaded - CUSTOMER DASHBOARD BADGES NOW USE REAL DATA - Notification and cart counts loaded from database and CartContext - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
