@@ -22,11 +22,21 @@ const Products = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [sortBy, setSortBy] = useState("featured");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(8); // Show 8 products per page
+  const [totalProducts, setTotalProducts] = useState<any[]>([]); // Store all products for pagination
 
   useEffect(() => {
     loadProducts();
     loadCategories();
   }, [selectedCategory, sortBy]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, sortBy, searchQuery]);
 
   const loadCategories = async () => {
     try {
@@ -92,7 +102,9 @@ const Products = () => {
             new Map(allProducts.map(product => [product._row_id, product])).values()
           );
           
-          setProducts(uniqueProducts);
+          setTotalProducts(uniqueProducts); // Store all products
+          applyPagination(uniqueProducts);
+          setLoading(false);
           return;
         }
       }
@@ -118,13 +130,46 @@ const Products = () => {
       }
 
       const data = await db.query("products", params);
-      setProducts(data);
+      setTotalProducts(data); // Store all products
+      applyPagination(data);
     } catch (error) {
       console.error("Error loading products:", error);
     } finally {
       setLoading(false);
     }
   };
+
+  const applyPagination = (allProducts: any[]) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    setProducts(allProducts.slice(startIndex, endIndex));
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    // Scroll to top of products
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      handlePageChange(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    const totalPages = Math.ceil(totalProducts.length / itemsPerPage);
+    if (currentPage < totalPages) {
+      handlePageChange(currentPage + 1);
+    }
+  };
+
+  // Update displayed products when page changes
+  useEffect(() => {
+    if (totalProducts.length > 0) {
+      applyPagination(totalProducts);
+    }
+  }, [currentPage]);
 
   const addToCart = (product: any) => {
     const cartItem = {
@@ -241,7 +286,14 @@ const Products = () => {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
             <span className="text-slate-600">
-              {products.length} products found
+              {totalProducts.length > 0 ? (
+                <>
+                  Showing {Math.min((currentPage - 1) * itemsPerPage + 1, totalProducts.length)}-
+                  {Math.min(currentPage * itemsPerPage, totalProducts.length)} of {totalProducts.length} products
+                </>
+              ) : (
+                `${products.length} products found`
+              )}
             </span>
             <Button variant="outline" size="sm" className="flex items-center space-x-2">
               <Filter className="w-4 h-4" />
@@ -407,21 +459,40 @@ const Products = () => {
         )}
 
         {/* Pagination */}
-        {!loading && products.length > 0 && (
+        {!loading && totalProducts.length > 0 && (
           <div className="flex items-center justify-center space-x-2 mt-12">
-            <Button variant="outline" size="icon" disabled>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+              className="hover:bg-orange-50 hover:border-orange-300"
+            >
               <ChevronLeft className="w-4 h-4" />
             </Button>
-            <Button variant="outline" size="icon" className="bg-orange-500 text-white">
-              1
-            </Button>
-            <Button variant="outline" size="icon">
-              2
-            </Button>
-            <Button variant="outline" size="icon">
-              3
-            </Button>
-            <Button variant="outline" size="icon">
+            
+            {Array.from({ length: Math.ceil(totalProducts.length / itemsPerPage) }, (_, i) => i + 1).map((pageNum) => (
+              <Button
+                key={pageNum}
+                variant="outline" 
+                size="icon"
+                onClick={() => handlePageChange(pageNum)}
+                className={currentPage === pageNum 
+                  ? "bg-orange-500 text-white hover:bg-orange-600" 
+                  : "hover:bg-orange-50 hover:border-orange-300"
+                }
+              >
+                {pageNum}
+              </Button>
+            ))}
+            
+            <Button 
+              variant="outline" 
+              size="icon"
+              onClick={handleNextPage}
+              disabled={currentPage === Math.ceil(totalProducts.length / itemsPerPage)}
+              className="hover:bg-orange-50 hover:border-orange-300"
+            >
               <ChevronRight className="w-4 h-4" />
             </Button>
           </div>
