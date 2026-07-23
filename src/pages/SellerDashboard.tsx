@@ -25,6 +25,8 @@ const SellerDashboard = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [subscriptionStatus, setSubscriptionStatus] = useState<any>(null);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -126,6 +128,9 @@ const SellerDashboard = () => {
           console.log("🔒 Orders locked - subscription not active");
           setOrders([]);
         }
+
+        // Load notification counts
+        await loadNotificationCounts(currentUser);
       }
     } catch (error) {
       console.error("❌ Error loading dashboard data:", error);
@@ -138,6 +143,8 @@ const SellerDashboard = () => {
       });
       setProducts([]);
       setOrders([]);
+      setUnreadNotifications(0);
+      setUnreadMessages(0);
       setSubscriptionStatus({
         status: 'trial',
         canAddProducts: true,
@@ -153,6 +160,27 @@ const SellerDashboard = () => {
     } finally {
       console.log("✅ Dashboard data loading complete");
       setLoading(false);
+    }
+  };
+
+  const loadNotificationCounts = async (currentUser: any) => {
+    try {
+      // Load unread notifications count
+      const notifications = await db.query("seller_notifications", {
+        seller_uuid: `eq.${currentUser.userUuid}`,
+        unread: "eq.1",
+        status: "eq.active"
+      });
+      setUnreadNotifications(notifications.length);
+
+      // For messages, we'll simulate count for now since we don't have a messages table yet
+      // TODO: Implement real message counting when messages table is created
+      const messageCount = 5; // Simulated count
+      setUnreadMessages(messageCount);
+    } catch (error) {
+      console.error("Error loading notification counts:", error);
+      setUnreadNotifications(0);
+      setUnreadMessages(0);
     }
   };
 
@@ -212,7 +240,7 @@ const SellerDashboard = () => {
       icon: MessageSquare, 
       label: "Messages", 
       description: "Chat with customers", 
-      count: 5, 
+      count: unreadMessages, 
       href: "/dashboard/seller/messages",
       disabled: !subscriptionStatus?.storeVisible,
       badge: !subscriptionStatus?.storeVisible ? "Store Hidden" : null
@@ -252,7 +280,7 @@ const SellerDashboard = () => {
       icon: Bell, 
       label: "Notifications", 
       description: "Stay updated", 
-      count: 12, 
+      count: unreadNotifications, 
       href: "/dashboard/seller/notifications",
       disabled: false
     },
@@ -315,17 +343,21 @@ if (loading) {
               <Link to="/dashboard/seller/notifications">
                 <Button variant="ghost" size="icon" className="relative">
                   <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
-                    3
-                  </span>
+                  {unreadNotifications > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-orange-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {unreadNotifications}
+                    </span>
+                  )}
                 </Button>
               </Link>
               <Link to="/dashboard/seller/messages">
                 <Button variant="ghost" size="icon" className="relative">
                   <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    5
-                  </span>
+                  {unreadMessages > 0 && (
+                    <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                      {unreadMessages}
+                    </span>
+                  )}
                 </Button>
               </Link>
               <Link to="/dashboard/seller/settings">

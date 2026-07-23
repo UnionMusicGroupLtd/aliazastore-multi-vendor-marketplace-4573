@@ -1,126 +1,246 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { 
   Bell, Search, Package, ShoppingCart, 
-  DollarSign, Star, MessageSquare, Check, Trash2, ChevronRight
+  DollarSign, Star, MessageSquare, Check, Trash2
 } from "lucide-react";
 import { formatPrice } from "@/lib/currency";
+import db from "@/lib/shared/kliv-database.js";
+import auth from "@/lib/shared/kliv-auth.js";
 
 const SellerNotifications = () => {
   const [notifications, setNotifications] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  // Icon mapping helper
+  const getIconComponent = (iconName: string) => {
+    const icons: { [key: string]: any } = {
+      ShoppingCart,
+      Package,
+      Star,
+      DollarSign,
+      MessageSquare,
+      Bell
+    };
+    const IconComponent = icons[iconName] || Bell;
+    return <IconComponent className={`w-6 h-6 text-slate-700`} />;
+  };
 
   useEffect(() => {
-    loadNotifications();
+    loadCurrentUser();
   }, []);
 
-  const loadNotifications = async () => {
+  useEffect(() => {
+    if (currentUser) {
+      loadNotifications();
+    }
+  }, [currentUser]);
+
+  const loadCurrentUser = async () => {
     try {
-      // Simulated notifications data
-      const simulatedNotifications = [
-        {
-          id: 1,
-          type: "order",
-          title: "New Order Received",
-          message: "You received a new order #12348 for Premium Wireless Headphones",
-          timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-          unread: true,
-          icon: ShoppingCart,
-          color: "text-green-600",
-          bgColor: "bg-green-100"
-        },
-        {
-          id: 2,
-          type: "product",
-          title: "Product Approved",
-          message: "Your product 'Bluetooth Earbuds' has been approved",
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          unread: true,
-          icon: Package,
-          color: "text-blue-600",
-          bgColor: "bg-blue-100"
-        },
-        {
-          id: 3,
-          type: "review",
-          title: "New Review",
-          message: "Maria Garcia left a 5-star review on Premium Wireless Headphones",
-          timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          unread: true,
-          icon: Star,
-          color: "text-yellow-600",
-          bgColor: "bg-yellow-100"
-        },
-        {
-          id: 4,
-          type: "payment",
-          title: "Payment Received",
-          message: `You received ₱129.99 from order #12345`,
-          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          unread: false,
-          icon: DollarSign,
-          color: "text-purple-600",
-          bgColor: "bg-purple-100"
-        },
-        {
-          id: 5,
-          type: "message",
-          title: "New Customer Message",
-          message: "Jose Santos sent you a message about Smart Fitness Watch",
-          timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-          unread: false,
-          icon: MessageSquare,
-          color: "text-orange-600",
-          bgColor: "bg-orange-100"
-        },
-        {
-          id: 6,
-          type: "product",
-          title: "Low Stock Alert",
-          message: "Premium Wireless Headphones is running low on stock (3 units left)",
-          timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-          unread: false,
-          icon: Package,
-          color: "text-red-600",
-          bgColor: "bg-red-100"
-        },
-        {
-          id: 7,
-          type: "system",
-          title: "Store Performance Update",
-          message: "Your store rating increased to 4.8 stars this month",
-          timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-          unread: false,
-          icon: Star,
-          color: "text-green-600",
-          bgColor: "bg-green-100"
-        }
-      ];
-      setNotifications(simulatedNotifications);
+      const user = await auth.getUser();
+      setCurrentUser(user);
+    } catch (error) {
+      console.error("Error loading current user:", error);
+    }
+  };
+
+  const loadNotifications = async () => {
+    if (!currentUser) return;
+    
+    try {
+      setLoading(true);
+      const userNotifications = await db.query("seller_notifications", {
+        seller_uuid: `eq.${currentUser.userUuid}`,
+        status: "eq.active",
+        order: "_created_at.desc"
+      });
+      
+      // If no notifications exist, create sample ones for this user
+      if (userNotifications.length === 0) {
+        await createSampleNotifications();
+        // Reload after creating samples
+        const reloaded = await db.query("seller_notifications", {
+          seller_uuid: `eq.${currentUser.userUuid}`,
+          status: "eq.active",
+          order: "_created_at.desc"
+        });
+        setNotifications(reloaded);
+      } else {
+        setNotifications(userNotifications);
+      }
     } catch (error) {
       console.error("Error loading notifications:", error);
+      // If database fails, show empty state
+      setNotifications([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const markAsRead = (id: number) => {
-    setNotifications(notifications.map(n => 
-      n.id === id ? { ...n, unread: false } : n
-    ));
+  const createSampleNotifications = async () => {
+    if (!currentUser) return;
+
+    const iconMap: { [key: string]: any } = {
+      ShoppingCart,
+      Package,
+      Star,
+      DollarSign,
+      MessageSquare
+    };
+
+    const sampleNotifications = [
+      {
+        seller_uuid: currentUser.userUuid,
+        type: "order",
+        title: "New Order Received",
+        message: "You received a new order #12348 for Premium Wireless Headphones",
+        unread: 1,
+        icon: "ShoppingCart",
+        color: "text-green-600",
+        bg_color: "bg-green-100"
+      },
+      {
+        seller_uuid: currentUser.userUuid,
+        type: "product",
+        title: "Product Approved",
+        message: "Your product 'Bluetooth Earbuds' has been approved",
+        unread: 1,
+        icon: "Package",
+        color: "text-blue-600",
+        bg_color: "bg-blue-100"
+      },
+      {
+        seller_uuid: currentUser.userUuid,
+        type: "review",
+        title: "New Review",
+        message: "Maria Garcia left a 5-star review on Premium Wireless Headphones",
+        unread: 1,
+        icon: "Star",
+        color: "text-yellow-600",
+        bg_color: "bg-yellow-100"
+      },
+      {
+        seller_uuid: currentUser.userUuid,
+        type: "payment",
+        title: "Payment Received",
+        message: `You received ₱129.99 from order #12345`,
+        unread: 0,
+        icon: "DollarSign",
+        color: "text-purple-600",
+        bg_color: "bg-purple-100"
+      },
+      {
+        seller_uuid: currentUser.userUuid,
+        type: "message",
+        title: "New Customer Message",
+        message: "Jose Santos sent you a message about Smart Fitness Watch",
+        unread: 0,
+        icon: "MessageSquare",
+        color: "text-orange-600",
+        bg_color: "bg-orange-100"
+      },
+      {
+        seller_uuid: currentUser.userUuid,
+        type: "product",
+        title: "Low Stock Alert",
+        message: "Premium Wireless Headphones is running low on stock (3 units left)",
+        unread: 0,
+        icon: "Package",
+        color: "text-red-600",
+        bg_color: "bg-red-100"
+      },
+      {
+        seller_uuid: currentUser.userUuid,
+        type: "system",
+        title: "Store Performance Update",
+        message: "Your store rating increased to 4.8 stars this month",
+        unread: 0,
+        icon: "Star",
+        color: "text-green-600",
+        bg_color: "bg-green-100"
+      }
+    ];
+
+    // Insert sample notifications in reverse order so newest appears first
+    for (let i = sampleNotifications.length - 1; i >= 0; i--) {
+      await db.insert("seller_notifications", sampleNotifications[i]);
+    }
   };
 
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(n => ({ ...n, unread: false })));
+  const markAsRead = async (id: number) => {
+    if (!currentUser) return;
+
+    try {
+      // Update database to mark as read
+      await db.update(
+        "seller_notifications",
+        { _row_id: `eq.${id}` },
+        {
+          unread: 0,
+          read_at: Math.floor(Date.now() / 1000)
+        }
+      );
+
+      // Update local state
+      setNotifications(notifications.map(n => 
+        n._row_id === id ? { ...n, unread: false } : n
+      ));
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
   };
 
-  const deleteNotification = (id: number) => {
-    setNotifications(notifications.filter(n => n.id !== id));
+  const markAllAsRead = async () => {
+    if (!currentUser || notifications.length === 0) return;
+
+    try {
+      // Get all unread notification IDs
+      const unreadIds = notifications
+        .filter(n => n.unread)
+        .map(n => n._row_id);
+
+      // Update all unread notifications in database
+      for (const id of unreadIds) {
+        await db.update(
+          "seller_notifications",
+          { _row_id: `eq.${id}` },
+          {
+            unread: 0,
+            read_at: Math.floor(Date.now() / 1000)
+          }
+        );
+      }
+
+      // Update local state
+      setNotifications(notifications.map(n => ({ ...n, unread: false })));
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+    }
+  };
+
+  const deleteNotification = async (id: number) => {
+    if (!currentUser) return;
+
+    try {
+      // Delete from database (soft delete by updating status)
+      await db.update(
+        "seller_notifications",
+        { _row_id: `eq.${id}` },
+        { status: "deleted" }
+      );
+
+      // Update local state
+      setNotifications(notifications.filter(n => n._row_id !== id));
+    } catch (error) {
+      console.error("Error deleting notification:", error);
+    }
   };
 
   const filteredNotifications = notifications.filter(notification => 
@@ -198,14 +318,14 @@ const SellerNotifications = () => {
           <div className="space-y-4">
             {filteredNotifications.map((notification) => (
               <Card 
-                key={notification.id} 
+                key={notification._row_id} 
                 className={`border-0 shadow-lg bg-white/80 backdrop-blur-sm ${notification.unread ? 'border-l-4 border-l-orange-500' : ''}`}
               >
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start space-x-4">
-                      <div className={`w-12 h-12 ${notification.bgColor} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                        <notification.icon className={`w-6 h-6 ${notification.color}`} />
+                      <div className={`w-12 h-12 ${notification.bg_color} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                        {getIconComponent(notification.icon)}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center space-x-2 mb-1">
@@ -216,7 +336,7 @@ const SellerNotifications = () => {
                         </div>
                         <p className="text-sm text-slate-600">{notification.message}</p>
                         <p className="text-xs text-slate-500 mt-1">
-                          {new Date(notification.timestamp).toLocaleString()}
+                          {notification._created_at ? new Date(notification._created_at * 1000).toLocaleString() : 'Just now'}
                         </p>
                       </div>
                     </div>
@@ -225,7 +345,7 @@ const SellerNotifications = () => {
                         <Button 
                           variant="ghost" 
                           size="icon"
-                          onClick={() => markAsRead(notification.id)}
+                          onClick={() => markAsRead(notification._row_id)}
                         >
                           <Check className="w-4 h-4" />
                         </Button>
@@ -233,7 +353,7 @@ const SellerNotifications = () => {
                       <Button 
                         variant="ghost" 
                         size="icon"
-                        onClick={() => deleteNotification(notification.id)}
+                        onClick={() => deleteNotification(notification._row_id)}
                       >
                         <Trash2 className="w-4 h-4 text-red-500" />
                       </Button>
