@@ -316,32 +316,48 @@ const Help = () => {
             <p className="text-xl text-slate-600">Contact our support team through your preferred channel</p>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-            {contactMethods.map((method, index) => (
-              <Card key={index} className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-                <CardHeader>
-                  <div className={`w-16 h-16 bg-gradient-to-br ${method.color} rounded-2xl flex items-center justify-center mx-auto mb-4`}>
-                    <method.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <CardTitle className="text-xl text-center">{method.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-center">
-                  <p className="text-slate-600 mb-2">{method.description}</p>
-                  <p className="text-sm text-slate-500 mb-4">{method.availability}</p>
-                  <Button 
-                    className={`w-full bg-gradient-to-r ${method.color} hover:opacity-90`}
-                    onClick={() => {
-                      if (method.action === "Start Chat") {
-                        alert("Live chat coming soon! For now, please use our contact form.");
-                      } else if (method.action === "Send Email") {
-                        alert("Email support: Please use our contact form below for quick responses.");
-                      }
-                    }}
-                  >
-                    {method.action}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+            {/* Live Chat */}
+            <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl text-center">Live Chat</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-slate-600 mb-2">Chat with our support team in real-time</p>
+                <p className="text-sm text-slate-500 mb-4">Available 24/7</p>
+                <a 
+                  href="https://tawk.to/chat/61f5d540b9e4e21181bc91ce/1fqk4i1k2" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-medium transition-all duration-200"
+                >
+                  Start Chat
+                </a>
+              </CardContent>
+            </Card>
+
+            {/* Email Support */}
+            <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Mail className="w-8 h-8 text-white" />
+                </div>
+                <CardTitle className="text-xl text-center">Email Support</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center">
+                <p className="text-slate-600 mb-2">Send us a detailed message</p>
+                <p className="text-sm font-medium text-purple-600 mb-1">info@aliazastore.com</p>
+                <p className="text-sm text-slate-500 mb-4">Response within 24 hours</p>
+                <a 
+                  href="mailto:info@aliazastore.com" 
+                  className="inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium transition-all duration-200"
+                >
+                  Send Email
+                </a>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

@@ -177,25 +177,42 @@ const Contact = () => {
                 <CardTitle className="text-xl">Quick Contact</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
+                {/* Live Chat */}
                 <div className="flex items-start space-x-3">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <MessageCircle className="w-5 h-5 text-blue-600" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-semibold text-slate-900">Live Chat</h3>
-                    <p className="text-slate-600">Available 24/7</p>
-                    <p className="text-sm text-slate-500">Average wait: 5 minutes</p>
+                    <p className="text-slate-600">Chat with our support team in real-time</p>
+                    <p className="text-sm text-slate-500">Available 24/7</p>
+                    <a 
+                      href="https://tawk.to/chat/61f5d540b9e4e21181bc91ce/1fqk4i1k2" 
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center w-full mt-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-medium transition-colors"
+                    >
+                      Start Chat
+                    </a>
                   </div>
                 </div>
 
+                {/* Email Support */}
                 <div className="flex items-start space-x-3">
                   <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
                     <Mail className="w-5 h-5 text-purple-600" />
                   </div>
-                  <div>
+                  <div className="flex-1">
                     <h3 className="font-semibold text-slate-900">Email Support</h3>
-                    <p className="text-slate-600">Use our contact form</p>
+                    <p className="text-slate-600">Send us a detailed message</p>
+                    <p className="text-sm font-medium text-purple-600">info@aliazastore.com</p>
                     <p className="text-sm text-slate-500">Response within 24 hours</p>
+                    <a 
+                      href="mailto:info@aliazastore.com" 
+                      className="inline-flex items-center justify-center w-full mt-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium transition-colors"
+                    >
+                      Send Email
+                    </a>
                   </div>
                 </div>
               </CardContent>
