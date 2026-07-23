@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// CUSTOMER NOTIFICATIONS & CART BADGES FIX - REAL DATA INTEGRATION
-console.log("App component loaded - CUSTOMER DASHBOARD BADGES NOW USE REAL DATA - Notification and cart counts loaded from database and CartContext - ", new Date().toISOString());
+// CUSTOMER HOME PAGE AUTHENTICATION FIX - SESSION PRESERVATION
+console.log("App component loaded - CUSTOMER AUTHENTICATION ON HOME PAGE FIXED - Users stay logged in when navigating to home page and can sign out manually - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

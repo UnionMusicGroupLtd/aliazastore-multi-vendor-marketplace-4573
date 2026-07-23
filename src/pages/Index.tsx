@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,16 +7,50 @@ import { Badge } from "@/components/ui/badge";
 import { 
   Search, ShoppingBag, Store, Shield, Truck, 
   HeadphonesIcon, Star, Users, BarChart3, 
-  ChevronRight, Menu, X, Heart,
+  ChevronRight, Menu, X, Heart, LogOut,
   Globe, Zap, MessageCircle, ArrowRight
 } from "lucide-react";
 import { formatPrice } from "@/lib/currency";
 import { useCart } from "@/context/CartContext";
+import auth from "@/lib/shared/kliv-auth.js";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [user, setUser] = useState<any>(null);
   const { getCartCount } = useCart();
+
+  useEffect(() => {
+    checkAuthentication();
+  }, []);
+
+  const checkAuthentication = async () => {
+    try {
+      const currentUser = await auth.getUser();
+      if (currentUser) {
+        console.log("✅ HOME PAGE AUTHENTICATION CHECK - User is authenticated:", currentUser.email);
+        console.log("✅ SESSION PRESERVATION ACTIVE - User will stay logged in when navigating to home page");
+        setUser(currentUser);
+      } else {
+        console.log("ℹ️ HOME PAGE - No user authenticated (showing public navigation)");
+        setUser(null);
+      }
+    } catch (error) {
+      console.log("⚠️ HOME PAGE - Authentication check error:", error);
+      setUser(null);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await auth.signOut();
+      setUser(null);
+      window.location.href = "/";
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+  };
 
   // Sample categories data
   const categories = [
@@ -145,14 +179,27 @@ const Index = () => {
                   <Heart className="w-5 h-5" />
                 </Button>
               </Link>
-              <Link to="/login">
-                <Button variant="ghost">Sign In</Button>
-              </Link>
-              <Link to="/register">
-                <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
-                  Start Selling
-                </Button>
-              </Link>
+              {user ? (
+                <>
+                  <Link to="/dashboard/customer">
+                    <Button variant="ghost">Dashboard</Button>
+                  </Link>
+                  <Button variant="ghost" size="icon" onClick={handleSignOut}>
+                    <LogOut className="w-5 h-5" />
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login">
+                    <Button variant="ghost">Sign In</Button>
+                  </Link>
+                  <Link to="/register">
+                    <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
+                      Start Selling
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -177,12 +224,24 @@ const Index = () => {
               />
               <Link to="/products" className="block py-2 text-slate-700">Products</Link>
               <Link to="/categories" className="block py-2 text-slate-700">Categories</Link>
-              <Link to="/login" className="block py-2 text-slate-700">Sign In</Link>
-              <Link to="/register">
-                <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600">
-                  Start Selling
-                </Button>
-              </Link>
+              {user ? (
+                <>
+                  <Link to="/dashboard/customer" className="block py-2 text-slate-700">Dashboard</Link>
+                  <Button variant="ghost" className="w-full" onClick={handleSignOut}>
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="block py-2 text-slate-700">Sign In</Link>
+                  <Link to="/register">
+                    <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600">
+                      Start Selling
+                    </Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         )}
