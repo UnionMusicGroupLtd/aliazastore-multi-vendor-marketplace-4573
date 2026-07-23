@@ -21,6 +21,7 @@ const SellerProductNew = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [store, setStore] = useState<any>(null);
   const [categories, setCategories] = useState<any[]>([]);
+  const [subcategories, setSubcategories] = useState<any[]>([]);
   const [successMessage, setSuccessMessage] = useState("");
   
   // Image upload states
@@ -108,11 +109,39 @@ const SellerProductNew = () => {
       }
 
       // Load categories
-      const categoryData = await db.query("categories", { status: "eq.active" });
+      const categoryData = await db.query("categories", { status: "eq.active", level: "eq.0" });
       setCategories(categoryData);
     } catch (error) {
       console.error("Error loading data:", error);
     }
+  };
+
+  const loadSubcategories = async (categoryId: string) => {
+    if (!categoryId) {
+      setSubcategories([]);
+      return;
+    }
+    try {
+      const subcategoryData = await db.query("categories", { 
+        parent_id: `eq.${categoryId}`,
+        status: "eq.active",
+        level: "eq.1"
+      });
+      setSubcategories(subcategoryData);
+    } catch (error) {
+      console.error("Error loading subcategories:", error);
+    }
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const categoryId = e.target.value;
+    setFormData(prev => ({ ...prev, category_id: categoryId, subcategory_id: "" }));
+    loadSubcategories(categoryId);
+  };
+
+  const handleSubcategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const subcategoryId = e.target.value;
+    setFormData(prev => ({ ...prev, subcategory_id: subcategoryId }));
   };
 
   const checkSubscriptionStatus = (storeData: any) => {
@@ -283,6 +312,12 @@ const SellerProductNew = () => {
     // Validation
     if (!formData.name || !formData.price || !formData.category_id) {
       alert("Please fill in all required fields");
+      return;
+    }
+
+    // Validate subcategory if subcategories are available
+    if (subcategories.length > 0 && !formData.subcategory_id) {
+      alert("Please select a subcategory for your product");
       return;
     }
 
@@ -466,17 +501,17 @@ const SellerProductNew = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="category">Category *</Label>
+                    <Label htmlFor="category">Main Category *</Label>
                     <select
                       id="category"
                       name="category_id"
                       value={formData.category_id}
-                      onChange={handleInputChange}
+                      onChange={handleCategoryChange}
                       className="w-full px-3 py-2 rounded-lg border bg-white"
                       required
                     >
-                      <option value="">Select category</option>
-                      {categories.map((category) => (
+                      <option value="">Select main category</option>
+                      {categories.filter(cat => cat.level === 0).map((category) => (
                         <option key={category._row_id} value={category._row_id}>
                           {category.name}
                         </option>
@@ -486,6 +521,32 @@ const SellerProductNew = () => {
                       Select the main category for your product
                     </p>
                   </div>
+                  
+                  {formData.category_id && subcategories.length > 0 && (
+                    <div>
+                      <Label htmlFor="subcategory">Subcategory *</Label>
+                      <select
+                        id="subcategory"
+                        name="subcategory_id"
+                        value={formData.subcategory_id}
+                        onChange={handleSubcategoryChange}
+                        className="w-full px-3 py-2 rounded-lg border bg-white"
+                        required
+                      >
+                        <option value="">Select subcategory (A-Z)</option>
+                        {subcategories
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((subcategory) => (
+                            <option key={subcategory._row_id} value={subcategory._row_id}>
+                              {subcategory.name}
+                            </option>
+                          ))}
+                      </select>
+                      <p className="text-xs text-slate-500 mt-1">
+                        {subcategories.length} subcategories available • Sorted A-Z
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

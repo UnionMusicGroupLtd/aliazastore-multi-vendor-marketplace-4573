@@ -83,7 +83,7 @@ import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
 // HEADER NAVIGATION FIX - CORRECTED IMPLEMENTATION - CLICKABLE ELEMENTS + LOGOUT AFTER AVATAR
-console.log("App component loaded - COOKIES AND SITEMAP PAGES ADDED - Fixed 404 errors for /cookies and /sitemap routes - ", new Date().toISOString());
+console.log("App component loaded - A-Z SUBCATEGORY SYSTEM IMPLEMENTED - Product creation now has full A-Z subcategory selection - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
