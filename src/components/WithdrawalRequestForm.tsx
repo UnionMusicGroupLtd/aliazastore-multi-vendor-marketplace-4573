@@ -19,6 +19,8 @@ const WithdrawalRequestForm = () => {
     amount: "",
     withdrawalMethod: "gcash",
     accountDetails: "",
+    bankName: "",
+    accountNumber: "",
     notes: ""
   });
 
@@ -51,12 +53,39 @@ const WithdrawalRequestForm = () => {
         return;
       }
 
+      // Validate bank transfer fields
+      if (formData.withdrawalMethod === "bank" && (!formData.bankName || !formData.accountNumber)) {
+        setError("Please provide both bank name and account number");
+        setLoading(false);
+        return;
+      }
+
+      // Validate GCash format
+      if (formData.withdrawalMethod === "gcash" && !formData.accountDetails.match(/^09\d{8}$/)) {
+        setError("Please enter a valid GCash number (format: 09XX XXX XXXX)");
+        setLoading(false);
+        return;
+      }
+
+      // Validate PayPal email
+      if (formData.withdrawalMethod === "paypal" && !formData.accountDetails.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+        setError("Please enter a valid PayPal email address");
+        setLoading(false);
+        return;
+      }
+
       // Create withdrawal request
+      // For bank transfers, combine bank name and account number
+      let accountDetails = formData.accountDetails;
+      if (formData.withdrawalMethod === "bank") {
+        accountDetails = `${formData.bankName} - ${formData.accountNumber}`;
+      }
+
       const withdrawalData = {
         shop_owner_id: "current_store_id", // In real app, get from auth
         amount: amount,
         withdrawal_method: formData.withdrawalMethod,
-        account_details: formData.accountDetails,
+        account_details: accountDetails,
         notes: formData.notes,
         status: "pending",
         request_date: new Date().toISOString()
@@ -73,7 +102,7 @@ const WithdrawalRequestForm = () => {
         ownerEmail: shopData.ownerEmail,
         amount: amount.toFixed(2),
         withdrawalMethod: formData.withdrawalMethod,
-        methodDetails: formData.accountDetails,
+        methodDetails: accountDetails,
         requestId: `WR-${Date.now()}`
       });
 
@@ -82,6 +111,8 @@ const WithdrawalRequestForm = () => {
         amount: "",
         withdrawalMethod: "gcash",
         accountDetails: "",
+        bankName: "",
+        accountNumber: "",
         notes: ""
       });
       
@@ -171,21 +202,42 @@ const WithdrawalRequestForm = () => {
             <div>
               <Label htmlFor="accountDetails">
                 {formData.withdrawalMethod === "gcash" ? "GCash Number" :
-                 formData.withdrawalMethod === "bank" ? "Bank Account Details" :
+                 formData.withdrawalMethod === "bank" ? "Bank Name" :
                  "PayPal Email"}
               </Label>
               <Input
                 id="accountDetails"
                 placeholder={
                   formData.withdrawalMethod === "gcash" ? "09XX XXX XXXX" :
-                  formData.withdrawalMethod === "bank" ? "Bank Name, Account Number" :
+                  formData.withdrawalMethod === "bank" ? "BDO, BPI, Metrobank..." :
                   "your-email@example.com"
                 }
-                value={formData.accountDetails}
-                onChange={(e) => setFormData({ ...formData, accountDetails: e.target.value })}
+                value={formData.withdrawalMethod === "bank" ? formData.bankName : formData.accountDetails}
+                onChange={(e) => setFormData({ 
+                  ...formData, 
+                  ...(formData.withdrawalMethod === "bank" 
+                    ? { bankName: e.target.value } 
+                    : { accountDetails: e.target.value })
+                })}
                 required
               />
             </div>
+
+            {formData.withdrawalMethod === "bank" && (
+              <div>
+                <Label htmlFor="accountNumber">Bank Account Number</Label>
+                <Input
+                  id="accountNumber"
+                  placeholder="Enter your bank account number"
+                  value={formData.accountNumber}
+                  onChange={(e) => setFormData({ ...formData, accountNumber: e.target.value })}
+                  required
+                />
+                <p className="text-sm text-slate-500 mt-1">
+                  💡 Tip: Make sure your bank account matches your store registration details
+                </p>
+              </div>
+            )}
 
             <div>
               <Label htmlFor="notes">Notes (Optional)</Label>
