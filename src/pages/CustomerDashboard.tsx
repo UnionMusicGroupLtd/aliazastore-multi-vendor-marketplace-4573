@@ -24,12 +24,31 @@ const CustomerDashboard = () => {
 
   const loadUserData = async () => {
     try {
-      const currentUser = await auth.getUser();
+      // Try multiple times to get user data to handle temporary auth issues
+      let currentUser = null;
+      let attempts = 0;
+      const maxAttempts = 3;
+      
+      while (!currentUser && attempts < maxAttempts) {
+        currentUser = await auth.getUser();
+        if (!currentUser) {
+          attempts++;
+          console.log(`Auth attempt ${attempts} failed, retrying...`);
+          // Wait a bit before retry (exponential backoff)
+          await new Promise(resolve => setTimeout(resolve, 500 * attempts));
+        }
+      }
+      
       if (!currentUser) {
-        // Redirect to login if not authenticated
-        window.location.href = "/login";
+        console.log("Authentication failed after multiple attempts, redirecting to login");
+        // Only redirect if we're not already on the login page
+        if (window.location.pathname !== '/login') {
+          window.location.href = "/login";
+        }
         return;
       }
+      
+      console.log("✅ User authenticated:", currentUser.email);
       setUser(currentUser);
 
       // Load customer orders

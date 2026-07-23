@@ -83,7 +83,7 @@ import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
 // HEADER NAVIGATION FIX - CORRECTED IMPLEMENTATION - CLICKABLE ELEMENTS + LOGOUT AFTER AVATAR
-console.log("App component loaded - ALL CATEGORIES NOW HAVE SUBCATEGORIES - Beauty, Bakery, Frozen Foods, etc. now fully populated with A-Z subcategories - ", new Date().toISOString());
+console.log("App component loaded - AUTHENTICATION FIX APPLIED - Users will no longer be signed out when clicking home - Added retry logic and better error handling to prevent false redirects - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
