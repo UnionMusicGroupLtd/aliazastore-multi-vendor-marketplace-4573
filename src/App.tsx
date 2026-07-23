@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// CUSTOMER HOME PAGE AUTHENTICATION FIX - SESSION PRESERVATION
-console.log("App component loaded - CUSTOMER AUTHENTICATION ON HOME PAGE FIXED - Users stay logged in when navigating to home page and can sign out manually - ", new Date().toISOString());
+// CUSTOMER CHECKOUT DETAILS FORM FIX - COMPREHENSIVE CUSTOMER DATA COLLECTION
+console.log("App component loaded - CUSTOMER CHECKOUT DETAILS FORM FIXED - Full customer information collection with validation - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
