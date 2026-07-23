@@ -1,11 +1,66 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShoppingBag, ArrowLeft, Package, CheckCircle, Clock, Truck, XCircle } from "lucide-react";
+import { ShoppingBag, ArrowLeft, Package, CheckCircle, Clock, Truck, XCircle, Eye, ShoppingCart, RefreshCw } from "lucide-react";
 import { formatPrice } from "@/lib/currency";
+import { useCart } from "@/context/CartContext";
+import { useState } from "react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const CustomerOrders = () => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
+  const [expandedOrder, setExpandedOrder] = useState<number | null>(null);
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+  const showTemporaryMessage = (text: string, type: 'success' | 'error' = 'success') => {
+    setMessage({ type, text });
+    setTimeout(() => setMessage(null), 3000);
+  };
+
+  const handleViewDetails = (orderId: number) => {
+    // Toggle expanded state for this order
+    if (expandedOrder === orderId) {
+      setExpandedOrder(null);
+    } else {
+      setExpandedOrder(orderId);
+    }
+  };
+
+  const handleBuyAgain = async (order: any) => {
+    try {
+      // Add all items from the order back to the cart
+      let addedCount = 0;
+      for (const item of order.items) {
+        await addToCart({
+          _row_id: Date.now() + Math.random(), // Generate temporary ID
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+          primary_image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop', // Default image
+          store_name: 'Various Sellers',
+          category: 'Various'
+        });
+        addedCount += item.quantity;
+      }
+      
+      showTemporaryMessage(`Added ${addedCount} items from order ${order.order_number} to cart!`, 'success');
+      
+      // Navigate to cart after a short delay
+      setTimeout(() => {
+        navigate('/cart');
+      }, 1500);
+      
+    } catch (error) {
+      console.error('Error adding items to cart:', error);
+      showTemporaryMessage('Failed to add items to cart. Please try again.', 'error');
+    }
+  };
+
+  const handleCancelOrder = (orderNumber: string) => {
+    // In a real app, this would call an API to cancel the order
+    showTemporaryMessage(`Order ${orderNumber} cancellation requested. You'll receive confirmation shortly.`, 'success');
+  };
 
   const orders = [
     {
@@ -68,6 +123,17 @@ const CustomerOrders = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Temporary Message */}
+      {message && (
+        <div className="fixed top-4 right-4 z-50 max-w-md">
+          <Alert className={message.type === 'success' ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-800'}>
+            <AlertDescription>
+              {message.text}
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+
       {/* Header */}
       <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -120,21 +186,83 @@ const CustomerOrders = () => {
                     </div>
                   ))}
                 </div>
+                
+                {/* Order Details Expansion */}
+                {expandedOrder === order._row_id && (
+                  <div className="mb-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                    <h4 className="font-semibold text-slate-900 mb-3 flex items-center">
+                      <Eye className="w-4 h-4 mr-2" />
+                      Order Details
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Order Number:</span>
+                        <span className="font-medium">{order.order_number}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Order Date:</span>
+                        <span className="font-medium">{new Date(order.created_at).toLocaleDateString()}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Order Status:</span>
+                        <span className={`font-medium capitalize ${getStatusColor(order.status)}`}>
+                          {order.status}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-600">Payment Method:</span>
+                        <span className="font-medium">GCash</span>
+                      </div>
+                      <div className="border-t border-slate-200 pt-2 mt-2">
+                        <div className="font-medium mb-1">Items Ordered:</div>
+                        {order.items.map((item, index) => (
+                          <div key={index} className="flex justify-between text-xs text-slate-600">
+                            <span>{item.quantity}x {item.name}</span>
+                            <span>{formatPrice(item.price * item.quantity)}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex justify-between font-bold pt-2 mt-2 border-t border-slate-200">
+                        <span>Total Paid:</span>
+                        <span className="text-orange-600">{formatPrice(order.total)}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
                 <div className="flex items-center justify-between pt-4 border-t">
                   <span className="font-semibold text-slate-900">Total</span>
                   <span className="font-bold text-lg text-orange-600">{formatPrice(order.total)}</span>
                 </div>
-                <div className="flex gap-2 mt-4">
-                  <Button variant="outline" size="sm">
-                    View Details
+                <div className="flex gap-2 mt-4 flex-wrap">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => handleViewDetails(order._row_id)}
+                    className="flex items-center gap-1"
+                  >
+                    <Eye className="w-4 h-4" />
+                    {expandedOrder === order._row_id ? 'Hide Details' : 'View Details'}
                   </Button>
+                  
                   {order.status === "delivered" && (
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => handleBuyAgain(order)}
+                      className="flex items-center gap-1"
+                    >
+                      <ShoppingCart className="w-4 h-4" />
                       Buy Again
                     </Button>
                   )}
+                  
                   {order.status === "processing" && (
-                    <Button variant="destructive" size="sm">
+                    <Button 
+                      variant="destructive" 
+                      size="sm"
+                      onClick={() => handleCancelOrder(order.order_number)}
+                    >
                       Cancel Order
                     </Button>
                   )}

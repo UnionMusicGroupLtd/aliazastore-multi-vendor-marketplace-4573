@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// CUSTOMER CHECKOUT DETAILS FORM FIX - COMPREHENSIVE CUSTOMER DATA COLLECTION
-console.log("App component loaded - CUSTOMER CHECKOUT DETAILS FORM FIXED - Full customer information collection with validation - ", new Date().toISOString());
+// CUSTOMER ORDERS BUTTONS FIX - VIEW DETAILS & BUY AGAIN FUNCTIONALITY
+console.log("App component loaded - CUSTOMER ORDERS BUTTONS FIXED - View Details expands order info, Buy Again adds items to cart - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
