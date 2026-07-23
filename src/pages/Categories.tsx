@@ -87,8 +87,6 @@ const Categories = () => {
               <Link to="/" className="text-slate-700 hover:text-orange-600 transition-colors">Home</Link>
               <Link to="/products" className="text-slate-700 hover:text-orange-600 transition-colors">Products</Link>
               <Link to="/categories" className="text-orange-600 font-semibold">Categories</Link>
-              <Link to="/sellers" className="text-slate-700 hover:text-orange-600 transition-colors">Become a Seller</Link>
-              <Link to="/about" className="text-slate-700 hover:text-orange-600 transition-colors">About</Link>
             </div>
 
             {/* Right Section */}
@@ -150,7 +148,6 @@ const Categories = () => {
               />
               <Link to="/products" className="block py-2 text-slate-700">Products</Link>
               <Link to="/categories" className="block py-2 text-orange-600 font-semibold">Categories</Link>
-              <Link to="/sellers" className="block py-2 text-slate-700">Become a Seller</Link>
               <Link to="/login" className="block py-2 text-slate-700">Sign In</Link>
               <Link to="/register">
                 <Button className="w-full bg-gradient-to-r from-orange-500 to-orange-600">
