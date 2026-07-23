@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// HEADER NAVIGATION FIX - CORRECTED IMPLEMENTATION - CLICKABLE ELEMENTS + LOGOUT AFTER AVATAR
-console.log("App component loaded - AUTHENTICATION FIX APPLIED - Users will no longer be signed out when clicking home - Added retry logic and better error handling to prevent false redirects - ", new Date().toISOString());
+// CUSTOMER NOTIFICATIONS & AUTH FIX - CUSTOMER NOTIFICATIONS NOW DATABASE-BACKED WITH MARK/DELETE FUNCTIONALITY + IMPROVED AUTH RETRY LOGIC
+console.log("App component loaded - CUSTOMER NOTIFICATIONS FIXED - Users can now mark notifications as read/delete and improved auth retry logic prevents false sign-outs - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

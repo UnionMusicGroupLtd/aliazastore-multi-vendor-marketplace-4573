@@ -24,23 +24,33 @@ const CustomerDashboard = () => {
 
   const loadUserData = async () => {
     try {
+      console.log("🔍 Starting user data load...");
       // Try multiple times to get user data to handle temporary auth issues
       let currentUser = null;
       let attempts = 0;
-      const maxAttempts = 3;
+      const maxAttempts = 5;
       
       while (!currentUser && attempts < maxAttempts) {
-        currentUser = await auth.getUser();
-        if (!currentUser) {
-          attempts++;
-          console.log(`Auth attempt ${attempts} failed, retrying...`);
+        try {
+          currentUser = await auth.getUser();
+          if (currentUser) {
+            console.log(`✅ Auth success on attempt ${attempts + 1}`);
+            break;
+          }
+        } catch (authError) {
+          console.log(`Auth attempt ${attempts + 1} failed:`, authError);
+        }
+        
+        attempts++;
+        if (!currentUser && attempts < maxAttempts) {
+          console.log(`Retrying auth in ${300 * attempts}ms...`);
           // Wait a bit before retry (exponential backoff)
-          await new Promise(resolve => setTimeout(resolve, 500 * attempts));
+          await new Promise(resolve => setTimeout(resolve, 300 * attempts));
         }
       }
       
       if (!currentUser) {
-        console.log("Authentication failed after multiple attempts, redirecting to login");
+        console.log("❌ Authentication failed after all attempts, redirecting to login");
         // Only redirect if we're not already on the login page
         if (window.location.pathname !== '/login') {
           window.location.href = "/login";
@@ -48,18 +58,26 @@ const CustomerDashboard = () => {
         return;
       }
       
-      console.log("✅ User authenticated:", currentUser.email);
+      console.log("✅ User authenticated successfully:", currentUser.email);
       setUser(currentUser);
 
-      // Load customer orders
-      const customerOrders = await db.query("orders", {
-        customer_uuid: `eq.${currentUser.userUuid}`,
-        order: "_created_at.desc",
-        limit: "5"
-      });
-      setOrders(customerOrders);
+      // Load customer orders with better error handling
+      try {
+        const customerOrders = await db.query("orders", {
+          customer_uuid: `eq.${currentUser.userUuid}`,
+          order: "_created_at.desc",
+          limit: "5"
+        });
+        console.log(`📦 Loaded ${customerOrders.length} orders`);
+        setOrders(customerOrders);
+      } catch (dbError) {
+        console.log("⚠️ Could not load orders, but continuing:", dbError);
+        // Don't fail the entire dashboard if orders fail to load
+        setOrders([]);
+      }
     } catch (error) {
-      console.error("Error loading user data:", error);
+      console.error("💥 Error loading user data:", error);
+      // Don't redirect to login on general errors, just show what we can
     } finally {
       setLoading(false);
     }
