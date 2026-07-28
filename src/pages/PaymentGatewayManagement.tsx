@@ -396,11 +396,21 @@ const PaymentGatewayManagement = () => {
                         <div className="flex flex-col items-center space-y-3">
                           <div className="relative">
                             <div className="w-32 h-32 bg-white rounded-lg shadow-md border-3 border-blue-500 p-2">
-                              <img 
-                                src={gateway.gcash_qr_code} 
-                                alt="GCash QR Code" 
-                                className="w-full h-full object-contain"
-                              />
+                              {gateway.gcash_qr_code && gateway.gcash_qr_code.length > 0 ? (
+                                <img 
+                                  src={gateway.gcash_qr_code} 
+                                  alt="GCash QR Code" 
+                                  className="w-full h-full object-contain"
+                                  onError={(e) => {
+                                    console.error("❌ QR Code image failed to load:", gateway.gcash_qr_code);
+                                    e.currentTarget.style.display = 'none';
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center">
+                                  <p className="text-xs text-slate-500 text-center">No QR code uploaded</p>
+                                </div>
+                              )}
                             </div>
                             <div className="absolute -bottom-1 -right-1 bg-blue-600 text-white text-xs px-1.5 py-0.5 rounded font-bold">
                               GCash
