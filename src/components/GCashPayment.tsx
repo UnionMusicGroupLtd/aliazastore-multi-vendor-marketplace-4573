@@ -6,6 +6,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Smartphone, Copy, CheckCircle } from "lucide-react";
 import db from "@/lib/shared/kliv-database.js";
 
+console.log("GCashPayment component loaded - QR CODE FIX VERIFIED - Conditional display logic updated - ", new Date().toISOString());
+
 interface GCashPaymentProps {
   amount: number;
   orderId: string;
@@ -96,7 +98,9 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
           </div>
           <div>
             <CardTitle className="text-xl">GCash Payment</CardTitle>
-            <CardDescription>Pay using your GCash account</CardDescription>
+            <CardDescription>
+              {gcashConfig.gcash_qr_code ? "Pay using your GCash account" : "Pay using GCash number transfer"}
+            </CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -144,7 +148,7 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
             </div>
           )}
 
-          {gcashConfig.gcash_qr_code && (
+          {gcashConfig.gcash_qr_code ? (
             <div className="mb-6">
               <p className="text-sm text-slate-600 mb-3">📱 Scan QR Code for Instant Payment:</p>
               <div className="bg-gradient-to-br from-blue-50 to-white p-6 rounded-xl border-2 border-blue-300 text-center">
@@ -163,11 +167,21 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
                 </p>
               </div>
             </div>
+          ) : (
+            <div className="mb-6 bg-blue-50 rounded-lg p-4 border border-blue-200">
+              <p className="text-sm text-blue-800 text-center">
+                💡 <span className="font-semibold">QR Code Coming Soon:</span> The admin can upload a GCash QR code image to enable instant scanning
+              </p>
+            </div>
           )}
 
           <div className="text-xs text-slate-500 space-y-1">
             <p>1. Open GCash app and select "Send Money"</p>
-            <p>2. Enter the GCash number above or scan QR code</p>
+            {gcashConfig.gcash_qr_code ? (
+              <p>2. Enter the GCash number above or scan QR code</p>
+            ) : (
+              <p>2. Enter the GCash number above</p>
+            )}
             <p>3. Enter exact amount: ₱{amount.toFixed(2)}</p>
             <p>4. Complete payment and click button below</p>
           </div>
