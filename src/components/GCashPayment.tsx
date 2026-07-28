@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,23 +17,42 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
   const [copied, setCopied] = useState(false);
   const [uploaded, setUploaded] = useState(false);
 
-  useState(() => {
+  useEffect(() => {
     const loadGCashConfig = async () => {
       try {
-        const gateways = await db.query("payment_methods", { 
-          gateway_type: "eq.gcash",
-          is_enabled: "eq.1"
-        });
+        console.log("🔄 Loading GCash payment configuration...");
+        
+        // Use direct SQL query instead of ORM query
+        const result = await db.execute(`
+          SELECT * FROM payment_methods 
+          WHERE gateway_type = 'gcash' 
+          AND is_enabled = 1
+          LIMIT 1
+        `);
+        
+        console.log("📊 SQL query result:", result);
+        const gateways = result?.rows || [];
+        console.log("🔍 Number of gateways found:", gateways.length);
+        
         if (gateways && gateways.length > 0) {
-          setGcashConfig(gateways[0]);
+          const config = gateways[0];
+          console.log("✅ GCash config loaded:", {
+            gateway_name: config.gateway_name,
+            gcash_number: config.gcash_number,
+            gcash_qr_code: config.gcash_qr_code,
+            is_enabled: config.is_enabled
+          });
+          setGcashConfig(config);
+        } else {
+          console.warn("⚠️ No enabled GCash gateway found");
         }
       } catch (error) {
-        console.error("Error loading GCash config:", error);
+        console.error("❌ Error loading GCash config:", error);
       }
     };
     
     loadGCashConfig();
-  });
+  }, []);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);

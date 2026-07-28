@@ -57,6 +57,7 @@ import CurrencyManagement from "./pages/CurrencyManagement";
 import DeliveryManagement from "./pages/DeliveryManagement";
 import DriverManagement from "./pages/DriverManagement";
 import PaymentGatewayManagement from "./pages/PaymentGatewayManagement";
+import PaymentGatewayManagementSimple from "./pages/PaymentGatewayManagementSimple";
 import WithdrawalManagement from "./pages/WithdrawalManagement";
 import ShopOwnerPaymentManagement from "./pages/ShopOwnerPaymentManagement";
 import DeliveryOptionsManagement from "./pages/DeliveryOptionsManagement";
@@ -82,8 +83,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// IMPROVED UPLOAD DEBUGGING - Enhanced error handling and logging for QR code upload
-console.log("App component loaded - IMPROVED UPLOAD DEBUGGING - Enhanced error handling - ", new Date().toISOString());
+// GCASH QR UPLOAD FIX - Simplified upload page for debugging
+console.log("App component loaded - GCASH QR UPLOAD FIX - Simplified debugging enabled - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -171,6 +172,7 @@ const App = () => (
           <Route path="/admin/drivers" element={<DriverManagement />} />
           <Route path="/admin/payment-gateways" element={<PaymentGatewayManagement />} />
           <Route path="/admin/withdrawals" element={<WithdrawalManagement />} />
+          <Route path="/admin/payment-gateways/simple" element={<PaymentGatewayManagementSimple />} />
           <Route path="/admin/shop-owner-payments" element={<ShopOwnerPaymentManagement />} />
           <Route path="/admin/delivery-options" element={<DeliveryOptionsManagement />} />
           <Route path="/admin/subscriptions" element={<SubscriptionManagement />} />
