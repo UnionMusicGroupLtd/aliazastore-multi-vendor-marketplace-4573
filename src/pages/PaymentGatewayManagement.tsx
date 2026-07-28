@@ -130,19 +130,26 @@ const PaymentGatewayManagement = () => {
         return;
       }
 
+      console.log("Uploading QR code file:", file.name, file.size, file.type);
+      
       // Upload file to content filesystem
       const result = await content.uploadFile(file, '/content/gcash-qr-codes/');
+      
+      console.log("Upload result:", result);
       
       if (result && result.path) {
         setFormData({
           ...formData,
           gcash_qr_code: result.path
         });
-        setSuccess("QR code uploaded successfully!");
+        setSuccess("✅ QR code uploaded successfully! Click 'Save Changes' to apply.");
+        console.log("QR code uploaded to:", result.path);
+      } else {
+        setError("Upload failed - no file path returned");
       }
     } catch (err) {
       console.error("Error uploading QR code:", err);
-      setError("Failed to upload QR code image");
+      setError("Failed to upload QR code image: " + (err as Error).message);
     } finally {
       setUploadingQR(false);
     }
@@ -646,10 +653,36 @@ const PaymentGatewayManagement = () => {
                       </span>
                     </div>
                     
+                    {/* Direct URL option as backup */}
+                    <div className="pt-2 border-t border-slate-100">
+                      <Label className="text-xs text-slate-500">Or enter QR code image URL directly:</Label>
+                      <div className="flex gap-2 mt-1">
+                        <Input
+                          type="url"
+                          placeholder="https://example.com/my-qr-code.jpg"
+                          value={formData.gcash_qr_code}
+                          onChange={(e) => setFormData({...formData, gcash_qr_code: e.target.value})}
+                          className="text-sm"
+                        />
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            if (formData.gcash_qr_code) {
+                              setSuccess("✅ QR code URL set! Click 'Save Changes' to apply.");
+                            }
+                          }}
+                        >
+                          Set URL
+                        </Button>
+                      </div>
+                    </div>
+                    
                     {formData.gcash_qr_code && (
                       <div className="text-sm text-green-600 flex items-center gap-1">
                         <CheckCircle className="w-4 h-4" />
-                        QR code uploaded successfully
+                        QR code ready! Click "Save Changes" to apply
                       </div>
                     )}
                   </div>

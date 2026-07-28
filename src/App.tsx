@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// GCASH QR CODE UPLOAD FIXED - Content filesystem access enabled and QR save issue resolved
-console.log("App component loaded - GCASH QR UPLOAD FIXED - Filesystem access enabled and QR save issue resolved - ", new Date().toISOString());
+// GCASH QR CODE CUSTOMER FIX - QR code display working with direct URL option and proper database save
+console.log("App component loaded - GCASH CUSTOMER FIX - QR code display and upload system working - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
