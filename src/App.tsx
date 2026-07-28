@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// SELLER MESSAGE PERSISTENCE FIX - Messages now persist read status to database
-console.log("App component loaded - SELLER MESSAGE PERSISTENCE FIXED - Messages now properly persist read status to database - ", new Date().toISOString());
+// ADMIN STORE QR CODE UPLOAD - Admin can upload custom QR codes for seller stores
+console.log("App component loaded - ADMIN STORE QR CODE UPLOAD - Custom QR codes for seller stores via admin - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

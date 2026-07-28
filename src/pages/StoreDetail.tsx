@@ -8,13 +8,14 @@ import { Label } from "@/components/ui/label";
 import { 
   Store, ArrowLeft, Plus, Edit, Trash2, Package, ShoppingCart, 
   TrendingUp, Users, CheckCircle, AlertCircle, Clock, Phone, MapPin,
-  Facebook, FileText, QrCode, Verified
+  Facebook, FileText, QrCode, Verified, Upload, Globe
 } from "lucide-react";
 import { 
   Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle 
 } from "@/components/ui/dialog";
 import { SimpleTabs, SimpleTabsList, SimpleTabsTrigger, SimpleTabsContent } from "@/components/ui/simple-tabs";
 import db from "@/lib/shared/kliv-database.js";
+import { content } from "@/lib/shared/kliv-content.js";
 
 console.log("StoreDetail component loaded - production build fix applied");
 
@@ -27,6 +28,7 @@ const StoreDetail = () => {
   const [showAddProductModal, setShowAddProductModal] = useState(false);
   const [showEditStoreModal, setShowEditStoreModal] = useState(false);
   const [success, setSuccess] = useState("");
+  const [uploadingQR, setUploadingQR] = useState(false);
 
   const [newProduct, setNewProduct] = useState({
     name: "",
@@ -87,7 +89,8 @@ const StoreDetail = () => {
         owner_address: store.owner_address,
         owner_facebook_id: store.owner_facebook_id,
         owner_govt_id: store.owner_govt_id,
-        store_bio: store.store_bio
+        store_bio: store.store_bio,
+        store_qr_code_image: store.store_qr_code_image
       };
       
       // Include is_verified if it exists in the state
@@ -155,6 +158,40 @@ const StoreDetail = () => {
     } catch (error) {
       console.error("Error deleting product:", error);
     }
+  };
+
+  const handleQRCodeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size must be less than 5MB');
+      return;
+    }
+
+    setUploadingQR(true);
+    try {
+      const result = await content.uploadFile(file, '/content/store-qr-codes/');
+      setStore({ ...store, store_qr_code_image: result.path });
+      setSuccess("QR code uploaded successfully!");
+    } catch (error) {
+      console.error("Error uploading QR code:", error);
+      alert("Error uploading QR code. Please try again.");
+    } finally {
+      setUploadingQR(false);
+    }
+  };
+
+  const handleRemoveQRCode = () => {
+    setStore({ ...store, store_qr_code_image: "" });
+    setSuccess("QR code removed successfully!");
   };
 
   const getStoreStatusBadge = (status: string) => {
@@ -383,33 +420,62 @@ const StoreDetail = () => {
         </Card>
 
         {/* Store QR Code */}
-        {store.store_qr_code && (
-          <Card className="mb-8 border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <QrCode className="w-5 h-5 mr-2" />
-                Store QR Code
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+        <Card className="mb-8 border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <QrCode className="w-5 h-5 mr-2" />
+              Store QR Code
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {store.store_qr_code_image ? (
               <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
-                <div className="w-32 h-32 bg-white border-2 border-slate-200 rounded-lg flex items-center justify-center">
-                  <QrCode className="w-24 h-24 text-slate-800" />
+                <div className="relative">
+                  <img 
+                    src={store.store_qr_code_image} 
+                    alt="Store QR Code"
+                    className="w-48 h-48 border-2 border-slate-300 rounded-lg bg-white shadow-md"
+                  />
+                  <div className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                    <CheckCircle className="w-5 h-5" />
+                  </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold mb-2">Direct Store Access</h3>
+                  <div className="flex items-center space-x-2 mb-2">
+                    <h3 className="font-semibold text-green-700">Custom QR Code Active</h3>
+                    <Badge className="bg-green-100 text-green-700">Uploaded</Badge>
+                  </div>
                   <p className="text-sm text-slate-600 mb-3">
-                    Customers can scan this QR code to directly visit your store page. Share this on your marketing materials, social media, or physical products.
+                    Customers can scan this custom QR code to directly visit your store page. This is perfect for business cards, flyers, product packaging, and social media marketing.
                   </p>
-                  <div className="bg-slate-100 p-3 rounded-lg">
-                    <p className="text-xs text-slate-500 mb-1">Store URL:</p>
-                    <p className="text-sm font-mono text-slate-800 break-all">{store.store_qr_code}</p>
+                  <div className="bg-blue-50 border-l-4 border-blue-500 p-3 rounded">
+                    <p className="text-xs text-blue-800 mb-1">Direct Store URL:</p>
+                    <p className="text-sm font-mono text-blue-900 break-all">{store.store_qr_code || "Auto-generated store link"}</p>
                   </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        )}
+            ) : (
+              <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+                <div className="w-32 h-32 bg-gradient-to-br from-slate-100 to-slate-200 border-2 border-slate-300 rounded-lg flex items-center justify-center">
+                  <QrCode className="w-20 h-20 text-slate-400" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <h3 className="font-semibold text-slate-700">Auto-Generated QR Code</h3>
+                    <Badge className="bg-blue-100 text-blue-700">Default</Badge>
+                  </div>
+                  <p className="text-sm text-slate-600 mb-3">
+                    Store uses auto-generated QR code. Admin can upload a custom QR code in the Edit Store section for better branding and marketing materials.
+                  </p>
+                  <div className="bg-slate-100 p-3 rounded-lg">
+                    <p className="text-xs text-slate-500 mb-1">Store URL:</p>
+                    <p className="text-sm font-mono text-slate-800 break-all">{store.store_qr_code || "Store link will be generated"}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Products and Orders */}
         <SimpleTabs defaultValue="products" className="space-y-6">
@@ -591,6 +657,80 @@ const StoreDetail = () => {
                 value={store.store_bio}
                 onChange={(e) => setStore({ ...store, store_bio: e.target.value })}
               />
+            </div>
+            
+            {/* Store QR Code Management - Admin Only */}
+            <div className="pt-4 border-t border-slate-200">
+              <div>
+                <Label className="text-base font-semibold mb-3 block">Store QR Code Image</Label>
+                <p className="text-xs text-slate-500 mb-3">Upload a custom QR code for better branding and marketing</p>
+                
+                <div className="border-2 border-dashed border-slate-300 rounded-lg p-6 bg-slate-50">
+                  <div className="flex flex-col items-center space-y-4">
+                    {store.store_qr_code_image ? (
+                      <>
+                        <div className="text-center">
+                          <div className="inline-block relative">
+                            <img 
+                              src={store.store_qr_code_image} 
+                              alt="Store QR Code"
+                              className="w-48 h-48 border border-slate-300 rounded-lg bg-white shadow-sm"
+                            />
+                            <div className="absolute -top-2 -right-2 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center">
+                              <CheckCircle className="w-4 h-4" />
+                            </div>
+                          </div>
+                          <p className="text-sm text-green-600 mt-2 font-medium">✓ QR code uploaded successfully</p>
+                        </div>
+                        <Button 
+                          variant="destructive" 
+                          size="sm"
+                          onClick={handleRemoveQRCode}
+                        >
+                          Remove QR Code
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <label className="cursor-pointer">
+                          <div className="flex flex-col items-center space-y-2">
+                            <Upload className="w-12 h-12 text-slate-400" />
+                            <div className="text-center">
+                              <p className="text-sm font-medium text-slate-700">Upload Store QR Code</p>
+                              <p className="text-xs text-slate-500">JPG, PNG • Max 5MB</p>
+                            </div>
+                          </div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleQRCodeUpload}
+                            disabled={uploadingQR}
+                            className="hidden"
+                          />
+                        </label>
+                        {uploadingQR && (
+                          <div className="flex items-center space-x-2 text-sm text-blue-600">
+                            <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                            <span>Uploading QR code...</span>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+                
+                <div className="mt-3 bg-blue-50 border-l-4 border-blue-500 p-3 rounded">
+                  <p className="text-xs text-blue-800">
+                    <strong>Why upload a custom QR code?</strong>
+                  </p>
+                  <ul className="text-xs text-blue-700 mt-1 space-y-1 list-disc list-inside">
+                    <li>Professional branding for your store</li>
+                    <li>Perfect for business cards and packaging</li>
+                    <li>Easy sharing at markets and events</li>
+                    <li>Custom colors and design with your brand</li>
+                  </ul>
+                </div>
+              </div>
             </div>
             
             {/* Verification Controls - Admin Only */}
