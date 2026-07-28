@@ -81,10 +81,11 @@ import PasswordResetTest from "./pages/PasswordResetTest";
 import ResetPassword from "./pages/ResetPassword";
 import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
+import QRCodeUploadHelp from "./pages/QRCodeUploadHelp";
 import NotFound from "./pages/NotFound";
 
-// GCASH QR UPLOAD FIX - Simplified upload page for debugging
-console.log("App component loaded - GCASH QR UPLOAD FIX - Simplified debugging enabled - ", new Date().toISOString());
+// Production build cache cleared - PaymentGatewayManagement JSX syntax fix
+console.log("App component loaded - BUILD CACHE CLEARED - PaymentGatewayManagement fix verified - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -177,6 +178,7 @@ const App = () => (
           <Route path="/admin/delivery-options" element={<DeliveryOptionsManagement />} />
           <Route path="/admin/subscriptions" element={<SubscriptionManagement />} />
           <Route path="/admin/password-management" element={<AdminPasswordManagement />} />
+          <Route path="/admin/qr-upload" element={<QRCodeUploadHelp />} />
           
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

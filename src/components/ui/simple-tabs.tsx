@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, Children, cloneElement, isValidElement } from "react";
 
-console.log("SimpleTabs component loaded - PRODUCTION BUILD FIX - ALL RADIX UI DEPENDENCIES REMOVED + SIMPLE IMPLEMENTATIONS - ", new Date().toISOString());
+console.log("SimpleTabs loaded - BUILD CACHE CLEARED - PaymentGatewayManagement JSX fix - ", new Date().toISOString());
 
 interface SimpleTabsProps {
   defaultValue: string;

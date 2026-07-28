@@ -659,33 +659,44 @@ const PaymentGatewayManagement = () => {
                   <Label>GCash QR Code</Label>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
+                      <Button
+                        type="button"
+                        onClick={() => document.getElementById('qr-code-file-input')?.click()}
+                        disabled={uploadingQR}
+                        className="bg-blue-600 hover:bg-blue-700"
+                      >
+                        {uploadingQR ? (
+                          <>
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4 mr-2" />
+                            Upload QR Code
+                          </>
+                        )}
+                      </Button>
                       <input
                         type="file"
                         accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                         onChange={handleQRUpload}
                         disabled={uploadingQR}
-                        className="block w-full text-sm text-slate-500
-                          file:mr-4 file:py-2 file:px-4
-                          file:rounded-md file:border-0
-                          file:text-sm file:font-semibold
-                          file:bg-blue-50 file:text-blue-700
-                          hover:file:bg-blue-100"
+                        className="hidden"
                         id="qr-code-file-input"
                       />
                     </div>
-                    {uploadingQR && (
-                      <div className="flex items-center gap-2 text-sm text-blue-600">
-                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-                        <span>Uploading QR code...</span>
-                      </div>
-                    )}
                     {selectedFileName && !uploadingQR && (
                       <div className="flex items-center gap-2 text-sm text-green-600">
                         <CheckCircle className="w-4 h-4" />
                         <span className="font-medium">{selectedFileName} selected</span>
                       </div>
                     )}
-                    </div>
+                    <p className="text-xs text-slate-500">
+                      Upload your InstaPay QR code image. Customers can scan this to pay directly in GCash.
+                    </p>
+                  </div>
+                </div>
                     
                     {formData.gcash_qr_code && (
                       <div className="bg-green-50 border border-green-200 rounded-lg p-3">
@@ -703,11 +714,10 @@ const PaymentGatewayManagement = () => {
                         </div>
                       </div>
                     )}
-                  </div>
-                </div>
-              )}
+              </div>
+            )}
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+            <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
                 <Button
                   type="button"
                   variant="outline"
