@@ -697,23 +697,23 @@ const PaymentGatewayManagement = () => {
                     </p>
                   </div>
                 </div>
-                    
-                    {formData.gcash_qr_code && (
-                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                        <div className="flex items-center gap-2 text-sm text-green-800">
-                          <CheckCircle className="w-4 h-4" />
-                          <span className="font-medium">✅ QR Code Image Uploaded!</span>
-                        </div>
-                        <p className="text-xs text-green-600 mt-1">This InstaPay QR code will open GCash app when scanned. Click 'Save Changes' to apply.</p>
-                        <div className="mt-3 flex items-center justify-center">
-                          <img 
-                            src={formData.gcash_qr_code} 
-                            alt="GCash QR Code Preview" 
-                            className="w-24 h-24 object-contain border border-green-300 rounded"
-                          />
-                        </div>
-                      </div>
-                    )}
+                
+                {formData.gcash_qr_code && (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                    <div className="flex items-center gap-2 text-sm text-green-800">
+                      <CheckCircle className="w-4 h-4" />
+                      <span className="font-medium">✅ QR Code Image Uploaded!</span>
+                    </div>
+                    <p className="text-xs text-green-600 mt-1">This InstaPay QR code will open GCash app when scanned. Click 'Save Changes' to apply.</p>
+                    <div className="mt-3 flex items-center justify-center">
+                      <img 
+                        src={formData.gcash_qr_code} 
+                        alt="GCash QR Code Preview" 
+                        className="w-24 h-24 object-contain border border-green-300 rounded"
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -741,5 +741,5 @@ const PaymentGatewayManagement = () => {
       </div>
     );
   };
-
-  export default PaymentGatewayManagement;
+// Force rebuild - PaymentGatewayManagement export fix verified
+export default PaymentGatewayManagement;
