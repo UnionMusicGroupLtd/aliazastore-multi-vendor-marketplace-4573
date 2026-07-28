@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { 
   DollarSign, TrendingUp, Wallet, Calendar,
-  Download, ChevronRight, CheckCircle, Clock
+  Download, ChevronRight, CheckCircle, Clock, ArrowLeft
 } from "lucide-react";
 import { formatPrice } from "@/lib/currency";
 import {
@@ -14,6 +14,7 @@ import {
 } from "recharts";
 
 const SellerEarnings = () => {
+  const navigate = useNavigate();
   // Sample earnings data
   const earningsData = [
     { month: "Jan", revenue: 45000, commission: 0, net: 45000 },
@@ -78,12 +79,23 @@ const SellerEarnings = () => {
       <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/dashboard/seller" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                <DollarSign className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-xl font-bold">Seller Earnings</span>
-            </Link>
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate("/dashboard/seller")}
+                className="hover:bg-orange-50"
+                title="Back to Dashboard"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+              <Link to="/dashboard/seller" className="flex items-center space-x-2">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                  <DollarSign className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-xl font-bold">Seller Earnings</span>
+              </Link>
+            </div>
             <Link to="/dashboard/seller/withdrawal">
               <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
                 Request Withdrawal

@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// PRODUCTS PAGINATION FIX - FULLY FUNCTIONAL PAGE NAVIGATION
-console.log("App component loaded - PRODUCTS PAGINATION FIXED - 1,2,3 buttons now functional with complete pagination system - ", new Date().toISOString());
+// SELLER DASHBOARD BACK BUTTON FIX - CONSISTENT NAVIGATION ACROSS ALL SELLER PAGES
+console.log("App component loaded - SELLER BACK BUTTONS ADDED - All seller pages now have consistent back navigation - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

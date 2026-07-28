@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { 
   TrendingUp, Package, Users, DollarSign, 
-  ShoppingCart, Star, Eye, ArrowUpRight, ArrowDownRight
+  ShoppingCart, Star, Eye, ArrowUpRight, ArrowDownRight, ArrowLeft
 } from "lucide-react";
 import { formatPrice } from "@/lib/currency";
 import {
@@ -12,6 +13,7 @@ import {
 } from "recharts";
 
 const SellerAnalytics = () => {
+  const navigate = useNavigate();
   // Sample analytics data
   const salesData = [
     { month: "Jan", sales: 45000, orders: 120, visitors: 1200 },
@@ -50,12 +52,23 @@ const SellerAnalytics = () => {
       <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/dashboard/seller" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-xl font-bold">Seller Analytics</span>
-            </Link>
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate("/dashboard/seller")}
+                className="hover:bg-orange-50"
+                title="Back to Dashboard"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+              <Link to="/dashboard/seller" className="flex items-center space-x-2">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                  <TrendingUp className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-xl font-bold">Seller Analytics</span>
+              </Link>
+            </div>
           </div>
         </div>
       </nav>

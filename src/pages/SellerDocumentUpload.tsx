@@ -5,13 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { 
-  Upload, ImageIcon, CheckCircle, AlertCircle, FileText, Shield
+  Upload, ImageIcon, CheckCircle, AlertCircle, FileText, Shield, ArrowLeft
 } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import { content } from "@/lib/shared/kliv-content.js";
 import auth from "@/lib/shared/kliv-auth.js";
 import db from "@/lib/shared/kliv-database.js";
 
 const SellerDocumentUpload = () => {
+  const navigate = useNavigate();
   const [storeData, setStoreData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
@@ -126,7 +128,7 @@ const SellerDocumentUpload = () => {
             <AlertCircle className="w-16 h-16 text-orange-500 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No Store Found</h3>
             <p className="text-slate-600 mb-4">You don't have a shop yet. Please create a shop first.</p>
-            <Button onClick={() => window.location.href = "/dashboard/seller"}>
+            <Button onClick={() => navigate("/dashboard/seller")}>
               Go to Seller Dashboard
             </Button>
           </CardContent>
@@ -142,6 +144,15 @@ const SellerDocumentUpload = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate("/dashboard/seller")}
+                className="hover:bg-orange-50"
+                title="Back to Dashboard"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
               <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
                 <Shield className="w-6 h-6 text-white" />
               </div>
@@ -150,12 +161,6 @@ const SellerDocumentUpload = () => {
                 <p className="text-sm text-slate-600">Shop Documents</p>
               </div>
             </div>
-            <Button 
-              variant="outline" 
-              onClick={() => window.location.href = "/dashboard/seller"}
-            >
-              Back to Dashboard
-            </Button>
           </div>
         </div>
       </nav>

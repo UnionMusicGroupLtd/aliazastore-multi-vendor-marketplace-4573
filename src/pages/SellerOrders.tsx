@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { 
   Search, Filter, Package, ChevronRight, 
-  Truck, CheckCircle, Clock, XCircle
+  Truck, CheckCircle, Clock, XCircle, ArrowLeft
 } from "lucide-react";
 import { formatPrice } from "@/lib/currency";
 import db from "@/lib/shared/kliv-database.js";
@@ -17,6 +17,7 @@ const SellerOrders = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadOrders();
@@ -84,12 +85,23 @@ const SellerOrders = () => {
       <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/dashboard/seller" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                <Package className="w-6 h-6 text-white" />
-              </div>
-              <span className="text-xl font-bold">Seller Orders</span>
-            </Link>
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate("/dashboard/seller")}
+                className="hover:bg-orange-50"
+                title="Back to Dashboard"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </Button>
+              <Link to="/dashboard/seller" className="flex items-center space-x-2">
+                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                  <Package className="w-6 h-6 text-white" />
+                </div>
+                <span className="text-xl font-bold">Seller Orders</span>
+              </Link>
+            </div>
           </div>
         </div>
       </nav>
