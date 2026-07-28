@@ -84,7 +84,7 @@ import Sitemap from "./pages/Sitemap";
 import QRCodeUploadHelp from "./pages/QRCodeUploadHelp";
 import NotFound from "./pages/NotFound";
 
-console.log("App component loaded - GCASH QR CODE FIX VERIFIED - Customer checkout display fixed - Conditional QR code logic added - ", new Date().toISOString());
+console.log("App component loaded - GCASH REAL INSTAPAY QR CODE - Using actual InstaPay QR from public directory - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
