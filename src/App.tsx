@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// JSX SYNTAX ERROR FIX - Fixed broken PaymentGatewayManagement structure
-console.log("App component loaded - JSX SYNTAX ERROR FIX - PaymentGatewayManagement fixed - ", new Date().toISOString());
+// IMPROVED UPLOAD DEBUGGING - Enhanced error handling and logging for QR code upload
+console.log("App component loaded - IMPROVED UPLOAD DEBUGGING - Enhanced error handling - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (

@@ -112,11 +112,11 @@ const PaymentGatewayManagement = () => {
   const handleQRUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) {
-      console.log("No file selected");
+      console.log("❌ No file selected");
       return;
     }
 
-    console.log("File selected:", file.name, file.size, file.type);
+    console.log("✅ File selected:", file.name, file.size, file.type);
     setSelectedFileName(file.name);
 
     try {
@@ -126,7 +126,9 @@ const PaymentGatewayManagement = () => {
       // Validate file type - accept all common image formats
       const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
       if (!validTypes.includes(file.type)) {
-        setError("Please upload an image file (JPG, PNG, GIF, WebP)");
+        const errorMsg = "Please upload an image file (JPG, PNG, GIF, WebP)";
+        console.error("❌ Invalid file type:", file.type);
+        setError(errorMsg);
         setUploadingQR(false);
         setSelectedFileName("");
         return;
@@ -134,37 +136,49 @@ const PaymentGatewayManagement = () => {
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        setError("File size must be less than 5MB");
+        const errorMsg = "File size must be less than 5MB";
+        console.error("❌ File too large:", file.size);
+        setError(errorMsg);
         setUploadingQR(false);
         setSelectedFileName("");
         return;
       }
 
-      console.log("Uploading REAL QR code image:", file.name, file.size, file.type);
+      console.log("🔄 Starting upload process for:", file.name);
       
       // Upload REAL image file to content filesystem (not a generated URL)
+      console.log("📤 Calling content.uploadFile...");
       const result = await content.uploadFile(file, '/content/gcash-qr-codes/');
       
-      console.log("Upload result:", result);
+      console.log("✅ Upload result:", JSON.stringify(result, null, 2));
       
       if (result && result.path) {
+        console.log("✅ File uploaded successfully to:", result.path);
+        
         // Store the actual image path, not a generated URL
         setFormData({
           ...formData,
           gcash_qr_code: result.path
         });
-        setSuccess("✅ REAL QR code image uploaded! This will open GCash app when scanned. Click 'Save Changes'.");
-        console.log("REAL QR code uploaded to:", result.path);
+        
+        const successMsg = "✅ QR code image uploaded! This will open GCash app when scanned. Click 'Save Changes'.";
+        console.log("✅ " + successMsg);
+        setSuccess(successMsg);
       } else {
-        setError("Upload failed - no file path returned");
+        const errorMsg = "Upload failed - no file path returned from uploadFile";
+        console.error("❌ " + errorMsg);
+        setError(errorMsg);
         setSelectedFileName("");
       }
     } catch (err) {
-      console.error("Error uploading QR code:", err);
-      setError("Failed to upload QR code image: " + (err as Error).message);
+      const errorMsg = "Failed to upload QR code image: " + (err as Error).message;
+      console.error("❌ Upload error:", err);
+      console.error("❌ Error details:", JSON.stringify(err, null, 2));
+      setError(errorMsg);
       setSelectedFileName("");
     } finally {
       setUploadingQR(false);
+      console.log("🔄 Upload process completed");
     }
   };
 
@@ -647,39 +661,30 @@ const PaymentGatewayManagement = () => {
                     <div className="flex items-center gap-3">
                       <input
                         type="file"
-                        accept="image/*"
+                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                         onChange={handleQRUpload}
                         disabled={uploadingQR}
-                        className="hidden"
+                        className="block w-full text-sm text-slate-500
+                          file:mr-4 file:py-2 file:px-4
+                          file:rounded-md file:border-0
+                          file:text-sm file:font-semibold
+                          file:bg-blue-50 file:text-blue-700
+                          hover:file:bg-blue-100"
                         id="qr-code-file-input"
                       />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        disabled={uploadingQR}
-                        onClick={() => {
-                          const fileInput = document.getElementById('qr-code-file-input') as HTMLInputElement;
-                          if (fileInput) {
-                            console.log('Triggering file input click');
-                            fileInput.click();
-                          } else {
-                            console.error('File input not found');
-                          }
-                        }}
-                      >
-                        <Upload className="w-4 h-4 mr-2" />
-                        {uploadingQR ? "Uploading..." : "Upload QR Code"}
-                      </Button>
-                      <div className="flex-1">
-                        <span className="text-sm text-slate-500">
-                          {selectedFileName ? (
-                            <span className="text-green-600 font-medium">✅ {selectedFileName}</span>
-                          ) : (
-                            "JPG, PNG • Max 5MB"
-                          )}
-                        </span>
-                      </div>
                     </div>
+                    {uploadingQR && (
+                      <div className="flex items-center gap-2 text-sm text-blue-600">
+                        <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                        <span>Uploading QR code...</span>
+                      </div>
+                    )}
+                    {selectedFileName && !uploadingQR && (
+                      <div className="flex items-center gap-2 text-sm text-green-600">
+                        <CheckCircle className="w-4 h-4" />
+                        <span className="font-medium">{selectedFileName} selected</span>
+                      </div>
+                    )}
                     </div>
                     
                     {formData.gcash_qr_code && (
