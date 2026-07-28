@@ -22,17 +22,14 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
       try {
         console.log("🔄 Loading GCash payment configuration...");
         
-        // Use direct SQL query instead of ORM query
-        const result = await db.execute(`
-          SELECT * FROM payment_methods 
-          WHERE gateway_type = 'gcash' 
-          AND is_enabled = 1
-          LIMIT 1
-        `);
+        // Try different query approaches
+        const gateways = await db.query('payment_methods', {
+          gateway_type: 'eq.gcash',
+          is_enabled: 'eq.1'
+        });
         
-        console.log("📊 SQL query result:", result);
-        const gateways = result?.rows || [];
-        console.log("🔍 Number of gateways found:", gateways.length);
+        console.log("📊 Query result:", gateways);
+        console.log("🔍 Number of gateways found:", gateways?.length || 0);
         
         if (gateways && gateways.length > 0) {
           const config = gateways[0];
@@ -44,7 +41,17 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
           });
           setGcashConfig(config);
         } else {
-          console.warn("⚠️ No enabled GCash gateway found");
+          console.warn("⚠️ No enabled GCash gateway found - trying fallback query");
+          // Fallback: try to get any gcash gateway
+          const fallbackGateways = await db.query('payment_methods', {
+            gateway_type: 'eq.gcash'
+          });
+          console.log("📊 Fallback query result:", fallbackGateways);
+          if (fallbackGateways && fallbackGateways.length > 0) {
+            const config = fallbackGateways[0];
+            console.log("✅ GCash config loaded via fallback:", config);
+            setGcashConfig(config);
+          }
         }
       } catch (error) {
         console.error("❌ Error loading GCash config:", error);
@@ -74,6 +81,7 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
         <CardContent className="p-6 text-center">
           <Smartphone className="w-12 h-12 text-slate-300 mx-auto mb-4" />
           <p className="text-slate-600">GCash payment is not available at the moment</p>
+          <p className="text-xs text-slate-500 mt-2">Please contact support or try again later</p>
         </CardContent>
       </Card>
     );
