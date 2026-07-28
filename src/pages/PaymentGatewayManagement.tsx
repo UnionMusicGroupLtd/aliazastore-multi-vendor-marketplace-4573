@@ -353,14 +353,27 @@ const PaymentGatewayManagement = () => {
                   )}
                   
                   {gateway.gateway_type === 'gcash' && gateway.gcash_qr_code && (
-                    <div className="space-y-2">
-                      <p className="text-sm text-slate-600">GCash QR Code:</p>
-                      <div className="bg-white p-3 rounded-lg border border-slate-200">
-                        <img 
-                          src={gateway.gcash_qr_code} 
-                          alt="GCash QR Code" 
-                          className="w-32 h-32 object-contain"
-                        />
+                    <div className="space-y-3">
+                      <p className="text-sm text-slate-600 font-semibold">GCash QR Code:</p>
+                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                        <div className="flex flex-col items-center space-y-3">
+                          <div className="relative">
+                            <div className="w-32 h-32 bg-white rounded-lg shadow-md border-3 border-blue-500 p-2">
+                              <img 
+                                src={gateway.gcash_qr_code} 
+                                alt="GCash QR Code" 
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                            <div className="absolute -bottom-1 -right-1 bg-blue-600 text-white text-xs px-1.5 py-0.5 rounded font-bold">
+                              GCash
+                            </div>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-xs text-slate-600">{gateway.gcash_business_name || "Aliaza Store"}</p>
+                            <p className="text-xs text-slate-500 font-mono">{gateway.gcash_number || "N/A"}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -590,7 +603,7 @@ const PaymentGatewayManagement = () => {
                   <Input
                     value={formData.gcash_business_name}
                     onChange={(e) => setFormData({...formData, gcash_business_name: e.target.value})}
-                    placeholder="Your Business Name"
+                    placeholder="Aliaza Store Platform"
                   />
                 </div>
 
@@ -639,29 +652,61 @@ const PaymentGatewayManagement = () => {
                   </div>
                 </div>
 
-                {formData.gcash_qr_code && (
-                  <div className="bg-white p-4 rounded-lg border border-slate-200">
-                    <p className="text-sm text-slate-600 mb-2">QR Code Preview:</p>
-                    <img 
-                      src={formData.gcash_qr_code} 
-                      alt="GCash QR Code Preview" 
-                      className="w-40 h-40 object-contain border border-slate-100 rounded"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/128?text=Invalid+QR+Code';
-                      }}
-                    />
-                    <div className="mt-2 flex gap-2">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setFormData({...formData, gcash_qr_code: ""})}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  </div>
-                )}
+                    {formData.gcash_qr_code && (
+                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
+                        <div className="text-center space-y-4">
+                          {/* Professional QR Code Display */}
+                          <div className="relative inline-block">
+                            <div className="w-48 h-48 bg-white rounded-lg shadow-lg border-4 border-blue-500 p-3 flex items-center justify-center">
+                              <img 
+                                src={formData.gcash_qr_code} 
+                                alt="GCash QR Code" 
+                                className="w-full h-full object-contain"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/192?text=Invalid+QR+Code';
+                                }}
+                              />
+                            </div>
+                            {/* GCash Watermark */}
+                            <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-semibold">
+                              GCash
+                            </div>
+                          </div>
+                          
+                          {/* Payment Information */}
+                          <div className="space-y-2">
+                            <h4 className="text-lg font-bold text-blue-900">{formData.gcash_business_name || "Aliaza Store"}</h4>
+                            <p className="text-sm text-slate-600 font-mono">{formData.gcash_number || "09172345678"}</p>
+                            <div className="bg-yellow-100 border-l-4 border-yellow-500 p-2 rounded">
+                              <p className="text-xs text-yellow-800 font-medium">⚠️ Transfer fees may apply</p>
+                            </div>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex gap-2 justify-center">
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => {
+                                navigator.clipboard.writeText(formData.gcash_number || "");
+                                setSuccess("GCash number copied to clipboard!");
+                              }}
+                              className="text-blue-600 hover:text-blue-700"
+                            >
+                              Copy Number
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => setFormData({...formData, gcash_qr_code: ""})}
+                              className="text-red-600 hover:text-red-700"
+                            >
+                              Remove QR
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
               </div>
             )}
 

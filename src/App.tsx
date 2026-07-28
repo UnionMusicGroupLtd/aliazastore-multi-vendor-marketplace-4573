@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// ADMIN STORE QR CODE UPLOAD - Admin can upload custom QR codes for seller stores
-console.log("App component loaded - ADMIN STORE QR CODE UPLOAD - Custom QR codes for seller stores via admin - ", new Date().toISOString());
+// ADMIN GCASH QR CODE DISPLAY ENHANCED - Professional QR display with business info and transfer fee warnings
+console.log("App component loaded - ADMIN GCASH QR ENHANCED - Professional QR display in admin payment gateway - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
