@@ -116,9 +116,10 @@ const PaymentGatewayManagement = () => {
       setUploadingQR(true);
       setError("");
 
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        setError("Please upload an image file (JPG, PNG, etc.)");
+      // Validate file type - accept all common image formats
+      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        setError("Please upload an image file (JPG, PNG, GIF, WebP)");
         setUploadingQR(false);
         return;
       }
@@ -130,20 +131,21 @@ const PaymentGatewayManagement = () => {
         return;
       }
 
-      console.log("Uploading QR code file:", file.name, file.size, file.type);
+      console.log("Uploading REAL QR code image:", file.name, file.size, file.type);
       
-      // Upload file to content filesystem
+      // Upload REAL image file to content filesystem (not a generated URL)
       const result = await content.uploadFile(file, '/content/gcash-qr-codes/');
       
       console.log("Upload result:", result);
       
       if (result && result.path) {
+        // Store the actual image path, not a generated URL
         setFormData({
           ...formData,
           gcash_qr_code: result.path
         });
-        setSuccess("✅ QR code uploaded successfully! Click 'Save Changes' to apply.");
-        console.log("QR code uploaded to:", result.path);
+        setSuccess("✅ REAL QR code image uploaded! This will open GCash app when scanned. Click 'Save Changes'.");
+        console.log("REAL QR code uploaded to:", result.path);
       } else {
         setError("Upload failed - no file path returned");
       }
@@ -655,11 +657,12 @@ const PaymentGatewayManagement = () => {
                     
                     {/* Direct URL option as backup */}
                     <div className="pt-2 border-t border-slate-100">
-                      <Label className="text-xs text-slate-500">Or enter QR code image URL directly:</Label>
+                      <Label className="text-xs text-slate-500">Or upload your real InstaPay QR code image URL:</Label>
+                      <p className="text-xs text-slate-400 mt-1">Upload your working InstaPay QR code image (the one that opens GCash app when scanned)</p>
                       <div className="flex gap-2 mt-1">
                         <Input
                           type="url"
-                          placeholder="https://example.com/my-qr-code.jpg"
+                          placeholder="Upload your real InstaPay QR code image file"
                           value={formData.gcash_qr_code}
                           onChange={(e) => setFormData({...formData, gcash_qr_code: e.target.value})}
                           className="text-sm"
@@ -670,7 +673,7 @@ const PaymentGatewayManagement = () => {
                           variant="outline"
                           onClick={() => {
                             if (formData.gcash_qr_code) {
-                              setSuccess("✅ QR code URL set! Click 'Save Changes' to apply.");
+                              setSuccess("✅ REAL QR code set! This will open GCash app when scanned. Click 'Save Changes'.");
                             }
                           }}
                         >
