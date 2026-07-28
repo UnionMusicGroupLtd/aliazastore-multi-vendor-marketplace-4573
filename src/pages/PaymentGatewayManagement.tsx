@@ -27,6 +27,7 @@ const PaymentGatewayManagement = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [uploadingQR, setUploadingQR] = useState(false);
+  const [selectedFileName, setSelectedFileName] = useState("");
 
   const [formData, setFormData] = useState({
     gateway_name: "",
@@ -110,7 +111,13 @@ const PaymentGatewayManagement = () => {
 
   const handleQRUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      console.log("No file selected");
+      return;
+    }
+
+    console.log("File selected:", file.name, file.size, file.type);
+    setSelectedFileName(file.name);
 
     try {
       setUploadingQR(true);
@@ -121,6 +128,7 @@ const PaymentGatewayManagement = () => {
       if (!validTypes.includes(file.type)) {
         setError("Please upload an image file (JPG, PNG, GIF, WebP)");
         setUploadingQR(false);
+        setSelectedFileName("");
         return;
       }
 
@@ -128,6 +136,7 @@ const PaymentGatewayManagement = () => {
       if (file.size > 5 * 1024 * 1024) {
         setError("File size must be less than 5MB");
         setUploadingQR(false);
+        setSelectedFileName("");
         return;
       }
 
@@ -148,10 +157,12 @@ const PaymentGatewayManagement = () => {
         console.log("REAL QR code uploaded to:", result.path);
       } else {
         setError("Upload failed - no file path returned");
+        setSelectedFileName("");
       }
     } catch (err) {
       console.error("Error uploading QR code:", err);
       setError("Failed to upload QR code image: " + (err as Error).message);
+      setSelectedFileName("");
     } finally {
       setUploadingQR(false);
     }
@@ -634,137 +645,86 @@ const PaymentGatewayManagement = () => {
                   <Label>GCash QR Code</Label>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleQRUpload}
+                        disabled={uploadingQR}
+                        className="hidden"
+                        id="qr-code-file-input"
+                      />
                       <Button
                         type="button"
                         variant="outline"
-                        className="relative"
                         disabled={uploadingQR}
+                        onClick={() => {
+                          const fileInput = document.getElementById('qr-code-file-input') as HTMLInputElement;
+                          if (fileInput) {
+                            console.log('Triggering file input click');
+                            fileInput.click();
+                          } else {
+                            console.error('File input not found');
+                          }
+                        }}
                       >
                         <Upload className="w-4 h-4 mr-2" />
                         {uploadingQR ? "Uploading..." : "Upload QR Code"}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleQRUpload}
-                          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                          disabled={uploadingQR}
-                        />
                       </Button>
-                      <span className="text-sm text-slate-500">
-                        JPG, PNG • Max 5MB
-                      </span>
-                    </div>
-                    
-                    {/* Direct URL option as backup */}
-                    <div className="pt-2 border-t border-slate-100">
-                      <Label className="text-xs text-slate-500">Or upload your real InstaPay QR code image URL:</Label>
-                      <p className="text-xs text-slate-400 mt-1">Upload your working InstaPay QR code image (the one that opens GCash app when scanned)</p>
-                      <div className="flex gap-2 mt-1">
-                        <Input
-                          type="url"
-                          placeholder="Upload your real InstaPay QR code image file"
-                          value={formData.gcash_qr_code}
-                          onChange={(e) => setFormData({...formData, gcash_qr_code: e.target.value})}
-                          className="text-sm"
-                        />
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            if (formData.gcash_qr_code) {
-                              setSuccess("✅ REAL QR code set! This will open GCash app when scanned. Click 'Save Changes'.");
-                            }
-                          }}
-                        >
-                          Set URL
-                        </Button>
+                      <div className="flex-1">
+                        <span className="text-sm text-slate-500">
+                          {selectedFileName ? (
+                            <span className="text-green-600 font-medium">✅ {selectedFileName}</span>
+                          ) : (
+                            "JPG, PNG • Max 5MB"
+                          )}
+                        </span>
                       </div>
+                    </div>
                     </div>
                     
                     {formData.gcash_qr_code && (
-                      <div className="text-sm text-green-600 flex items-center gap-1">
-                        <CheckCircle className="w-4 h-4" />
-                        QR code ready! Click "Save Changes" to apply
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                        <div className="flex items-center gap-2 text-sm text-green-800">
+                          <CheckCircle className="w-4 h-4" />
+                          <span className="font-medium">✅ QR Code Image Uploaded!</span>
+                        </div>
+                        <p className="text-xs text-green-600 mt-1">This InstaPay QR code will open GCash app when scanned. Click 'Save Changes' to apply.</p>
+                        <div className="mt-3 flex items-center justify-center">
+                          <img 
+                            src={formData.gcash_qr_code} 
+                            alt="GCash QR Code Preview" 
+                            className="w-24 h-24 object-contain border border-green-300 rounded"
+                          />
+                        </div>
                       </div>
                     )}
                   </div>
                 </div>
+              )}
 
-                    {formData.gcash_qr_code && (
-                      <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg border border-blue-200">
-                        <div className="text-center space-y-4">
-                          {/* Professional QR Code Display */}
-                          <div className="relative inline-block">
-                            <div className="w-48 h-48 bg-white rounded-lg shadow-lg border-4 border-blue-500 p-3 flex items-center justify-center">
-                              <img 
-                                src={formData.gcash_qr_code} 
-                                alt="GCash QR Code" 
-                                className="w-full h-full object-contain"
-                                onError={(e) => {
-                                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/192?text=Invalid+QR+Code';
-                                }}
-                              />
-                            </div>
-                            {/* GCash Watermark */}
-                            <div className="absolute bottom-2 right-2 bg-blue-600 text-white text-xs px-2 py-1 rounded font-semibold">
-                              GCash
-                            </div>
-                          </div>
-                          
-                          {/* Payment Information */}
-                          <div className="space-y-2">
-                            <h4 className="text-lg font-bold text-blue-900">{formData.gcash_business_name || "Aliaza Store"}</h4>
-                            <p className="text-sm text-slate-600 font-mono">{formData.gcash_number || "09172345678"}</p>
-                            <div className="bg-yellow-100 border-l-4 border-yellow-500 p-2 rounded">
-                              <p className="text-xs text-yellow-800 font-medium">⚠️ Transfer fees may apply</p>
-                            </div>
-                          </div>
-
-                          {/* Actions */}
-                          <div className="flex gap-2 justify-center">
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => {
-                                navigator.clipboard.writeText(formData.gcash_number || "");
-                                setSuccess("GCash number copied to clipboard!");
-                              }}
-                              className="text-blue-600 hover:text-blue-700"
-                            >
-                              Copy Number
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => setFormData({...formData, gcash_qr_code: ""})}
-                              className="text-red-600 hover:text-red-700"
-                            >
-                              Remove QR
-                            </Button>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+              <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowEditModal(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800"
+                  onClick={handleUpdateGateway}
+                  disabled={!formData.gateway_name}
+                >
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Save Changes
+                </Button>
               </div>
-            )}
-
-            <div className="flex gap-3 justify-end pt-4">
-              <Button variant="outline" onClick={() => setShowEditModal(false)}>
-                Cancel
-              </Button>
-              <Button 
-                onClick={handleUpdateGateway}
-                className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700"
-              >
-                Save Changes
-              </Button>
             </div>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-};
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  };
 
-export default PaymentGatewayManagement;
+  export default PaymentGatewayManagement;
