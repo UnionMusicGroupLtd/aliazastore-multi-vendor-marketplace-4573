@@ -9,6 +9,8 @@ import {
   MessageSquare, Send, ChevronLeft, User, Package,
   Clock, CheckCircle, AlertCircle, Phone, Mail
 } from "lucide-react";
+import db from "@/lib/shared/kliv-database.js";
+import auth from "@/lib/shared/kliv-auth.js";
 
 const SellerMessageReply = () => {
   const { messageId } = useParams();
@@ -19,57 +21,27 @@ const SellerMessageReply = () => {
   const [replyText, setReplyText] = useState("");
   const [replyHistory, setReplyHistory] = useState<any[]>([]);
 
-  // Simulated message data (in real app, this would come from database)
-  const simulatedMessages: any = {
-    '1': {
-      id: 1,
-      customer_name: "Maria Garcia",
-      customer_email: "maria.garcia@email.com",
-      message: "Hi! Is this product still available?",
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      unread: true,
-      product_id: 1,
-      product_name: "Premium Wireless Headphones",
-      replies: [
-        {
-          from: "customer",
-          message: "Hi! Is this product still available?",
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-        }
-      ]
-    },
-    '2': {
-      id: 2,
-      customer_name: "Jose Santos",
-      customer_email: "jose.santos@email.com",
-      message: "Can you offer a discount for bulk orders?",
-      timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-      unread: true,
-      product_id: 2,
-      product_name: "Smart Fitness Watch",
-      replies: [
-        {
-          from: "customer",
-          message: "Can you offer a discount for bulk orders?",
-          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-        }
-      ]
-    }
-  };
-
   useEffect(() => {
     loadMessage();
   }, [messageId]);
 
   const loadMessage = async () => {
     try {
-      // In a real app, this would fetch from database
-      const messageData = simulatedMessages[messageId || '1'];
-      if (messageData) {
-        setMessage(messageData);
-        setReplyHistory(messageData.replies || []);
-      } else {
-        // Default message if not found
+      const user = await auth.getUser();
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      // Load real message from database
+      const { data: messageData, error } = await db.query('seller_messages', {
+        _row_id: `eq.${messageId}`,
+        seller_uuid: `eq.${user.user_uuid}`
+      });
+
+      if (error || !messageData || messageData.length === 0) {
+        console.error("Message not found or error loading:", error);
+        // Set default message
         setMessage({
           id: 1,
           customer_name: "Maria Garcia",
@@ -82,7 +54,40 @@ const SellerMessageReply = () => {
           replies: []
         });
         setReplyHistory([]);
+        setLoading(false);
+        return;
       }
+
+      const dbMessage = messageData[0];
+
+      // Mark message as read when opened
+      if (dbMessage.unread === 1) {
+        await db.update('seller_messages',
+          { _row_id: `eq.${messageId}`, seller_uuid: `eq.${user.user_uuid}` },
+          {
+            unread: 0,
+            read_at: Math.floor(Date.now() / 1000),
+            updated_at: Math.floor(Date.now() / 1000)
+          }
+        );
+      }
+
+      // Transform database data to match expected format
+      const transformedMessage = {
+        id: dbMessage._row_id,
+        customer_name: dbMessage.customer_name,
+        customer_email: dbMessage.customer_email,
+        message: dbMessage.message,
+        timestamp: new Date(dbMessage.created_at * 1000).toISOString(),
+        unread: dbMessage.unread === 1,
+        product_id: dbMessage.product_id,
+        product_name: dbMessage.product_name,
+        replies: dbMessage.reply_history ? JSON.parse(dbMessage.reply_history) : []
+      };
+
+      setMessage(transformedMessage);
+      setReplyHistory(transformedMessage.replies);
+
     } catch (error) {
       console.error("Error loading message:", error);
     } finally {
@@ -99,14 +104,31 @@ const SellerMessageReply = () => {
     setSending(true);
 
     try {
-      // Simulate sending reply (in real app, this would save to database)
+      const user = await auth.getUser();
+      if (!user || !message) {
+        throw new Error("User not authenticated or message not loaded");
+      }
+
+      // Add new reply to history
       const newReply = {
         from: "seller",
         message: replyText,
         timestamp: new Date().toISOString()
       };
 
-      setReplyHistory([...replyHistory, newReply]);
+      const updatedHistory = [...replyHistory, newReply];
+
+      // Update message in database with new reply
+      await db.update('seller_messages',
+        { _row_id: `eq.${message.id}`, seller_uuid: `eq.${user.user_uuid}` },
+        {
+          reply_history: JSON.stringify(updatedHistory),
+          updated_at: Math.floor(Date.now() / 1000)
+        }
+      );
+
+      // Update local state
+      setReplyHistory(updatedHistory);
       setReplyText("");
 
       // Show success message
@@ -119,11 +141,33 @@ const SellerMessageReply = () => {
     }
   };
 
-  const markAsResolved = () => {
-    if (message) {
+  const markAsResolved = async () => {
+    if (!message) return;
+
+    try {
+      const user = await auth.getUser();
+      if (!user) {
+        alert("You must be logged in to perform this action");
+        return;
+      }
+
+      // Update message as resolved in database
+      await db.update('seller_messages',
+        { _row_id: `eq.${message.id}`, seller_uuid: `eq.${user.user_uuid}` },
+        {
+          unread: 0,
+          read_at: Math.floor(Date.now() / 1000),
+          updated_at: Math.floor(Date.now() / 1000)
+        }
+      );
+
+      // Update local state
       setMessage({ ...message, unread: false });
       alert("Conversation marked as resolved");
       navigate("/dashboard/seller/messages");
+    } catch (error) {
+      console.error("Error marking message as resolved:", error);
+      alert("Error marking as resolved. Please try again.");
     }
   };
 

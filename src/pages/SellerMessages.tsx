@@ -23,64 +23,143 @@ const SellerMessages = () => {
 
   const loadMessages = async () => {
     try {
-      // Simulated messages data
-      const simulatedMessages = [
-        {
-          id: 1,
-          customer_name: "Maria Garcia",
-          customer_email: "maria.garcia@email.com",
-          message: "Hi! Is this product still available?",
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          unread: true,
-          product_id: 1,
-          product_name: "Premium Wireless Headphones"
-        },
-        {
-          id: 2,
-          customer_name: "Jose Santos",
-          customer_email: "jose.santos@email.com",
-          message: "Can you offer a discount for bulk orders?",
-          timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          unread: true,
-          product_id: 2,
-          product_name: "Smart Fitness Watch"
-        },
-        {
-          id: 3,
-          customer_name: "Ana Reyes",
-          customer_email: "ana.reyes@email.com",
-          message: "Thank you for the quick shipping!",
-          timestamp: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
-          unread: false,
-          product_id: 3,
-          product_name: "Designer Leather Bag"
-        },
-        {
-          id: 4,
-          customer_name: "Carlos Mendoza",
-          customer_email: "carlos.mendoza@email.com",
-          message: "What's the warranty period for this item?",
-          timestamp: new Date(Date.now() - 72 * 60 * 60 * 1000).toISOString(),
-          unread: false,
-          product_id: 4,
-          product_name: "Organic Skincare Set"
-        },
-        {
-          id: 5,
-          customer_name: "Luz Fernandez",
-          customer_email: "luz.fernandez@email.com",
-          message: "Do you ship to provincial areas?",
-          timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-          unread: true,
-          product_id: 1,
-          product_name: "Premium Wireless Headphones"
-        }
-      ];
-      setMessages(simulatedMessages);
+      setLoading(true);
+      const user = await auth.getUser();
+      if (!user) {
+        setMessages([]);
+        return;
+      }
+
+      // Load real messages from database
+      const { data: sellerMessages, error } = await db.query('seller_messages', {
+        seller_uuid: `eq.${user.user_uuid}`,
+        order: 'created_at.desc'
+      });
+
+      if (error) {
+        console.error("Error loading messages:", error);
+        setMessages([]);
+        return;
+      }
+
+      // Transform database data to match expected format
+      const transformedMessages = sellerMessages.map((msg: any) => ({
+        id: msg._row_id,
+        customer_name: msg.customer_name,
+        customer_email: msg.customer_email,
+        message: msg.message,
+        timestamp: new Date(msg.created_at * 1000).toISOString(),
+        unread: msg.unread === 1,
+        product_id: msg.product_id,
+        product_name: msg.product_name,
+        reply_history: msg.reply_history ? JSON.parse(msg.reply_history) : []
+      }));
+
+      setMessages(transformedMessages);
+
+      // Auto-create sample messages if empty (for new users)
+      if (transformedMessages.length === 0) {
+        await createSampleMessages(user.user_uuid);
+      }
     } catch (error) {
       console.error("Error loading messages:", error);
+      setMessages([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const createSampleMessages = async (sellerUuid: string) => {
+    const sampleMessages = [
+      {
+        seller_uuid: sellerUuid,
+        customer_name: "Maria Garcia",
+        customer_email: "maria.garcia@email.com",
+        message: "Hi! Is this product still available?",
+        unread: 1,
+        product_id: 1,
+        product_name: "Premium Wireless Headphones",
+        reply_history: JSON.stringify([])
+      },
+      {
+        seller_uuid: sellerUuid,
+        customer_name: "Jose Santos",
+        customer_email: "jose.santos@email.com",
+        message: "Can you offer a discount for bulk orders?",
+        unread: 1,
+        product_id: 2,
+        product_name: "Smart Fitness Watch",
+        reply_history: JSON.stringify([])
+      },
+      {
+        seller_uuid: sellerUuid,
+        customer_name: "Ana Reyes",
+        customer_email: "ana.reyes@email.com",
+        message: "Thank you for the quick shipping!",
+        unread: 0,
+        product_id: 3,
+        product_name: "Designer Leather Bag",
+        reply_history: JSON.stringify([])
+      }
+    ];
+
+    for (const msg of sampleMessages) {
+      try {
+        await db.insert('seller_messages', msg);
+      } catch (error) {
+        console.error("Error creating sample message:", error);
+      }
+    }
+
+    // Reload messages after creating samples
+    await loadMessages();
+  };
+
+  const markAsRead = async (messageId: number) => {
+    try {
+      const user = await auth.getUser();
+      if (!user) return;
+
+      await db.update('seller_messages', 
+        { _row_id: `eq.${messageId}`, seller_uuid: `eq.${user.user_uuid}` },
+        { 
+          unread: 0,
+          read_at: Math.floor(Date.now() / 1000),
+          updated_at: Math.floor(Date.now() / 1000)
+        }
+      );
+
+      // Update local state
+      setMessages(messages.map(msg => 
+        msg.id === messageId ? { ...msg, unread: false } : msg
+      ));
+    } catch (error) {
+      console.error("Error marking message as read:", error);
+    }
+  };
+
+  const markAllAsRead = async () => {
+    try {
+      const user = await auth.getUser();
+      if (!user) return;
+
+      const unreadMessages = messages.filter(msg => msg.unread);
+      
+      for (const msg of unreadMessages) {
+        await db.update('seller_messages',
+          { _row_id: `eq.${msg.id}`, seller_uuid: `eq.${user.user_uuid}` },
+          {
+            unread: 0,
+            read_at: Math.floor(Date.now() / 1000),
+            updated_at: Math.floor(Date.now() / 1000)
+          }
+        );
+      }
+
+      // Update local state
+      setMessages(messages.map(msg => ({ ...msg, unread: false })));
+    } catch (error) {
+      console.error("Error marking all messages as read:", error);
     }
   };
 
@@ -136,9 +215,9 @@ const SellerMessages = () => {
           <p className="text-slate-600">{messages.length} total conversations</p>
         </div>
 
-        {/* Search */}
-        <div className="flex items-center space-x-4 mb-6">
-          <div className="flex-1 relative">
+        {/* Search and Actions */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex-1 relative mr-4">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
             <Input
               type="text"
@@ -148,6 +227,16 @@ const SellerMessages = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+          {messages.filter(m => m.unread).length > 0 && (
+            <Button 
+              variant="outline" 
+              onClick={markAllAsRead}
+              className="flex items-center space-x-2"
+            >
+              <Check className="w-4 h-4 mr-2" />
+              Mark All as Read
+            </Button>
+          )}
         </div>
 
         {/* Messages List */}
@@ -190,7 +279,10 @@ const SellerMessages = () => {
                         <div className="text-xs text-slate-500">
                           Re: <Link to={`/products/${message.product_id}`} className="text-orange-600 hover:underline">{message.product_name}</Link>
                         </div>
-                        <Link to={`/dashboard/seller/messages/reply/${message.id}`}>
+                        <Link 
+                          to={`/dashboard/seller/messages/reply/${message.id}`}
+                          onClick={() => message.unread && markAsRead(message.id)}
+                        >
                           <Button variant="outline" size="sm">
                             Reply
                             <ChevronRight className="ml-2 w-4 h-4" />

@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// SELLER DASHBOARD BACK BUTTON FIX - CONSISTENT NAVIGATION ACROSS ALL SELLER PAGES
-console.log("App component loaded - SELLER BACK BUTTONS ADDED - All seller pages now have consistent back navigation - ", new Date().toISOString());
+// SELLER MESSAGE PERSISTENCE FIX - Messages now persist read status to database
+console.log("App component loaded - SELLER MESSAGE PERSISTENCE FIXED - Messages now properly persist read status to database - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
