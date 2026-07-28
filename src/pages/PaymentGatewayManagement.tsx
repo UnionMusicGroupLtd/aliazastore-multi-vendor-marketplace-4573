@@ -70,6 +70,8 @@ const PaymentGatewayManagement = () => {
     try {
       setError("");
       
+      console.log("Updating gateway with QR code:", formData.gcash_qr_code);
+      
       await db.update("payment_methods", { 
         _row_id: `eq.${selectedGateway._row_id}` 
       }, {
@@ -78,7 +80,8 @@ const PaymentGatewayManagement = () => {
         supports_cod: formData.supports_cod ? 1 : 0,
         supports_ewallet: formData.supports_ewallet ? 1 : 0,
         supports_card: formData.supports_card ? 1 : 0,
-        supports_bank: formData.supports_bank ? 1 : 0
+        supports_bank: formData.supports_bank ? 1 : 0,
+        gcash_qr_code: formData.gcash_qr_code || "" // Ensure QR code is saved
       });
 
       setSuccess("Payment gateway updated successfully!");

@@ -82,8 +82,8 @@ import Cookies from "./pages/Cookies";
 import Sitemap from "./pages/Sitemap";
 import NotFound from "./pages/NotFound";
 
-// ADMIN GCASH QR CODE DISPLAY ENHANCED - Professional QR display with business info and transfer fee warnings
-console.log("App component loaded - ADMIN GCASH QR ENHANCED - Professional QR display in admin payment gateway - ", new Date().toISOString());
+// GCASH QR CODE UPLOAD FIXED - Content filesystem access enabled and QR save issue resolved
+console.log("App component loaded - GCASH QR UPLOAD FIXED - Filesystem access enabled and QR save issue resolved - ", new Date().toISOString());
 const queryClient = new QueryClient();
 
 const App = () => (
