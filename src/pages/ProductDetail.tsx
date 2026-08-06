@@ -7,17 +7,54 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
 
   // Sample product data - in production this would load from database
-  const product = {
-    _row_id: parseInt(id || '1'),
-    name: 'Premium Luxury Vibrator',
-    description: 'Experience ultimate pleasure with our premium luxury vibrator featuring 10 vibration modes, whisper-quiet operation, and waterproof design. Made from body-safe silicone.',
-    price: 49.99,
-    compare_price: 69.99,
-    image_url: 'https://images.pexels.com/photos/11482458/pexels-photo-11482458.jpeg?auto=compress&cs=tinysrgb&h=500&w=500',
-    category: 'Vibrators',
-    in_stock: 1,
-    age_restricted: 1
-  };
+  const allProducts = [
+    {
+      _row_id: 1,
+      name: 'Premium Luxury Vibrator',
+      description: 'Experience ultimate pleasure with our premium luxury vibrator featuring 10 vibration modes, whisper-quiet operation, and waterproof design. Made from body-safe silicone.',
+      price: 49.99,
+      compare_price: 69.99,
+      image_url: 'https://images.pexels.com/photos/11482458/pexels-photo-11482458.jpeg?auto=compress&cs=tinysrgb&h=500&w=500',
+      category: 'Vibrators',
+      in_stock: 1,
+      age_restricted: 1
+    },
+    {
+      _row_id: 2,
+      name: 'Couples Ring Enhancement',
+      description: 'Enhance intimacy with this premium silicone couples ring. Features 7 vibration patterns and wireless remote control.',
+      price: 34.99,
+      compare_price: 44.99,
+      image_url: 'https://images.pexels.com/photos/33538414/pexels-photo-33538414.png?auto=compress&cs=tinysrgb&h=500&w=500',
+      category: 'Couples Toys',
+      in_stock: 1,
+      age_restricted: 1
+    },
+    {
+      _row_id: 3,
+      name: 'Massage Oil Collection',
+      description: 'Premium massage oil collection in three sensual scents. Made from natural ingredients.',
+      price: 24.99,
+      compare_price: 29.99,
+      image_url: 'https://images.pexels.com/photos/33538415/pexels-photo-33538415.png?auto=compress&cs=tinysrgb&h=500&w=500',
+      category: 'Massage',
+      in_stock: 1,
+      age_restricted: 0
+    },
+    {
+      _row_id: 4,
+      name: 'Lingerie Set - Black Lace',
+      description: 'Elegant black lace lingerie set featuring adjustable straps and comfortable fit.',
+      price: 39.99,
+      compare_price: 54.99,
+      image_url: 'https://images.pexels.com/photos/12456285/pexels-photo-12456285.jpeg?auto=compress&cs=tinysrgb&h=500&w=500',
+      category: 'Lingerie',
+      in_stock: 1,
+      age_restricted: 1
+    }
+  ];
+
+  const product = allProducts.find(p => p._row_id === parseInt(id || '1')) || allProducts[0];
 
   const handleAddToCart = () => {
     addToCart({

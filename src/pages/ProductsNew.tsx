@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
 import { ShoppingCart, Filter, Grid, List } from 'lucide-react';
 
@@ -22,6 +22,11 @@ const Products = () => {
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const { addToCart } = useCart();
+  const navigate = useNavigate();
+
+  const handleProductClick = (productId: number) => {
+    navigate(`/products/${productId}`);
+  };
 
   const categories = ['all', 'Vibrators', 'Couples Toys', 'Lingerie', 'Massage', 'Bondage', 'Lubricants', 'Massagers', 'Games'];
 
@@ -168,18 +173,25 @@ const Products = () => {
         {/* Products Grid */}
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product) => (
-            <div key={product._row_id} className="bg-gray-900/50 backdrop-blur-lg rounded-xl overflow-hidden border border-gray-800 hover:border-red-500/50 transition-all">
+            <div 
+              key={product._row_id} 
+              className="bg-gray-900/50 backdrop-blur-lg rounded-xl overflow-hidden border border-gray-800 hover:border-red-500/50 hover:shadow-lg hover:shadow-red-500/20 transition-all cursor-pointer group"
+              onClick={() => handleProductClick(product._row_id)}
+            >
               <div className="relative aspect-square">
                 <img
                   src={product.image_url}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
                 {product.compare_price && product.compare_price > product.price && (
                   <div className="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">
                     SAVE {Math.round(((product.compare_price - product.price) / product.compare_price) * 100)}%
                   </div>
                 )}
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span className="text-white font-semibold">View Details</span>
+                </div>
               </div>
 
               <div className="p-4">
@@ -195,12 +207,26 @@ const Products = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleAddToCart(product)}
-                  className="w-full bg-gradient-to-r from-red-600 to-pink-600 text-white py-2 rounded-lg font-semibold hover:from-red-700 hover:to-pink-700 transition-all"
-                >
-                  Add to Cart
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleAddToCart(product);
+                    }}
+                    className="flex-1 bg-gradient-to-r from-red-600 to-pink-600 text-white py-2 rounded-lg font-semibold hover:from-red-700 hover:to-pink-700 transition-all"
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleProductClick(product._row_id);
+                    }}
+                    className="px-3 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all"
+                  >
+                    View
+                  </button>
+                </div>
               </div>
             </div>
           ))}

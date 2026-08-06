@@ -14,6 +14,7 @@ import Terms from "./pages/Terms";
 import About from "./pages/About";
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
+console.log("✅ Product click navigation fixed - Products are now clickable");
 const queryClient = new QueryClient();
 
 const App = () => (
