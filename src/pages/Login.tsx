@@ -199,12 +199,10 @@ const Login = () => {
         {/* Logo */}
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center space-x-2">
-            <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
-              <ShoppingBag className="w-7 h-7 text-white" />
+            <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-2xl">i</span>
             </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-orange-600 to-blue-600 bg-clip-text text-transparent">
-              AliazaStore
-            </span>
+            <span className="text-2xl font-bold text-white">ifudda</span>
           </Link>
         </div>
 

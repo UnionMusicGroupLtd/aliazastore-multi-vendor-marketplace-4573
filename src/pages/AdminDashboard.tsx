@@ -176,41 +176,41 @@ const AdminDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
       {/* Header */}
-      <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
+      <nav className="bg-black/50 backdrop-blur-lg border-b border-gray-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Link to="/" className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">i</span>
                 </div>
                 <div>
-                  <span className="text-xl font-bold">AliazaStore</span>
-                  <Badge className="ml-2 bg-purple-100 text-purple-700">Admin</Badge>
+                  <span className="text-xl font-bold text-white">ifudda</span>
+                  <Badge className="ml-2 bg-red-500 text-white">Admin</Badge>
                 </div>
               </Link>
             </div>
             
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <Link to="/admin/notifications">
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
-                  <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-                    7
-                  </span>
+              <div className="flex items-center space-x-2 sm:space-x-4">
+                <Link to="/admin/notifications">
+                  <Button variant="ghost" size="icon" className="relative text-gray-300 hover:text-white">
+                    <Bell className="w-5 h-5 sm:w-6 sm:h-6" />
+                    <span className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                      7
+                    </span>
+                  </Button>
+                </Link>
+                <Link to="/admin/settings">
+                  <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-full flex items-center justify-center text-white text-sm sm:text-base font-medium cursor-pointer hover:ring-2 hover:ring-red-400 transition-all">
+                    A
+                  </div>
+                </Link>
+                <Button variant="ghost" size="icon" onClick={handleSignOut} className="text-gray-300 hover:text-white">
+                  <LogOut className="w-5 h-5 sm:w-6 sm:h-6" />
                 </Button>
-              </Link>
-              <Link to="/admin/settings">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm sm:text-base font-medium cursor-pointer hover:ring-2 hover:ring-purple-400 transition-all">
-                  A
-                </div>
-              </Link>
-              <Button variant="ghost" size="icon" onClick={handleSignOut}>
-                <LogOut className="w-5 h-5 sm:w-6 sm:h-6" />
-              </Button>
-            </div>
+              </div>
           </div>
         </div>
       </nav>
@@ -219,22 +219,22 @@ const AdminDashboard = () => {
         {/* Welcome Section */}
         <div className="mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">
+            <h1 className="text-3xl font-bold text-white">
               Admin Dashboard
             </h1>
-            <p className="text-slate-600">Platform overview and management</p>
+            <p className="text-gray-400">ifudda platform overview and management</p>
           </div>
         </div>
 
         {/* Platform Stats */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
-          <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0">
+          <Card className="bg-gradient-to-br from-red-500 to-red-600 text-white border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-100 mb-1">Total Users</p>
+                  <p className="text-red-100 mb-1">Total Users</p>
                   <p className="text-3xl font-bold">{stats.totalUsers.toLocaleString()}</p>
-                  <p className="text-sm text-blue-100 mt-2">↑ 12% from last month</p>
+                  <p className="text-sm text-red-100 mt-2">↑ 12% from last month</p>
                 </div>
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                   <Users className="w-6 h-6" />
@@ -243,13 +243,13 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-0">
+          <Card className="bg-gradient-to-br from-pink-500 to-pink-600 text-white border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-100 mb-1">Active Stores</p>
+                  <p className="text-pink-100 mb-1">Active Stores</p>
                   <p className="text-3xl font-bold">{stats.totalStores}</p>
-                  <p className="text-sm text-green-100 mt-2">↑ 8% from last month</p>
+                  <p className="text-sm text-pink-100 mt-2">↑ 8% from last month</p>
                 </div>
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                   <Store className="w-6 h-6" />
@@ -288,13 +288,13 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-emerald-500 to-emerald-600 text-white border-0">
+          <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-emerald-100 mb-1">Revenue</p>
+                  <p className="text-green-100 mb-1">Revenue</p>
                   <p className="text-3xl font-bold">{formatPrice(stats.totalRevenue)}</p>
-                  <p className="text-sm text-emerald-100 mt-2">↑ 18% from last month</p>
+                  <p className="text-sm text-green-100 mt-2">↑ 18% from last month</p>
                 </div>
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                   <DollarSign className="w-6 h-6" />
@@ -306,20 +306,28 @@ const AdminDashboard = () => {
 
         <div className="grid lg:grid-cols-3 gap-8 mb-8">
           {/* Platform Growth Chart */}
-          <Card className="lg:col-span-2 border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+          <Card className="lg:col-span-2 border-0 shadow-lg bg-gray-900/50 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle>Platform Growth</CardTitle>
-              <CardDescription>Users, stores, and revenue trends</CardDescription>
+              <CardTitle className="text-white">Platform Growth</CardTitle>
+              <CardDescription className="text-gray-400">Users, stores, and revenue trends</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={platformGrowthData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="users" stroke="#3b82f6" strokeWidth={2} name="Users" />
-                  <Line type="monotone" dataKey="stores" stroke="#22c55e" strokeWidth={2} name="Stores" />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                  <XAxis dataKey="month" stroke="#9ca3af" />
+                  <YAxis stroke="#9ca3af" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#1f2937', 
+                      border: '1px solid #374151',
+                      borderRadius: '8px'
+                    }}
+                    itemStyle={{ color: '#e5e7eb' }}
+                    labelStyle={{ color: '#9ca3af' }}
+                  />
+                  <Line type="monotone" dataKey="users" stroke="#ef4444" strokeWidth={2} name="Users" />
+                  <Line type="monotone" dataKey="stores" stroke="#ec4899" strokeWidth={2} name="Stores" />
                   <Line type="monotone" dataKey="revenue" stroke="#f97316" strokeWidth={2} name="Revenue" />
                 </LineChart>
               </ResponsiveContainer>
@@ -327,10 +335,10 @@ const AdminDashboard = () => {
           </Card>
 
           {/* Store Status Distribution */}
-          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+          <Card className="border-0 shadow-lg bg-gray-900/50 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle>Store Status</CardTitle>
-              <CardDescription>Distribution by status</CardDescription>
+              <CardTitle className="text-white">Store Status</CardTitle>
+              <CardDescription className="text-gray-400">Distribution by status</CardDescription>
             </CardHeader>
             <CardContent>
               <ResponsiveContainer width="100%" height={300}>
@@ -340,7 +348,7 @@ const AdminDashboard = () => {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={(entry) => entry.name}
+                    label={(entry) => <span style={{ fill: '#e5e7eb' }}>{entry.name}</span>}
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
@@ -349,7 +357,15 @@ const AdminDashboard = () => {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: '#1f2937', 
+                      border: '1px solid #374151',
+                      borderRadius: '8px'
+                    }}
+                    itemStyle={{ color: '#e5e7eb' }}
+                    labelStyle={{ color: '#9ca3af' }}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             </CardContent>
@@ -371,25 +387,25 @@ const AdminDashboard = () => {
                     window.location.href = item.href;
                   }}
                 >
-                  <Card className="group-hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm cursor-pointer hover:scale-[1.02] active:scale-[0.98] touch-manipulation">
+                  <Card className="group-hover:shadow-xl transition-all duration-300 border-0 bg-gray-900/50 backdrop-blur-sm cursor-pointer hover:scale-[1.02] active:scale-[0.98] touch-manipulation hover:border-red-500/50">
                     <CardContent className="p-6">
                       <div className="flex items-start justify-between">
                         <div className="flex items-start space-x-4">
-                          <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform touch-manipulation">
+                          <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-600 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform touch-manipulation">
                             <item.icon className="w-6 h-6 text-white pointer-events-none" />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-slate-900 mb-1 group-hover:text-purple-700 transition-colors pointer-events-none">{item.label}</h3>
-                            <p className="text-sm text-slate-600 pointer-events-none">{item.description}</p>
+                            <h3 className="font-semibold text-white mb-1 group-hover:text-red-400 transition-colors pointer-events-none">{item.label}</h3>
+                            <p className="text-sm text-gray-400 pointer-events-none">{item.description}</p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2 flex-shrink-0">
                           {item.count !== undefined && (
-                            <Badge className="bg-purple-100 text-purple-700 group-hover:bg-purple-200 transition-colors pointer-events-none">
+                            <Badge className="bg-red-500/20 text-red-400 group-hover:bg-red-500/30 transition-colors pointer-events-none">
                               {item.count}
                             </Badge>
                           )}
-                          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-1 transition-all pointer-events-none" />
+                          <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-red-400 group-hover:translate-x-1 transition-all pointer-events-none" />
                         </div>
                       </div>
                     </CardContent>
@@ -401,22 +417,22 @@ const AdminDashboard = () => {
 
           {/* Recent Activity */}
           <div className="space-y-6">
-            <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+            <Card className="border-0 shadow-lg bg-gray-900/50 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-lg">Recent Activity</CardTitle>
-                <CardDescription>Latest platform events</CardDescription>
+                <CardTitle className="text-lg text-white">Recent Activity</CardTitle>
+                <CardDescription className="text-gray-400">Latest platform events</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 {recentActivity.map((activity) => (
-                  <div key={activity.id} className="p-4 rounded-lg bg-slate-50">
+                  <div key={activity.id} className="p-4 rounded-lg bg-gray-800/50">
                     <div className="flex items-start justify-between mb-2">
                       <div className="flex items-center space-x-3">
-                        <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                        <div className="w-8 h-8 bg-red-500/20 rounded-lg flex items-center justify-center">
                           {getActivityIcon(activity.type)}
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-slate-900">{activity.message}</p>
-                          <p className="text-xs text-slate-500">{activity.time}</p>
+                          <p className="text-sm font-medium text-white">{activity.message}</p>
+                          <p className="text-xs text-gray-400">{activity.time}</p>
                         </div>
                       </div>
                       <Badge className={`text-xs ${getStatusColor(activity.status)}`}>
@@ -429,9 +445,9 @@ const AdminDashboard = () => {
             </Card>
 
             {/* Quick Actions */}
-            <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+            <Card className="border-0 shadow-lg bg-gray-900/50 backdrop-blur-sm">
               <CardHeader>
-                <CardTitle className="text-lg">Quick Actions</CardTitle>
+                <CardTitle className="text-lg text-white">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <Link to="/admin/shop-owners?status=pending">
@@ -440,10 +456,10 @@ const AdminDashboard = () => {
                     Review Pending Stores (32)
                   </Button>
                 </Link>
-                <Link to="/admin/products?status=flagged">
+                <Link to="/admin/products">
                   <Button variant="outline" className="w-full justify-start hover:bg-orange-50 hover:border-orange-300 transition-colors">
                     <Package className="mr-2 w-4 h-4 text-orange-600" />
-                    Review Flagged Products (15)
+                    Product Management
                   </Button>
                 </Link>
                 <Link to="/admin/security">
