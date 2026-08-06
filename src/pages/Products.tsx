@@ -1,16 +1,7 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Search, Filter, ShoppingBag, Star, 
-  Heart, Store, ChevronLeft, ChevronRight, Grid, List, ShoppingCart, Bolt
-} from "lucide-react";
-import { formatPrice } from "@/lib/currency";
-import db from "@/lib/shared/kliv-database.js";
-import { useCart } from "@/context/CartContext";
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useCart } from '@/context/CartContext';
+import { ShoppingCart, Heart, Filter, Grid, List } from 'lucide-react';
 
 const Products = () => {
   const navigate = useNavigate();

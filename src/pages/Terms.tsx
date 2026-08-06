@@ -1,324 +1,201 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  FileText, Users, ShoppingCart, Shield, AlertCircle, 
-  Ban, CheckCircle, Scale, DollarSign, ShoppingBag
-} from "lucide-react";
+import { Link } from 'react-router-dom';
+import { FileText, Shield, Users, CreditCard, AlertCircle } from 'lucide-react';
 
-// Force rebuild for Philippine compliance updates
 const Terms = () => {
-  const sections = [
-    {
-      icon: Users,
-      title: "Account Terms",
-      color: "from-blue-500 to-blue-600",
-      content: [
-        "You must be at least 18 years old to create an account",
-        "Provide accurate and complete information during registration",
-        "Maintain the security of your password and account",
-        "One account per person - no duplicate accounts allowed",
-        "Notify us immediately of unauthorized account access",
-        "You are responsible for all activity under your account"
-      ]
-    },
-    {
-      icon: ShoppingCart,
-      title: "Seller Responsibilities",
-      color: "from-green-500 to-green-600",
-      content: [
-        "List only genuine products you own or are authorized to sell",
-        "Provide accurate product descriptions and images",
-        "Maintain adequate inventory for listed products",
-        "Ship orders within the specified timeframe",
-        "Accept returns according to our return policy",
-        "Pay the monthly subscription fee of ₱200",
-        "Comply with all applicable laws and regulations"
-      ]
-    },
-    {
-      icon: CheckCircle,
-      title: "Buyer Responsibilities",
-      color: "from-purple-500 to-purple-600",
-      content: [
-        "Provide accurate shipping and payment information",
-        "Pay for all purchased items promptly",
-        "Review products honestly after purchase",
-        "Follow our community guidelines in reviews",
-        "Respect seller policies and return procedures",
-        "Contact sellers directly for order issues first",
-        "Return items according to Philippine consumer laws"
-      ]
-    },
-    {
-      icon: Ban,
-      title: "Prohibited Activities",
-      color: "from-red-500 to-red-600",
-      content: [
-        "Listing counterfeit or fraudulent products",
-        "Manipulating prices, ratings, or reviews",
-        "Using automated bots to scrape the platform",
-        "Interfering with platform security or operation",
-        "Spamming or sending unsolicited communications",
-        "Reselling platform accounts or seller privileges",
-        "Engaging in fraud, money laundering, or illegal activities"
-      ]
-    },
-    {
-      icon: Shield,
-      title: "Intellectual Property",
-      color: "from-orange-500 to-orange-600",
-      content: [
-        "Sellers must own or have rights to all content listed",
-        "Brand names and trademarks require authorization",
-        "Product images must be original or properly licensed",
-        "We reserve rights to remove infringing content",
-        "Repeat infringers will be permanently banned",
-        "DMCA takedown procedures will be followed"
-      ]
-    },
-    {
-      icon: Scale,
-      title: "Dispute Resolution",
-      color: "from-cyan-500 to-cyan-600",
-      content: [
-        "Contact the other party first for direct resolution",
-        "Use our resolution center for mediation assistance",
-        "Follow our decision-making process for disputes",
-        "Provide evidence and documentation for claims",
-        "Mediation available for dispute resolution",
-        "Follow Philippine Alternative Dispute Resolution procedures",
-        "Small Claims Court option for disputes under P400,000",
-        "Consumer protection rights under Philippine law"
-      ]
-    },
-    {
-      icon: DollarSign,
-      title: "Fees & Payments",
-      color: "from-yellow-500 to-yellow-600",
-      content: [
-        "Seller subscription: ₱200/month after 14-day free trial",
-        "No commission fees on any sales - keep 100% revenue",
-        "Payment processing through secure third-party providers",
-        "Subscription fees billed monthly in advance",
-        "No refunds for partial months of service",
-        "Prices subject to change with 30-day notice"
-      ]
-    },
-    {
-      icon: AlertCircle,
-      title: "Platform Termination",
-      color: "from-pink-500 to-pink-600",
-      content: [
-        "We may suspend accounts for policy violations",
-        "Serious violations result in permanent termination",
-        "We may remove any listing without prior notice",
-        "Terminated users forfeit all account privileges",
-        "Outstanding fees remain due after termination",
-        "You may cancel your account at any time"
-      ]
-    }
-  ];
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
       {/* Header */}
-      <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 py-4">
+      <header className="bg-black/50 backdrop-blur-lg border-b border-gray-800 sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                <ShoppingBag className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xl">i</span>
               </div>
-              <span className="text-xl font-bold">AliazaStore</span>
+              <span className="text-2xl font-bold text-white">ifudda</span>
             </Link>
-            <div className="flex items-center space-x-4">
-              <Link to="/login">
-                <Button variant="ghost">Sign In</Button>
-              </Link>
-              <Link to="/register">
-                <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
-                  Start Selling
-                </Button>
-              </Link>
-            </div>
+            
+            <Link to="/" className="text-gray-300 hover:text-white transition-colors">
+              ← Back to Home
+            </Link>
           </div>
         </div>
-      </nav>
+      </header>
 
-      {/* Hero */}
-      <section className="py-16 px-4 bg-gradient-to-br from-orange-500 to-orange-600 text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <FileText className="w-16 h-16 mx-auto mb-6 opacity-50" />
-          <h1 className="text-4xl lg:text-5xl font-bold mb-4">Terms of Service</h1>
-          <p className="text-xl text-white/90 mb-2">Last Updated: January 2026</p>
-          <p className="text-white/80">
-            By using AliazaStore, you agree to these terms compliant with Philippine laws. Please read them carefully.
-          </p>
-        </div>
-      </section>
-
-      {/* Introduction */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg mb-12">
-            <h2 className="text-2xl font-bold mb-4">Agreement to Terms</h2>
-            <div className="prose prose-slate max-w-none">
-              <p className="text-slate-600 leading-relaxed mb-4">
-                These Terms of Service govern your use of AliazaStore, the marketplace platform operating 
-                in accordance with Philippine laws including the E-Commerce Act of 2000 (Republic Act No. 8792), 
-                Consumer Act of the Philippines (Republic Act No. 7394), and other applicable laws.
-              </p>
-              <p className="text-slate-600 leading-relaxed mb-4">
-                By accessing or using our platform, you agree to be bound by these terms. If you do not agree 
-                with these terms, please do not use our platform. These terms constitute a legally binding agreement.
-              </p>
-              <p className="text-slate-600 leading-relaxed">
-                We reserve the right to modify these terms at any time. Your continued use of the platform 
-                after changes constitutes acceptance of the updated terms.
-              </p>
-            </div>
+      <div className="container mx-auto px-4 py-12 max-w-4xl">
+        <div className="bg-gray-900/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-800">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <FileText className="w-16 h-16 text-red-500 mx-auto mb-4" />
+            <h1 className="text-4xl font-bold text-white mb-2">Terms & Conditions</h1>
+            <p className="text-gray-400">Last updated: January 2026 | UK Law Compliant</p>
           </div>
 
-          {/* Terms Sections */}
-          <div className="space-y-8">
-            {sections.map((section, index) => (
-              <Card key={index} className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-                <CardHeader>
-                  <div className={`w-14 h-14 bg-gradient-to-br ${section.color} rounded-xl flex items-center justify-center mb-4`}>
-                    <section.icon className="w-7 h-7 text-white" />
-                  </div>
-                  <CardTitle className="text-2xl">{section.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3">
-                    {section.content.map((item, itemIndex) => (
-                      <li key={itemIndex} className="flex items-start space-x-3">
-                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-slate-700">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Limitation of Liability */}
-      <section className="py-16 px-4 bg-white/50 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto">
-          <Card className="border-0 shadow-xl bg-gradient-to-br from-slate-700 to-slate-800 text-white overflow-hidden">
-            <CardContent className="p-8">
-              <AlertCircle className="w-12 h-12 mb-4" />
-              <h3 className="text-2xl font-bold mb-4">Limitation of Liability</h3>
-              <div className="space-y-4 text-white/90">
-                <p>
-                  AliazaStore shall not be liable for any indirect, incidental, special, consequential, 
-                  or punitive damages, including lost profits, data loss, or business interruption.
-                </p>
-                <p>
-                  We are not responsible for the conduct of sellers or buyers on our platform. We act 
-                  as a marketplace venue and do not guarantee the quality or safety of products listed.
-                </p>
-                <p>
-                  Our total liability shall not exceed the amount you paid to us in the twelve (12) months 
-                  preceding the claim.
-                </p>
-                <p className="text-sm text-white/70 mt-4">
-                  Some jurisdictions do not allow the exclusion of certain warranties or limitation of 
-                  liability, so these exclusions may not apply to you.
-                </p>
+          {/* Content */}
+          <div className="space-y-6 text-gray-300">
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3">🔞 Age Requirement & Verification</h2>
+              <div className="space-y-2 text-gray-400">
+                <p><strong className="text-white">18+ Only:</strong> ifudda is strictly for adults aged 18 and over. By using our website, you confirm that you are 18+.</p>
+                <p><strong className="text-white">Age Verification:</strong> We use age verification systems to ensure compliance with UK law. Providing false information is a breach of these terms.</p>
+                <p><strong className="text-white">Legal Requirement:</strong> Under UK law, it is illegal to sell age-restricted products to minors. We actively prevent underage access.</p>
               </div>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+            </section>
 
-      {/* Governing Law */}
-      <section className="py-16 px-4">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
-            <h3 className="text-2xl font-bold mb-4">Governing Law & Jurisdiction</h3>
-            <p className="text-slate-600 leading-relaxed mb-4">
-              These terms are governed by the laws of the Republic of the Philippines. Any disputes arising 
-              from these terms or your use of the platform shall be resolved in accordance with Philippine laws,
-              including the Electronic Commerce Act and Consumer Act of the Philippines.
-            </p>
-            <p className="text-slate-600 leading-relaxed">
-              For consumer disputes, you may avail of alternative dispute resolution mechanisms including 
-              the Department of Trade and Industry (DTI) and Small Claims Court for disputes under P400,000.
-            </p>
-          </div>
-        </div>
-      </section>
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3 flex items-center">
+                <Users className="w-5 h-5 mr-2" />
+                Account Terms
+              </h2>
+              <div className="space-y-2 text-gray-400">
+                <ul className="list-disc ml-6 space-y-1">
+                  <li>You must be 18+ to create an account</li>
+                  <li>Provide accurate and complete information</li>
+                  <li>Maintain account security and password confidentiality</li>
+                  <li>One account per person - no duplicate accounts</li>
+                  <li>Notify us immediately of unauthorized access</li>
+                  <li>You are responsible for all activity under your account</li>
+                </ul>
+              </div>
+            </section>
 
-      {/* Consumer Rights */}
-      <section className="py-16 px-4 bg-white/50 backdrop-blur-sm">
-        <div className="max-w-4xl mx-auto text-center">
-          <Shield className="w-16 h-16 mx-auto mb-6 text-orange-600" />
-          <h3 className="text-3xl font-bold mb-4">Your Consumer Rights</h3>
-          <p className="text-xl text-slate-600 mb-8">
-            As a consumer in the Philippines, you have specific rights and protections.
-          </p>
-          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            <Card className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-              <h4 className="font-semibold mb-3">Right to Information</h4>
-              <p className="text-sm text-slate-600">
-                Clear information about products, prices, and seller details before purchase.
-              </p>
-            </Card>
-            <Card className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-              <h4 className="font-semibold mb-3">Right to Safety</h4>
-              <p className="text-sm text-slate-600">
-                Protection against defective products and fraudulent practices.
-              </p>
-            </Card>
-            <Card className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-              <h4 className="font-semibold mb-3">Right to Choose</h4>
-              <p className="text-sm text-slate-600">
-                Freedom to select from various products and sellers in our marketplace.
-              </p>
-            </Card>
-            <Card className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-              <h4 className="font-semibold mb-3">Right to Redress</h4>
-              <p className="text-sm text-slate-600">
-                Fair settlement of legitimate complaints through proper channels.
-              </p>
-            </Card>
-          </div>
-          <div className="mt-8 bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg max-w-3xl mx-auto">
-            <h4 className="font-semibold mb-3">Government Resources</h4>
-            <div className="space-y-2 text-sm text-slate-600">
-              <p>• Department of Trade and Industry (DTI): <span className="text-orange-600">dti.gov.ph</span></p>
-              <p>• Consumer Protection Group: <span className="text-orange-600">1244 DTI (Call Center)</span></p>
-              <p>• National Privacy Commission: <span className="text-orange-600">privacy.gov.ph</span></p>
-            </div>
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3">Products & Services</h2>
+              <div className="space-y-2 text-gray-400">
+                <ul className="list-disc ml-6 space-y-1">
+                  <li><strong className="text-white">Adult Wellness Products:</strong> We sell age-restricted products for adult wellness and intimate use</li>
+                  <li><strong className="text-white">Product Accuracy:</strong> We strive for accurate descriptions, images, and pricing</li>
+                  <li><strong className="text-white">Availability:</strong> Products subject to stock availability</li>
+                  <li><strong className="text-white">Body-Safe Materials:</strong> All products comply with UK safety standards</li>
+                  <li><strong className="text-white">Medical Devices:</strong> Some products may be CE marked as medical devices</li>
+                </ul>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3 flex items-center">
+                <CreditCard className="w-5 h-5 mr-2" />
+                Pricing & Payment
+              </h2>
+              <div className="space-y-2 text-gray-400">
+                <ul className="list-disc ml-6 space-y-1">
+                  <li><strong className="text-white">GBP Currency:</strong> All prices are in British Pounds (£)</li>
+                  <li><strong className="text-white">Secure Payment:</strong> Payments processed through secure PCI DSS compliant payment providers</li>
+                  <li><strong className="text-white">Discreet Billing:</strong> Charges appear as "IFD" on your statement</li>
+                  <li><strong className="text-white">Payment Security:</strong> We never store your full payment card details</li>
+                  <li><strong className="text-white">Price Accuracy:</strong> Prices confirmed at checkout - errors will be corrected</li>
+                </ul>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3">Shipping & Delivery</h2>
+              <div className="space-y-2 text-gray-400">
+                <ul className="list-disc ml-6 space-y-1">
+                  <li><strong className="text-white">UK Shipping:</strong> We ship throughout the United Kingdom</li>
+                  <li><strong className="text-white">Discreet Packaging:</strong> Plain packaging with no indication of contents</li>
+                  <li><strong className="text-white">Delivery Times:</strong> Standard 3-5 days, Express 1-2 days (subject to availability)</li>
+                  <li><strong className="text-white">Shipping Costs:</strong> Free UK delivery on orders over £50</li>
+                  <li><strong className="text-white">Signature Required:</strong> Some orders may require signature upon delivery</li>
+                </ul>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3">Returns & Refunds</h2>
+              <div className="space-y-2 text-gray-400">
+                <ul className="list-disc ml-6 space-y-1">
+                  <li><strong className="text-white">30-Day Returns:</strong> Unopened items can be returned within 30 days</li>
+                  <li><strong className="text-white">Hygiene Reasons:</strong> Opened intimate products cannot be returned for hygiene reasons</li>
+                  <li><strong className="text-white">Faulty Products:</strong> Full refund for defective items (including opened)</li>
+                  <li><strong className="text-white">Refund Method:</strong> Refunds processed to original payment method</li>
+                  <li><strong className="text-white">Return Costs:</strong> Customer pays return postage unless item is faulty</li>
+                </ul>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3">Prohibited Activities</h2>
+              <div className="space-y-2 text-gray-400">
+                <ul className="list-disc ml-6 space-y-1">
+                  <li>Attempting to bypass age verification systems</li>
+                  <li>Using fraudulent payment methods</li>
+                  <li>Placing fake orders or abusing the return policy</li>
+                  <li>Reproducing or redistributing our content without permission</li>
+                  <li>Using our platform for illegal purposes</li>
+                  <li>Interfering with website security or operation</li>
+                </ul>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3 flex items-center">
+                <Shield className="w-5 h-5 mr-2" />
+                Privacy & Data Protection
+              </h2>
+              <div className="space-y-2 text-gray-400">
+                <p>We comply with UK GDPR and data protection laws. Your privacy is protected through:</p>
+                <ul className="list-disc ml-6 space-y-1">
+                  <li>SSL encryption for all data transmission</li>
+                  <li>Secure payment processing (PCI DSS compliant)</li>
+                  <li>Discreet billing and packaging</li>
+                  <li>No sharing of your data with third parties (except payment processors)</li>
+                  <li>Your rights under UK GDPR (access, correction, deletion, objection)</li>
+                </ul>
+                <p className="mt-2">See our <Link to="/privacy" className="text-red-500 underline">Privacy Policy</Link> for full details.</p>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3 flex items-center">
+                <AlertCircle className="w-5 h-5 mr-2" />
+                Limitation of Liability
+              </h2>
+              <div className="space-y-2 text-gray-400">
+                <p>ifudda provides adult wellness products on an "as is" basis. We are not liable for:</p>
+                <ul className="list-disc ml-6 space-y-1">
+                  <li>Product misuse or improper use</li>
+                  <li>Allergic reactions to materials (please check product descriptions)</li>
+                  <li>Delays caused by shipping carriers</li>
+                  <li>Indirect or consequential damages</li>
+                </ul>
+                <p className="mt-2">Our total liability is limited to the purchase price of the product.</p>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3">Governing Law & Jurisdiction</h2>
+              <div className="space-y-2 text-gray-400">
+                <p>These terms are governed by the laws of England and Wales. Any disputes shall be resolved in UK courts under English law.</p>
+                <p className="mt-2">Your statutory rights as a UK consumer are not affected by these terms.</p>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3">Terms Updates</h2>
+              <div className="space-y-2 text-gray-400">
+                <p>We may update these terms from time to time. Continued use of the website after changes constitutes acceptance of the updated terms.</p>
+                <p className="mt-2">Significant changes will be communicated via website notice or email.</p>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3">Contact Information</h2>
+              <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+                <p className="text-gray-300 mb-2">For questions about these Terms & Conditions:</p>
+                <p className="text-white"><strong>Email:</strong> legal@ifudda.co.uk</p>
+                <p className="text-white"><strong>Website:</strong> www.ifudda.co.uk</p>
+                <p className="text-gray-400 text-sm mt-2">Operating as a UK company since 2000</p>
+              </div>
+            </section>
           </div>
         </div>
-      </section>
+      </div>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center space-x-2 mb-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-              <ShoppingBag className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-xl font-bold">AliazaStore</span>
-          </div>
-          <p className="text-slate-400 mb-4">
-            Your trusted global marketplace since 2008.
-          </p>
-          <div className="flex justify-center space-x-6 mb-4">
-            <Link to="/privacy" className="text-slate-400 hover:text-white transition-colors">Privacy Policy</Link>
-            <Link to="/terms" className="text-slate-400 hover:text-white transition-colors">Terms of Service</Link>
-            <Link to="/help" className="text-slate-400 hover:text-white transition-colors">Help Center</Link>
-          </div>
-          <p className="text-slate-500 text-sm">
-            © 2026 AliazaStore. All rights reserved.
-          </p>
+      <footer className="bg-black/50 border-t border-gray-800 mt-12">
+        <div className="container mx-auto px-4 py-6">
+          <p className="text-center text-gray-500 text-sm">© 2000-2026 ifudda. All rights reserved. | UK Company | Age Verification Required</p>
         </div>
       </footer>
     </div>
