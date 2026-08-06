@@ -1,10 +1,12 @@
 import { Link, useParams } from 'react-router-dom';
+import { useState } from 'react';
 import { useCart } from '@/context/CartContext';
-import { ShoppingCart, Shield, Truck, Heart } from 'lucide-react';
+import { ShoppingCart, Shield, Truck, Heart, Check } from 'lucide-react';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   // Sample product data - in production this would load from database
   const allProducts = [
@@ -58,12 +60,20 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     addToCart({
-      id: product._row_id,
+      _row_id: Date.now(), // Use timestamp for unique cart item ID
+      product_id: product._row_id,
       name: product.name,
       price: product.price,
+      original_price: product.compare_price || product.price,
+      quantity: 1,
       image: product.image_url,
-      quantity: 1
+      store_name: 'ifudda',
+      rating: 4.5
     });
+    
+    // Show success feedback
+    setShowSuccessMessage(true);
+    setTimeout(() => setShowSuccessMessage(false), 3000);
   };
 
   return (
@@ -86,6 +96,14 @@ const ProductDetail = () => {
           </div>
         </div>
       </header>
+
+      {/* Success Message */}
+      {showSuccessMessage && (
+        <div className="fixed top-20 right-4 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 animate-fade-in">
+          <Check className="w-5 h-5" />
+          <span className="font-semibold">Added to cart successfully!</span>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 py-12">
         <div className="grid lg:grid-cols-2 gap-12">

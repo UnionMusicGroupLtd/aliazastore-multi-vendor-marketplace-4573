@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
-import { ShoppingCart, Filter, Grid, List } from 'lucide-react';
+import { ShoppingCart, Filter, Grid, List, Check } from 'lucide-react';
 
 interface Product {
   _row_id: number;
@@ -21,7 +21,9 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [view, setView] = useState<'grid' | 'list'>('grid');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const { addToCart } = useCart();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [addedProductName, setAddedProductName] = useState('');
+  const { addToCart, getCartCount } = useCart();
   const navigate = useNavigate();
 
   const handleProductClick = (productId: number) => {
@@ -93,12 +95,21 @@ const Products = () => {
 
   const handleAddToCart = (product: Product) => {
     addToCart({
-      id: product._row_id,
+      _row_id: Date.now(), // Use timestamp for unique cart item ID
+      product_id: product._row_id,
       name: product.name,
       price: product.price,
+      original_price: product.compare_price || product.price,
+      quantity: 1,
       image: product.image_url,
-      quantity: 1
+      store_name: 'ifudda',
+      rating: 4.5
     });
+    
+    // Show success feedback
+    setAddedProductName(product.name);
+    setShowSuccessMessage(true);
+    setTimeout(() => setShowSuccessMessage(false), 3000);
   };
 
   if (loading) {
@@ -122,12 +133,26 @@ const Products = () => {
               <span className="text-2xl font-bold text-white">ifudda</span>
             </Link>
             
-            <Link to="/cart" className="text-gray-300 hover:text-white transition-colors flex items-center">
+            <Link to="/cart" className="text-gray-300 hover:text-white transition-colors flex items-center relative">
               <ShoppingCart className="w-5 h-5 mr-1" />
+              {getCartCount() > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                  {getCartCount()}
+                </span>
+              )}
+              Cart
             </Link>
           </div>
         </div>
       </header>
+
+      {/* Success Message */}
+      {showSuccessMessage && (
+        <div className="fixed top-20 right-4 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 animate-fade-in">
+          <Check className="w-5 h-5" />
+          <span className="font-semibold">{addedProductName} added to cart!</span>
+        </div>
+      )}
 
       <div className="container mx-auto px-4 py-8">
         {/* Page Header */}
