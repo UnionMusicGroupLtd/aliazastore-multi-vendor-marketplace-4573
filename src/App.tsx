@@ -16,7 +16,7 @@ import AdminProductManagement from "./pages/AdminProductManagement";
 import AdminDashboard from "./pages/AdminDashboard";
 import Login from "./pages/Login";
 import CategoryPageNew from "./pages/CategoryPageNew";
-import SellerDashboard from "./pages/SellerDashboard";
+import SellerDashboardNew from "./pages/SellerDashboardNew";
 import SellerProducts from "./pages/SellerProducts";
 import SellerOrders from "./pages/SellerOrders";
 import SellerMessages from "./pages/SellerMessages";
@@ -42,6 +42,7 @@ console.log("🎨 NEW HOMEPAGE DESIGN - Product-focused template with featured p
 console.log("🗂️ COMPLETE CATEGORY SYSTEM - 15 main categories with 60+ subcategories implemented in database and UI");
 console.log("🔧 SELLER DASHBOARD ROUTING FIXED - Complete seller system with 15+ specialized routes and features");
 console.log("🎨 SELLER DASHBOARD BRANDING FIXED - Updated to ifudda dark theme with red/pink accents");
+console.log("🚀 NEW SELLER DASHBOARD DEPLOYED - Custom ifudda dashboard with upload products, delivery setup, and all features");
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -60,7 +61,7 @@ const App = () => (
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/dashboard/admin" element={<AdminDashboard />} />
-            <Route path="/dashboard/seller" element={<SellerDashboard />} />
+            <Route path="/dashboard/seller" element={<SellerDashboardNew />} />
             <Route path="/dashboard/seller/products" element={<SellerProducts />} />
             <Route path="/dashboard/seller/orders" element={<SellerOrders />} />
             <Route path="/dashboard/seller/messages" element={<SellerMessages />} />
