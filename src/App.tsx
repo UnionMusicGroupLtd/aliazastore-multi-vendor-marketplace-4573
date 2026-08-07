@@ -15,7 +15,7 @@ import About from "./pages/About";
 import AdminProductManagement from "./pages/AdminProductManagement";
 import CategoryPageNew from "./pages/CategoryPageNew";
 import SimpleAdminDashboard from "./pages/SimpleAdminDashboard";
-import Login from "./pages/Login";
+import LoginNew from "./pages/LoginNew";
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
 console.log("✅ Product click navigation fixed - Products are now clickable");
@@ -25,7 +25,7 @@ console.log("🎨 NEW HOMEPAGE DESIGN - Product-focused template with featured p
 console.log("🗂️ COMPLETE CATEGORY SYSTEM - 15 main categories with 60+ subcategories implemented in database and UI");
 console.log("🔧 ADMIN-ONLY PLATFORM - Simplified to single-store admin management (no multi-seller complexity)");
 console.log("🎯 ifudda ADMIN DASHBOARD - Premium adult wellness store with products, delivery, payments, analytics");
-console.log("🔐 LOGIN SYSTEM RESTORED - Admin login accessible via /login and homepage 'Sign In' links");
+console.log("🔐 SMART LOGIN SYSTEM - Auto-detects admin emails (info@unionmusicgroup.co.uk) vs normal users");
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -37,7 +37,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<IfuddaHomeNew />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<LoginNew />} />
             <Route path="/categories" element={<CategoryPageNew />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetail />} />
