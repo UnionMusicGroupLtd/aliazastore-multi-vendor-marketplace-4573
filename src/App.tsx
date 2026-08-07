@@ -36,6 +36,8 @@ console.log("🔧 LOGIN REDIRECT FIX - Fixed login to check user role directly f
 console.log("🔧 AUTH GUARDS ADDED - Added authentication checks to SimpleAdminDashboard to protect admin routes");
 console.log("🚀 NEW ADMIN DASHBOARD BUILT - Complete admin dashboard without complex auth dependencies");
 console.log("🔧 AUTHCONTEXT EXPORT FIX - Added missing export statement for AuthContext in AuthContext.tsx");
+console.log("🚀 ADMIN LOGIN REDIRECT ENHANCED - Added comprehensive debugging and extended timeout for admin detection");
+console.log("🔍 ADMIN DASHBOARD DEBUGGING - Added component mount logging to track if dashboard loads");
 const queryClient = new QueryClient();
 
 const App = () => (

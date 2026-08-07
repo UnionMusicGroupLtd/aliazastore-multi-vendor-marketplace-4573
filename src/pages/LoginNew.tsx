@@ -63,30 +63,35 @@ const LoginNew = () => {
 
     try {
       await signIn(loginForm.email, loginForm.password);
-      console.log("Login successful!");
+      console.log("✅ Login successful!");
       
-      setSuccess("Login successful! Redirecting...");
+      setSuccess("✅ Login successful! Redirecting...");
       
-      // Check user role from metadata immediately after sign-in
-      // The signIn function should update the auth context, but let's wait a bit
+      // Immediate redirect check
       setTimeout(async () => {
         try {
-          const currentUser = await (await import('@/lib/shared/kliv-auth.js')).default.getUser();
-          console.log("Current user after login:", currentUser);
+          const auth = (await import('@/lib/shared/kliv-auth.js')).default;
+          const currentUser = await auth.getUser();
+          console.log("🔍 Current user after login:", currentUser);
+          console.log("🔍 User metadata:", currentUser?.metadata);
           
-          if (currentUser?.metadata?.role === 'admin') {
-            console.log("Admin user detected, redirecting to admin dashboard");
+          const userRole = currentUser?.metadata?.role as string;
+          console.log("🔍 Detected user role:", userRole);
+          console.log("🔍 Is admin check:", userRole === 'admin');
+          
+          if (userRole === 'admin') {
+            console.log("✅✅✅ ADMIN USER DETECTED - Redirecting to /admin");
             navigate("/admin");
           } else {
-            console.log("Normal user detected, redirecting to home");
+            console.log("✅ Normal user - Redirecting to home");
             navigate("/");
           }
         } catch (err) {
-          console.error("Error checking user role:", err);
-          // Fallback to home if there's an error
+          console.error("❌ Error checking user role:", err);
+          console.log("🔄 Fallback: Redirecting to home due to error");
           navigate("/");
         }
-      }, 1000);
+      }, 2000);
       
     } catch (err: any) {
       console.error("Login error:", err);

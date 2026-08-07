@@ -31,8 +31,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const checkAuth = async () => {
     try {
       const currentUser = await auth.getUser();
-      console.log("Current user:", currentUser);
+      console.log("🔍 AuthContext: checkAuth - Current user", currentUser);
+      
       if (currentUser) {
+        console.log("🔍 AuthContext: User metadata", currentUser.metadata);
+        console.log("🔍 AuthContext: User role", currentUser.metadata?.role);
+        console.log("🔍 AuthContext: Is admin?", currentUser.metadata?.role === 'admin');
+        
         setUser({
           userUuid: currentUser.userUuid || '',
           email: currentUser.email || '',
@@ -43,7 +48,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         });
       }
     } catch (error) {
-      console.error("Auth check failed:", error);
+      console.error("❌ AuthContext: Auth check failed:", error);
       setUser(null);
     } finally {
       setLoading(false);
@@ -67,6 +72,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       metadata: signedUser.user.metadata
     };
     
+    console.log("🔍 AuthContext: Setting user data", userData);
+    console.log("🔍 AuthContext: User role", userData.role);
+    console.log("🔍 AuthContext: Is admin?", userData.role === 'admin');
+    
     setUser(userData);
   };
 
@@ -76,7 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     console.log("User signed out");
   };
 
-  const isAdmin = user?.role === 'admin';
+  const isAdmin = Boolean(user?.role === 'admin');
 
   return (
     <AuthContext.Provider value={{ user, loading, signIn, signOut, isAdmin }}>

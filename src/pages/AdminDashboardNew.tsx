@@ -13,7 +13,11 @@ const AdminDashboardNew = () => {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  console.log("🔍 AdminDashboardNew: Component mounted");
+  console.log("🔍 AdminDashboardNew: Current URL:", window.location.href);
+
   const handleSignOut = () => {
+    console.log("🔍 AdminDashboardNew: Sign out triggered");
     // Simple sign out - clear any session and redirect to login
     navigate("/login");
   };
