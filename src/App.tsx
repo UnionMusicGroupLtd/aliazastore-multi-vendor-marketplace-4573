@@ -33,6 +33,7 @@ console.log("🔧 ADMIN AUTH FIX - Fixed isAdmin check to use user.role instead 
 console.log("🎯 ADMIN DASHBOARD NOW WORKS - Admin users can now properly access /admin route");
 console.log("🆔 ADMIN USER CREATED - admin@ifudda.com created with role: admin in metadata");
 console.log("🔧 LOGIN REDIRECT FIX - Fixed login to check user role directly from Kliv auth instead of relying on async context");
+console.log("🔧 AUTH GUARDS ADDED - Added authentication checks to SimpleAdminDashboard to protect admin routes");
 const queryClient = new QueryClient();
 
 const App = () => (

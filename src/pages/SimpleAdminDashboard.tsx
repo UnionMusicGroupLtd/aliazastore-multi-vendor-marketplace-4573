@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -8,9 +8,34 @@ import {
   BarChart3, Store, Upload, AlertCircle, CheckCircle,
   ChevronRight, Badge
 } from "lucide-react";
+import { AuthContext } from "@/context/AuthContext";
 
 const SimpleAdminDashboard = () => {
-  const [user] = useState({ email: "admin@ifudda.com" });
+  const { user, isAdmin, signOut } = useContext(AuthContext);
+  const navigate = useNavigate();
+  
+  // Add authentication check and redirect
+  useEffect(() => {
+    console.log("SimpleAdminDashboard mounted - User:", user);
+    console.log("SimpleAdminDashboard - isAdmin:", isAdmin);
+    
+    if (!user) {
+      console.log("No user found, redirecting to login");
+      navigate("/login");
+    } else if (!isAdmin) {
+      console.log("User is not admin, redirecting to home");
+      navigate("/");
+    }
+  }, [user, isAdmin, navigate]);
+  
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate("/");
+    } catch (error) {
+      console.error("Sign out error:", error);
+    }
+  };
 
   const menuItems = [
     { 
@@ -91,9 +116,12 @@ const SimpleAdminDashboard = () => {
                 A
               </div>
               <Link to="/">
-                <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white hover:bg-gray-800">
+                <button 
+                  onClick={handleSignOut}
+                  className="text-gray-400 hover:text-white transition-colors"
+                >
                   <LogOut className="w-5 h-5" />
-                </Button>
+                </button>
               </Link>
             </div>
           </div>
