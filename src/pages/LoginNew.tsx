@@ -1,29 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Mail, Lock, User, AlertCircle, CheckCircle2, ArrowRight, Shield, Users } from "lucide-react";
+import { Mail, Lock, User, AlertCircle, CheckCircle2, ArrowRight, Users } from "lucide-react";
 import auth from "@/lib/shared/kliv-auth.js";
-
-// Admin emails list - these accounts can access admin dashboard
-const ADMIN_EMAILS = [
-  "info@unionmusicgroup.co.uk",
-  "admin@ifudda.com",
-  "support@ifudda.com"
-];
 
 const LoginNew = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [isAdminEmail, setIsAdminEmail] = useState(false);
   const [showRegistration, setShowRegistration] = useState(false);
 
-  // Unified login form
+  // Login form
   const [loginForm, setLoginForm] = useState({
     email: "",
     password: ""
@@ -38,19 +30,6 @@ const LoginNew = () => {
     confirmPassword: ""
   });
 
-  // Check if email is admin email
-  useEffect(() => {
-    if (loginForm.email) {
-      const emailLower = loginForm.email.toLowerCase().trim();
-      const isAdmin = ADMIN_EMAILS.some(adminEmail => 
-        adminEmail.toLowerCase() === emailLower
-      );
-      setIsAdminEmail(isAdmin);
-    } else {
-      setIsAdminEmail(false);
-    }
-  }, [loginForm.email]);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -61,15 +40,8 @@ const LoginNew = () => {
       const user = await auth.signIn(loginForm.email, loginForm.password);
       console.log("User logged in:", user);
       
-      // Check if this is an admin email login
-      if (isAdminEmail) {
-        setSuccess("Admin login successful! Redirecting to admin dashboard...");
-        setTimeout(() => navigate("/admin"), 1000);
-      } else {
-        // Normal user login - redirect to home
-        setSuccess("Login successful! Redirecting to home...");
-        setTimeout(() => navigate("/"), 1000);
-      }
+      setSuccess("Login successful! Redirecting to home...");
+      setTimeout(() => navigate("/"), 1000);
     } catch (err: any) {
       console.error("Login error:", err);
       if (err.message?.includes("bad_credentials")) {
@@ -93,18 +65,6 @@ const LoginNew = () => {
     // Validate passwords match
     if (registration.password !== registration.confirmPassword) {
       setError("Passwords do not match");
-      setLoading(false);
-      return;
-    }
-
-    // Check if trying to register with admin email
-    const emailLower = registration.email.toLowerCase().trim();
-    const isAdminRegistration = ADMIN_EMAILS.some(adminEmail => 
-      adminEmail.toLowerCase() === emailLower
-    );
-
-    if (isAdminRegistration) {
-      setError("This email is reserved for admin accounts. Please use a different email.");
       setLoading(false);
       return;
     }
@@ -164,19 +124,11 @@ const LoginNew = () => {
             <Card className="border-gray-800 shadow-xl bg-gray-900/80 backdrop-blur-lg">
               <CardHeader className="space-y-1">
                 <div className="flex items-center space-x-2">
-                  {isAdminEmail ? (
-                    <Shield className="w-6 h-6 text-red-500" />
-                  ) : (
-                    <Users className="w-6 h-6 text-blue-500" />
-                  )}
-                  <CardTitle className="text-2xl text-white">
-                    {isAdminEmail ? "Admin Portal" : "Welcome Back"}
-                  </CardTitle>
+                  <Users className="w-6 h-6 text-red-500" />
+                  <CardTitle className="text-2xl text-white">Welcome Back</CardTitle>
                 </div>
                 <CardDescription className="text-gray-400">
-                  {isAdminEmail 
-                    ? "Sign in to manage ifudda store" 
-                    : "Sign in to your account"}
+                  Sign in to your ifudda account
                 </CardDescription>
               </CardHeader>
               <form onSubmit={handleLogin}>
@@ -193,15 +145,6 @@ const LoginNew = () => {
                       <AlertDescription>{success}</AlertDescription>
                     </Alert>
                   )}
-                  
-                  {isAdminEmail && (
-                    <Alert className="bg-blue-50 border-blue-200 text-blue-800">
-                      <Shield className="h-4 w-4" />
-                      <AlertDescription>
-                        Admin account detected - Dashboard access enabled
-                      </AlertDescription>
-                    </Alert>
-                  )}
 
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
@@ -210,7 +153,7 @@ const LoginNew = () => {
                       <Input
                         id="email"
                         type="email"
-                        placeholder={isAdminEmail ? "admin@ifudda.com" : "your@email.com"}
+                        placeholder="your@email.com"
                         className="pl-10"
                         value={loginForm.email}
                         onChange={(e) => setLoginForm({ ...loginForm, email: e.target.value })}
@@ -244,14 +187,10 @@ const LoginNew = () => {
                 <CardFooter className="flex flex-col space-y-4">
                   <Button 
                     type="submit" 
-                    className={`w-full ${
-                      isAdminEmail 
-                        ? "bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700" 
-                        : "bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700"
-                    }`}
+                    className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700"
                     disabled={loading}
                   >
-                    {loading ? "Signing in..." : isAdminEmail ? "Access Admin Dashboard" : "Sign In"}
+                    {loading ? "Signing in..." : "Sign In"}
                   </Button>
                   
                   <div className="text-sm text-center text-gray-400">
