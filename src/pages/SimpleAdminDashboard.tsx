@@ -12,6 +12,16 @@ import {
 const SimpleAdminDashboard = () => {
   const [user] = useState({ email: "admin@ifudda.com" });
 
+  // Privacy email mask - show first 2 chars and mask the rest
+  const maskEmail = (email: string) => {
+    if (!email) return '';
+    const [username, domain] = email.split('@');
+    if (!domain) return email;
+    const visibleChars = username.slice(0, 2);
+    const maskedChars = '*'.repeat(Math.max(3, username.length - 2));
+    return `${visibleChars}${maskedChars}@${domain}`;
+  };
+
   const menuItems = [
     { 
       icon: Package, 
@@ -86,7 +96,7 @@ const SimpleAdminDashboard = () => {
             </div>
             
             <div className="flex items-center space-x-2">
-              <span className="text-gray-400 text-sm">{user.email}</span>
+              <span className="text-gray-400 text-sm">{maskEmail(user.email)}</span>
               <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
                 A
               </div>

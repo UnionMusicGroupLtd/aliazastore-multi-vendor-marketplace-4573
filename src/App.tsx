@@ -28,6 +28,7 @@ console.log("🔧 ADMIN-ONLY PLATFORM - Simplified to single-store admin managem
 console.log("🎯 ifudda ADMIN DASHBOARD - Premium adult wellness store with products, delivery, payments, analytics");
 console.log("🚫 ADMIN LINKS REMOVED - Admin access hidden from header and footer (only accessible via direct URL)");
 console.log("🔐 AUTHENTICATION SYSTEM - Complete auth context with admin detection and proper redirect logic");
+console.log("🔒 EMAIL PRIVACY MASKING - User emails partially hidden (e.g., ad***@ifudda.com) for privacy protection");
 const queryClient = new QueryClient();
 
 const App = () => (

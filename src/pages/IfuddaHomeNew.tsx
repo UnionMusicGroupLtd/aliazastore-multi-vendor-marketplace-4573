@@ -32,6 +32,16 @@ const IfuddaHomeNew = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
 
+  // Privacy email mask - show first 2 chars and mask the rest
+  const maskEmail = (email: string) => {
+    if (!email) return '';
+    const [username, domain] = email.split('@');
+    if (!domain) return email;
+    const visibleChars = username.slice(0, 2);
+    const maskedChars = '*'.repeat(Math.max(3, username.length - 2));
+    return `${visibleChars}${maskedChars}@${domain}`;
+  };
+
   useEffect(() => {
     const verified = localStorage.getItem('ifudda_age_verified');
     if (verified === 'true') {
@@ -288,7 +298,7 @@ const IfuddaHomeNew = () => {
                   {isAdmin ? (
                     <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold">Admin Dashboard</Link>
                   ) : (
-                    <span className="text-gray-300">Welcome, {user.email}</span>
+                    <span className="text-gray-300">Welcome, {maskEmail(user.email)}</span>
                   )}
                   <button 
                     onClick={signOut}
