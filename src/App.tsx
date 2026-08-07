@@ -31,6 +31,8 @@ console.log("🔐 AUTHENTICATION SYSTEM - Complete auth context with admin detec
 console.log("🚫 BROKEN DASHBOARD LINK REMOVED - Removed non-functional 'Dashboard' link, kept Admin Dashboard for admins only");
 console.log("🔧 ADMIN AUTH FIX - Fixed isAdmin check to use user.role instead of user.app_metadata.role");
 console.log("🎯 ADMIN DASHBOARD NOW WORKS - Admin users can now properly access /admin route");
+console.log("🆔 ADMIN USER CREATED - admin@ifudda.com created with role: admin in metadata");
+console.log("🔧 LOGIN REDIRECT FIX - Fixed login to check user role directly from Kliv auth instead of relying on async context");
 const queryClient = new QueryClient();
 
 const App = () => (

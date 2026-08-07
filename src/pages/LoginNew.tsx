@@ -33,17 +33,27 @@ const LoginNew = () => {
 
   // Check if user is already logged in
   useEffect(() => {
-    if (user) {
-      console.log("User already logged in:", user);
-      if (isAdmin) {
-        console.log("Admin user detected, redirecting to /admin");
-        navigate("/admin");
-      } else {
-        console.log("Normal user detected, redirecting to home");
-        navigate("/");
+    const checkUserAuth = async () => {
+      try {
+        const currentUser = await (await import('@/lib/shared/kliv-auth.js')).default.getUser();
+        console.log("User already logged in:", currentUser);
+        
+        if (currentUser) {
+          if (currentUser.metadata?.role === 'admin') {
+            console.log("Admin user detected, redirecting to /admin");
+            navigate("/admin");
+          } else {
+            console.log("Normal user detected, redirecting to home");
+            navigate("/");
+          }
+        }
+      } catch (err) {
+        console.error("Error checking auth status:", err);
       }
-    }
-  }, [user, isAdmin, navigate]);
+    };
+    
+    checkUserAuth();
+  }, [navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,16 +67,26 @@ const LoginNew = () => {
       
       setSuccess("Login successful! Redirecting...");
       
-      // Add a small delay to allow the auth state to propagate
-      setTimeout(() => {
-        if (isAdmin) {
-          console.log("Redirecting to admin dashboard");
-          navigate("/admin");
-        } else {
-          console.log("Redirecting to home");
+      // Check user role from metadata immediately after sign-in
+      // The signIn function should update the auth context, but let's wait a bit
+      setTimeout(async () => {
+        try {
+          const currentUser = await (await import('@/lib/shared/kliv-auth.js')).default.getUser();
+          console.log("Current user after login:", currentUser);
+          
+          if (currentUser?.metadata?.role === 'admin') {
+            console.log("Admin user detected, redirecting to admin dashboard");
+            navigate("/admin");
+          } else {
+            console.log("Normal user detected, redirecting to home");
+            navigate("/");
+          }
+        } catch (err) {
+          console.error("Error checking user role:", err);
+          // Fallback to home if there's an error
           navigate("/");
         }
-      }, 500);
+      }, 1000);
       
     } catch (err: any) {
       console.error("Login error:", err);
