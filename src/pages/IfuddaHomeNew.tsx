@@ -285,10 +285,8 @@ const IfuddaHomeNew = () => {
               
               {user ? (
                 <>
-                  {isAdmin ? (
+                  {isAdmin && (
                     <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold">Admin Dashboard</Link>
-                  ) : (
-                    <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors">Dashboard</Link>
                   )}
                   <button 
                     onClick={signOut}
