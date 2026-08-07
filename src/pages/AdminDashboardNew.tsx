@@ -70,7 +70,7 @@ const AdminDashboardNew = () => {
       icon: Truck,
       label: "Delivery Setup",
       description: "Configure shipping and delivery options",
-      href: "/admin/settings",
+      href: "/admin/delivery",
       color: "from-purple-600 to-indigo-600"
     },
     {
@@ -95,11 +95,11 @@ const AdminDashboardNew = () => {
       color: "from-amber-600 to-orange-600"
     },
     {
-      icon: TrendingUp,
-      label: "Analytics",
-      description: "View sales performance and metrics",
-      href: "/admin/analytics",
-      color: "from-pink-600 to-rose-600"
+      icon: DollarSign,
+      label: "Withdrawals",
+      description: "Manage seller withdrawal requests",
+      href: "/admin/withdrawals",
+      color: "from-rose-600 to-red-600"
     },
     {
       icon: Settings,

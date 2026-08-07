@@ -17,6 +17,12 @@ import AdminProductManagement from "./pages/AdminProductManagement";
 import CategoryPageNew from "./pages/CategoryPageNew";
 import AdminDashboardNew from "./pages/AdminDashboardNew";
 import LoginNew from "./pages/LoginNew";
+import AdminOrders from "./pages/AdminOrders";
+import AdminCustomers from "./pages/AdminCustomers";
+import AdminSettings from "./pages/AdminSettings";
+import AdminWithdrawals from "./pages/AdminWithdrawals";
+import AdminPayments from "./pages/AdminPayments";
+import AdminDelivery from "./pages/AdminDelivery";
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
 console.log("✅ Product click navigation fixed - Products are now clickable");
@@ -34,7 +40,7 @@ console.log("🎯 ADMIN DASHBOARD NOW WORKS - Admin users can now properly acces
 console.log("🆔 ADMIN USER CREATED - admin@ifudda.com created with role: admin in metadata");
 console.log("🔧 LOGIN REDIRECT FIX - Fixed login to check user role directly from Kliv auth instead of relying on async context");
 console.log("🔧 AUTH GUARDS ADDED - Added authentication checks to SimpleAdminDashboard to protect admin routes");
-console.log("🚀 NEW ADMIN DASHBOARD BUILT - Complete admin dashboard without complex auth dependencies");
+console.log("🔧 ALL ADMIN CARDS FIXED - Orders, Customers, Settings, Delivery, Payments, Withdrawals now working");
 console.log("🔧 AUTHCONTEXT EXPORT FIX - Added missing export statement for AuthContext in AuthContext.tsx");
 console.log("🚀 ADMIN LOGIN REDIRECT ENHANCED - Added comprehensive debugging and extended timeout for admin detection");
 console.log("🔍 ADMIN DASHBOARD DEBUGGING - Added component mount logging to track if dashboard loads");
@@ -58,6 +64,12 @@ const App = () => (
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/admin" element={<AdminDashboardNew />} />
               <Route path="/admin/products" element={<AdminProductManagement />} />
+              <Route path="/admin/orders" element={<AdminOrders />} />
+              <Route path="/admin/customers" element={<AdminCustomers />} />
+              <Route path="/admin/settings" element={<AdminSettings />} />
+              <Route path="/admin/withdrawals" element={<AdminWithdrawals />} />
+              <Route path="/admin/payments" element={<AdminPayments />} />
+              <Route path="/admin/delivery" element={<AdminDelivery />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/about" element={<About />} />
