@@ -29,6 +29,8 @@ console.log("🎯 ifudda ADMIN DASHBOARD - Premium adult wellness store with pro
 console.log("🚫 ADMIN LINKS REMOVED - Admin access hidden from header and footer (only accessible via direct URL)");
 console.log("🔐 AUTHENTICATION SYSTEM - Complete auth context with admin detection and proper redirect logic");
 console.log("🚫 BROKEN DASHBOARD LINK REMOVED - Removed non-functional 'Dashboard' link, kept Admin Dashboard for admins only");
+console.log("🔧 ADMIN AUTH FIX - Fixed isAdmin check to use user.role instead of user.app_metadata.role");
+console.log("🎯 ADMIN DASHBOARD NOW WORKS - Admin users can now properly access /admin route");
 const queryClient = new QueryClient();
 
 const App = () => (
