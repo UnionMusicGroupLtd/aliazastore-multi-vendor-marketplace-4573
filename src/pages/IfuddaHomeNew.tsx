@@ -277,6 +277,7 @@ const IfuddaHomeNew = () => {
             </Link>
             
             <nav className="hidden md:flex items-center space-x-8">
+              <Link to="/categories" className="text-gray-300 hover:text-white transition-colors">Categories</Link>
               <Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
               <Link to="/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link>
@@ -499,7 +500,7 @@ const IfuddaHomeNew = () => {
             {categories.map((category, index) => (
               <Link
                 key={index}
-                to="/products"
+                to="/categories"
                 className="group bg-gray-900/50 backdrop-blur-lg rounded-xl overflow-hidden border border-gray-800 hover:border-red-500/50 transition-all"
               >
                 <div className="relative h-48">

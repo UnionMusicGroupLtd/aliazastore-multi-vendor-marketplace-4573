@@ -15,6 +15,7 @@ import About from "./pages/About";
 import AdminProductManagement from "./pages/AdminProductManagement";
 import AdminDashboard from "./pages/AdminDashboard";
 import Login from "./pages/Login";
+import CategoryPageNew from "./pages/CategoryPageNew";
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
 console.log("✅ Product click navigation fixed - Products are now clickable");
@@ -22,6 +23,7 @@ console.log("🛒 Add to Cart functionality fixed - Cart items now persist and s
 console.log("🔧 Admin Product Management System - Complete with ban, upload, sales, pricing, delivery");
 console.log("🔐 Login System Fixed - Sign In now accessible from homepage and /login route");
 console.log("🎨 NEW HOMEPAGE DESIGN - Product-focused template with featured products, new arrivals, best sellers, sales, and categories");
+console.log("🗂️ COMPLETE CATEGORY SYSTEM - 15 main categories with 60+ subcategories implemented in database and UI");
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -34,6 +36,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<IfuddaHomeNew />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/categories" element={<CategoryPageNew />} />
             <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/cart" element={<Cart />} />
