@@ -64,14 +64,14 @@ const Login = () => {
       // Only redirect to admin if role is explicitly "admin" or user is in admin group
       if (userRole === 'admin' || isAdmin) {
         setSuccess("Admin login successful! Redirecting to admin dashboard...");
-        setTimeout(() => navigate("/dashboard/admin"), 1000);
+        setTimeout(() => navigate("/admin"), 1000);
       } else if (userRole === 'seller') {
-        setSuccess("Seller account detected! Redirecting to seller dashboard...");
-        setTimeout(() => navigate("/dashboard/seller"), 1000);
+        setSuccess("Seller account detected! Redirecting to admin dashboard...");
+        setTimeout(() => navigate("/admin"), 1000);
       } else {
-        // Default to customer dashboard
-        setSuccess("Login successful! Redirecting...");
-        setTimeout(() => navigate("/dashboard/customer"), 1000);
+        // Default to admin dashboard for simplified platform
+        setSuccess("Login successful! Redirecting to admin dashboard...");
+        setTimeout(() => navigate("/admin"), 1000);
       }
     } catch (err: any) {
       console.error("Login error:", err);
@@ -111,29 +111,17 @@ const Login = () => {
       );
       console.log("Seller login - Is admin by group:", isAdmin);
       
-      // Force admin redirect if admin role or admin group membership detected
+      // Force admin redirect for simplified platform
       if (userRole === 'admin' || isAdmin) {
         setSuccess("Admin login successful! Redirecting to admin dashboard...");
-        setTimeout(() => navigate("/dashboard/admin"), 1000);
+        setTimeout(() => navigate("/admin"), 1000);
       } else if (userRole === 'seller') {
-        setSuccess("Seller login successful! Redirecting to seller dashboard...");
-        setTimeout(() => navigate("/dashboard/seller"), 1000);
+        setSuccess("Seller login successful! Redirecting to admin dashboard...");
+        setTimeout(() => navigate("/admin"), 1000);
       } else {
-        // Check if user is in Shop Owners group as fallback
-        const isShopOwner = user.groups?.some((g: any) => 
-          g.key === 'shop_owners' || g.name === 'Shop Owners'
-        );
-        
-        if (isShopOwner) {
-          // Update user metadata to set role to seller
-          console.log("Shop owner detected but no seller role - setting role");
-          setSuccess("Shop owner access granted! Redirecting to seller dashboard...");
-          setTimeout(() => navigate("/dashboard/seller"), 1000);
-        } else {
-          // Default to seller dashboard for seller tab login
-          setSuccess("Login successful! Redirecting to seller dashboard...");
-          setTimeout(() => navigate("/dashboard/seller"), 1000);
-        }
+        // All users redirect to admin dashboard for simplified platform
+        setSuccess("Login successful! Redirecting to admin dashboard...");
+        setTimeout(() => navigate("/admin"), 1000);
       }
     } catch (err: any) {
       console.error("Login error:", err);
@@ -171,15 +159,11 @@ const Login = () => {
         } // metadata
       );
       console.log("Registration successful:", user);
-      setSuccess("Registration successful! Redirecting...");
+      setSuccess("Registration successful! Redirecting to admin dashboard...");
       
-      // Redirect based on account type
+      // All new accounts redirect to admin dashboard for simplified platform
       setTimeout(() => {
-        if (registration.accountType === "seller") {
-          navigate("/dashboard/seller");
-        } else {
-          navigate("/dashboard/customer");
-        }
+        navigate("/admin");
       }, 1000);
     } catch (err: any) {
       console.error("Registration error:", err);
@@ -194,7 +178,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -204,20 +188,21 @@ const Login = () => {
             </div>
             <span className="text-2xl font-bold text-white">ifudda</span>
           </Link>
+          <p className="text-gray-400 mt-2">Premium Adult Wellness - Admin Portal</p>
         </div>
 
         <SimpleTabs defaultValue="customer" className="w-full">
           <SimpleTabsList className="grid w-full grid-cols-2 mb-6 gap-2 p-1 bg-slate-100 rounded-lg">
-            <SimpleTabsTrigger value="customer" className="py-2 px-4 rounded-md transition-colors">Customer</SimpleTabsTrigger>
-            <SimpleTabsTrigger value="seller" className="py-2 px-4 rounded-md transition-colors">Seller</SimpleTabsTrigger>
+            <SimpleTabsTrigger value="customer" className="py-2 px-4 rounded-md transition-colors">Admin Access</SimpleTabsTrigger>
+            <SimpleTabsTrigger value="seller" className="py-2 px-4 rounded-md transition-colors">Admin Management</SimpleTabsTrigger>
           </SimpleTabsList>
 
           {/* Customer Login */}
           <SimpleTabsContent value="customer">
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-lg">
+            <Card className="border-gray-800 shadow-xl bg-gray-900/80 backdrop-blur-lg">
               <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl">Welcome back</CardTitle>
-                <CardDescription>Sign in to your customer account</CardDescription>
+                <CardTitle className="text-2xl text-white">Admin Portal</CardTitle>
+                <CardDescription className="text-gray-400">Sign in to manage ifudda store</CardDescription>
               </CardHeader>
               <form onSubmit={handleCustomerLogin}>
                 <CardContent className="space-y-4">
@@ -272,7 +257,7 @@ const Login = () => {
                 <CardFooter className="flex flex-col space-y-4">
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                    className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700"
                     disabled={loading}
                   >
                     {loading ? "Signing in..." : "Sign In"}
@@ -290,10 +275,10 @@ const Login = () => {
 
           {/* Seller Login */}
           <SimpleTabsContent value="seller">
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-lg">
+            <Card className="border-gray-800 shadow-xl bg-gray-900/80 backdrop-blur-lg">
               <CardHeader className="space-y-1">
-                <CardTitle className="text-2xl">Seller Portal</CardTitle>
-                <CardDescription>Sign in to manage your store</CardDescription>
+                <CardTitle className="text-2xl text-white">Admin Portal</CardTitle>
+                <CardDescription className="text-gray-400">Access store management</CardDescription>
               </CardHeader>
               <form onSubmit={handleSellerLogin}>
                 <CardContent className="space-y-4">
@@ -348,10 +333,10 @@ const Login = () => {
                 <CardFooter className="flex flex-col space-y-4">
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                    className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700"
                     disabled={loading}
                   >
-                    {loading ? "Signing in..." : "Access Seller Dashboard"}
+                    {loading ? "Signing in..." : "Access Admin Dashboard"}
                   </Button>
                   <div className="text-sm text-center text-slate-600">
                     New seller?{" "}
@@ -369,7 +354,7 @@ const Login = () => {
             <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-lg">
               <CardHeader className="space-y-1">
                 <CardTitle className="text-2xl">Create account</CardTitle>
-                <CardDescription>Join AliazaStore today</CardDescription>
+                <CardDescription>Join ifudda today</CardDescription>
               </CardHeader>
               <form onSubmit={handleRegistration}>
                 <CardContent className="space-y-4">
@@ -460,7 +445,7 @@ const Login = () => {
                 <CardFooter className="flex flex-col space-y-4">
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                    className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700"
                     disabled={loading}
                   >
                     {loading ? "Creating account..." : "Create Account"}
