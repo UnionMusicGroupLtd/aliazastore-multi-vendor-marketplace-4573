@@ -280,7 +280,6 @@ const IfuddaHomeNew = () => {
               <Link to="/categories" className="text-gray-300 hover:text-white transition-colors">Categories</Link>
               <Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
-              <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold">Admin</Link>
               <Link to="/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link>
               <Link to="/cart" className="text-gray-300 hover:text-white transition-colors flex items-center">
                 <ShoppingBag className="w-5 h-5 mr-1" />
@@ -293,7 +292,6 @@ const IfuddaHomeNew = () => {
             </nav>
 
             <div className="md:hidden flex items-center space-x-4">
-              <Link to="/admin" className="text-red-400 text-sm font-semibold">Admin</Link>
               <Link to="/login" className="text-white text-sm">Sign In</Link>
             </div>
           </div>
@@ -727,7 +725,6 @@ const IfuddaHomeNew = () => {
                 <li><Link to="/products" className="text-gray-400 hover:text-white text-sm">Products</Link></li>
                 <li><Link to="/about" className="text-gray-400 hover:text-white text-sm">About Us</Link></li>
                 <li><Link to="/cart" className="text-gray-400 hover:text-white text-sm">Shopping Cart</Link></li>
-                <li><Link to="/admin" className="text-red-400 hover:text-red-300 text-sm font-semibold">Admin</Link></li>
                 <li><Link to="/login" className="text-gray-400 hover:text-white text-sm">Sign In</Link></li>
               </ul>
             </div>
