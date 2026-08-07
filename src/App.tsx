@@ -41,6 +41,7 @@ console.log("🔐 Login System Fixed - Sign In now accessible from homepage and 
 console.log("🎨 NEW HOMEPAGE DESIGN - Product-focused template with featured products, new arrivals, best sellers, sales, and categories");
 console.log("🗂️ COMPLETE CATEGORY SYSTEM - 15 main categories with 60+ subcategories implemented in database and UI");
 console.log("🔧 SELLER DASHBOARD ROUTING FIXED - Complete seller system with 15+ specialized routes and features");
+console.log("🎨 SELLER DASHBOARD BRANDING FIXED - Updated to ifudda dark theme with red/pink accents");
 const queryClient = new QueryClient();
 
 const App = () => (

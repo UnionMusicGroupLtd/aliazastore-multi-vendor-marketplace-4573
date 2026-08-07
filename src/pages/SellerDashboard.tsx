@@ -327,32 +327,32 @@ console.log("📊 Subscription status:", subscriptionStatus);
 
 if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading your dashboard...</p>
+          <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading your dashboard...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
       {/* Header */}
-      <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
+      <nav className="bg-black/50 backdrop-blur-lg border-b border-gray-800 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <Link to="/" className="flex items-center space-x-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
                   <Store className="w-6 h-6 text-white" />
                 </div>
-                <span className="text-xl font-bold">AliazaStore</span>
+                <span className="text-xl font-bold">ifudda</span>
               </Link>
-              <div className="h-6 w-px bg-slate-300"></div>
+              <div className="h-6 w-px bg-gray-800"></div>
               {store && (
                 <div className="flex items-center space-x-2">
-                  <Store className="w-5 h-5 text-orange-600" />
+                  <Store className="w-5 h-5 text-red-600" />
                   <span className="font-medium">{store.name}</span>
                 </div>
               )}
@@ -397,15 +397,15 @@ if (loading) {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900">
+              <h1 className="text-3xl font-bold text-white">
                 Seller Dashboard
               </h1>
-              <p className="text-slate-600">Manage your store and track your performance</p>
+              <p className="text-gray-400">Manage your store and track your performance</p>
             </div>
             <div className="flex space-x-2">
               {subscriptionStatus?.showSubscribeNotice && (
                 <Link to="/dashboard/seller/subscription">
-                  <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
+                  <Button className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700">
                     <AlertCircle className="mr-2 w-4 h-4" />
                     {subscriptionStatus.actionText}
                   </Button>
@@ -413,7 +413,7 @@ if (loading) {
               )}
               {subscriptionStatus?.canAddProducts ? (
                 <Link to="/dashboard/seller/products/new">
-                  <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
+                  <Button className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700">
                     <Plus className="mr-2 w-4 h-4" />
                     Add Product
                   </Button>
@@ -421,7 +421,7 @@ if (loading) {
               ) : (
                 <Button 
                   disabled 
-                  className="bg-slate-300 cursor-not-allowed"
+                  className="bg-gray-800 cursor-not-allowed"
                   title={subscriptionStatus?.message}
                 >
                   <Lock className="mr-2 w-4 h-4" />
@@ -473,13 +473,13 @@ if (loading) {
 
         {/* Stats Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0">
+          <Card className="bg-gradient-to-br from-red-600 to-pink-600 text-white border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-100 mb-1">Total Revenue</p>
+                  <p className="text-red-100 mb-1">Total Revenue</p>
                   <p className="text-3xl font-bold">{formatPrice(12450)}</p>
-                  <p className="text-sm text-blue-100 mt-2">↑ 23% from last month</p>
+                  <p className="text-sm text-red-100 mt-2">↑ 23% from last month</p>
                 </div>
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                   <DollarSign className="w-6 h-6" />
@@ -488,13 +488,13 @@ if (loading) {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-0">
+          <Card className="bg-gradient-to-br from-purple-600 to-indigo-600 text-white border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-100 mb-1">Total Orders</p>
+                  <p className="text-purple-100 mb-1">Total Orders</p>
                   <p className="text-3xl font-bold">324</p>
-                  <p className="text-sm text-green-100 mt-2">↑ 18% from last month</p>
+                  <p className="text-sm text-purple-100 mt-2">↑ 18% from last month</p>
                 </div>
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                   <ShoppingCart className="w-6 h-6" />
@@ -503,13 +503,13 @@ if (loading) {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white border-0">
+          <Card className="bg-gradient-to-br from-blue-600 to-cyan-600 text-white border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-100 mb-1">Products</p>
+                  <p className="text-blue-100 mb-1">Products</p>
                   <p className="text-3xl font-bold">48</p>
-                  <p className="text-sm text-purple-100 mt-2">12 active listings</p>
+                  <p className="text-sm text-blue-100 mt-2">12 active listings</p>
                 </div>
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                   <Package className="w-6 h-6" />
@@ -518,13 +518,13 @@ if (loading) {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white border-0">
+          <Card className="bg-gradient-to-br from-amber-600 to-orange-600 text-white border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-orange-100 mb-1">Store Rating</p>
+                  <p className="text-amber-100 mb-1">Store Rating</p>
                   <p className="text-3xl font-bold">4.8</p>
-                  <p className="text-sm text-orange-100 mt-2">256 reviews</p>
+                  <p className="text-sm text-amber-100 mt-2">256 reviews</p>
                 </div>
                 <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
                   <Star className="w-6 h-6" />
@@ -590,16 +590,16 @@ if (loading) {
           <div className="lg:col-span-2 space-y-6">
             {/* Documents Status Card */}
             {store && (store.owner_govt_id_uploaded === 0 || store.store_logo_uploaded === 0) && (
-              <Card className="border-0 shadow-lg bg-gradient-to-r from-orange-50 to-red-50">
+              <Card className="border-0 shadow-lg bg-gradient-to-r from-gray-900 to-gray-800 border border-gray-700">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-4">
-                      <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
-                        <Upload className="w-6 h-6 text-orange-600" />
+                      <div className="w-12 h-12 bg-red-900/30 rounded-lg flex items-center justify-center">
+                        <Upload className="w-6 h-6 text-red-500" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-slate-900">Complete Your Documents</h3>
-                        <p className="text-sm text-slate-600">
+                        <h3 className="font-semibold text-white">Complete Your Documents</h3>
+                        <p className="text-sm text-gray-400">
                           {store.owner_govt_id_uploaded === 0 && store.store_logo_uploaded === 0 
                             ? "Upload your government ID and store logo to complete your profile"
                             : store.owner_govt_id_uploaded === 0
@@ -609,7 +609,7 @@ if (loading) {
                       </div>
                     </div>
                     <Link to="/dashboard/seller/documents">
-                      <Button className="bg-orange-600 hover:bg-orange-700">
+                      <Button className="bg-red-600 hover:bg-red-700">
                         Upload Documents
                       </Button>
                     </Link>
@@ -622,24 +622,24 @@ if (loading) {
               {menuItems.map((item) => (
                 <div key={item.label}>
                   {item.disabled ? (
-                    <Card className="group border-2 border-red-200 bg-red-50/50 cursor-not-allowed opacity-75">
+                    <Card className="group border-2 border-red-900 bg-red-950/30 cursor-not-allowed opacity-75">
                       <CardContent className="p-6">
                         <div className="flex items-start justify-between">
                           <div className="flex items-start space-x-4">
-                            <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                              <Lock className="w-6 h-6 text-red-600" />
+                            <div className="w-12 h-12 bg-red-900/50 rounded-xl flex items-center justify-center flex-shrink-0">
+                              <Lock className="w-6 h-6 text-red-500" />
                             </div>
                             <div>
-                              <h3 className="font-semibold text-slate-900 mb-1 flex items-center">
+                              <h3 className="font-semibold text-white mb-1 flex items-center">
                                 {item.label}
                                 {item.badge && (
-                                  <Badge className="ml-2 bg-red-100 text-red-700 text-xs">
+                                  <Badge className="ml-2 bg-red-900/50 text-red-400 border border-red-800 text-xs">
                                     {item.badge}
                                   </Badge>
                                 )}
                               </h3>
-                              <p className="text-sm text-slate-600">{item.description}</p>
-                              <p className="text-xs text-red-600 mt-2 font-medium">
+                              <p className="text-sm text-gray-400">{item.description}</p>
+                              <p className="text-xs text-red-400 mt-2 font-medium">
                                 {item.badge || "Feature locked - Subscribe to unlock"}
                               </p>
                             </div>
