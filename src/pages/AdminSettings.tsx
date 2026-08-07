@@ -24,12 +24,12 @@ const AdminSettings = () => {
   const [success, setSuccess] = useState("");
 
   const [generalSettings, setGeneralSettings] = useState({
-    siteName: "AliazaStore",
-    siteDescription: "Multi-Vendor Marketplace",
-    contactEmail: "info@aliazastore.com",
-    contactPhone: "+63 912 345 6789",
-    timezone: "Asia/Manila",
-    language: "en-US"
+    siteName: "ifudda",
+    siteDescription: "Premium Adult Wellness Store",
+    contactEmail: "admin@ifudda.com",
+    contactPhone: "+44 20 7123 4567",
+    timezone: "Europe/London",
+    language: "en-GB"
   });
 
   // Load existing settings on mount
@@ -90,8 +90,8 @@ const AdminSettings = () => {
   const [emailSettings, setEmailSettings] = useState({
     smtpHost: "smtp.mailgun.org",
     smtpPort: "587",
-    smtpUser: "postmaster@aliazastore.com",
-    emailFrom: "noreply@aliazastore.com",
+    smtpUser: "postmaster@ifudda.com",
+    emailFrom: "noreply@ifudda.com",
     enableEmailNotifications: true
   });
 
@@ -104,11 +104,11 @@ const AdminSettings = () => {
   });
 
   const [marketplaceSettings, setMarketplaceSettings] = useState({
-    enableRegistration: true,
-    requireSellerApproval: true,
-    commissionRate: "5",
-    currency: "PHP",
-    taxRate: "12"
+    enableRegistration: false,
+    requireSellerApproval: false,
+    commissionRate: "0",
+    currency: "GBP",
+    taxRate: "20"
   });
 
   const handleSaveSettings = async (section: string) => {
