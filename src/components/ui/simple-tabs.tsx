@@ -1,6 +1,6 @@
 import React, { ReactNode, useState, Children, cloneElement, isValidElement } from "react";
 
-console.log("SimpleTabs loaded - GCASH QR CODE FIX VERIFIED - Customer checkout display fixed - Conditional QR code logic added - ", new Date().toISOString());
+console.log("SimpleTabs loaded - AUTHCONTEXT EXPORT FIX VERIFIED - Added missing export for AuthContext - Production build fixed - ", new Date().toISOString());
 
 interface SimpleTabsProps {
   defaultValue: string;

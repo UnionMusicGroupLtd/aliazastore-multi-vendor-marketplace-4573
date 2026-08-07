@@ -34,6 +34,7 @@ console.log("🎯 ADMIN DASHBOARD NOW WORKS - Admin users can now properly acces
 console.log("🆔 ADMIN USER CREATED - admin@ifudda.com created with role: admin in metadata");
 console.log("🔧 LOGIN REDIRECT FIX - Fixed login to check user role directly from Kliv auth instead of relying on async context");
 console.log("🔧 AUTH GUARDS ADDED - Added authentication checks to SimpleAdminDashboard to protect admin routes");
+console.log("🔧 AUTHCONTEXT EXPORT FIX - Added missing export statement for AuthContext in AuthContext.tsx");
 const queryClient = new QueryClient();
 
 const App = () => (
