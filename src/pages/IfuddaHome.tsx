@@ -116,6 +116,7 @@ const IfuddaHome = () => {
                   </span>
                 )}
               </Link>
+              <Link to="/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link>
             </nav>
 
             <button className="md:hidden text-white">
@@ -123,6 +124,9 @@ const IfuddaHome = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
+            <div className="md:hidden">
+              <Link to="/login" className="text-white text-sm">Sign In</Link>
+            </div>
           </div>
         </div>
       </header>
@@ -149,6 +153,12 @@ const IfuddaHome = () => {
               className="bg-gray-800 text-white px-8 py-4 rounded-lg font-semibold hover:bg-gray-700 transition-all duration-200"
             >
               Learn More
+            </Link>
+            <Link
+              to="/login"
+              className="bg-gray-700 text-white px-8 py-4 rounded-lg font-semibold hover:bg-gray-600 transition-all duration-200"
+            >
+              Sign In
             </Link>
           </div>
         </div>
@@ -250,6 +260,7 @@ const IfuddaHome = () => {
                 <li><Link to="/products" className="text-gray-400 hover:text-white text-sm">Products</Link></li>
                 <li><Link to="/about" className="text-gray-400 hover:text-white text-sm">About Us</Link></li>
                 <li><Link to="/cart" className="text-gray-400 hover:text-white text-sm">Shopping Cart</Link></li>
+                <li><Link to="/login" className="text-gray-400 hover:text-white text-sm">Sign In</Link></li>
               </ul>
             </div>
 
