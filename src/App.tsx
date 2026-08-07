@@ -15,7 +15,7 @@ import Terms from "./pages/Terms";
 import About from "./pages/About";
 import AdminProductManagement from "./pages/AdminProductManagement";
 import CategoryPageNew from "./pages/CategoryPageNew";
-import SimpleAdminDashboard from "./pages/SimpleAdminDashboard";
+import AdminDashboardNew from "./pages/AdminDashboardNew";
 import LoginNew from "./pages/LoginNew";
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
@@ -34,6 +34,7 @@ console.log("🎯 ADMIN DASHBOARD NOW WORKS - Admin users can now properly acces
 console.log("🆔 ADMIN USER CREATED - admin@ifudda.com created with role: admin in metadata");
 console.log("🔧 LOGIN REDIRECT FIX - Fixed login to check user role directly from Kliv auth instead of relying on async context");
 console.log("🔧 AUTH GUARDS ADDED - Added authentication checks to SimpleAdminDashboard to protect admin routes");
+console.log("🚀 NEW ADMIN DASHBOARD BUILT - Complete admin dashboard without complex auth dependencies");
 console.log("🔧 AUTHCONTEXT EXPORT FIX - Added missing export statement for AuthContext in AuthContext.tsx");
 const queryClient = new QueryClient();
 
@@ -53,7 +54,7 @@ const App = () => (
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
-              <Route path="/admin" element={<SimpleAdminDashboard />} />
+              <Route path="/admin" element={<AdminDashboardNew />} />
               <Route path="/admin/products" element={<AdminProductManagement />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
