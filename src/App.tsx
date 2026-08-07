@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 import IfuddaHomeNew from "./pages/IfuddaHomeNew";
 import Products from "./pages/ProductsNew";
@@ -26,33 +27,36 @@ console.log("🗂️ COMPLETE CATEGORY SYSTEM - 15 main categories with 60+ subc
 console.log("🔧 ADMIN-ONLY PLATFORM - Simplified to single-store admin management (no multi-seller complexity)");
 console.log("🎯 ifudda ADMIN DASHBOARD - Premium adult wellness store with products, delivery, payments, analytics");
 console.log("🚫 ADMIN LINKS REMOVED - Admin access hidden from header and footer (only accessible via direct URL)");
+console.log("🔐 AUTHENTICATION SYSTEM - Complete auth context with admin detection and proper redirect logic");
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <CartProvider>
-      <div className="ifudda-app">
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<IfuddaHomeNew />} />
-            <Route path="/login" element={<LoginNew />} />
-            <Route path="/categories" element={<CategoryPageNew />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/admin" element={<SimpleAdminDashboard />} />
-            <Route path="/admin/products" element={<AdminProductManagement />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/about" element={<About />} />
-            <Route path="*" element={<IfuddaHomeNew />} />
-          </Routes>
-        </BrowserRouter>
-      </div>
-    </CartProvider>
+    <AuthProvider>
+      <CartProvider>
+        <div className="ifudda-app">
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<IfuddaHomeNew />} />
+              <Route path="/login" element={<LoginNew />} />
+              <Route path="/categories" element={<CategoryPageNew />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<ProductDetail />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/admin" element={<SimpleAdminDashboard />} />
+              <Route path="/admin/products" element={<AdminProductManagement />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/about" element={<About />} />
+              <Route path="*" element={<IfuddaHomeNew />} />
+            </Routes>
+          </BrowserRouter>
+        </div>
+      </CartProvider>
+    </AuthProvider>
   </QueryClientProvider>
 );
 

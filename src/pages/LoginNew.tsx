@@ -1,15 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Mail, Lock, User, AlertCircle, CheckCircle2, ArrowRight, Users } from "lucide-react";
-import auth from "@/lib/shared/kliv-auth.js";
+import { Mail, Lock, User, AlertCircle, CheckCircle2, ArrowRight, Users, Shield } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const LoginNew = () => {
   const navigate = useNavigate();
+  const { signIn, user, isAdmin } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -30,6 +31,20 @@ const LoginNew = () => {
     confirmPassword: ""
   });
 
+  // Check if user is already logged in
+  useEffect(() => {
+    if (user) {
+      console.log("User already logged in:", user);
+      if (isAdmin) {
+        console.log("Admin user detected, redirecting to /admin");
+        navigate("/admin");
+      } else {
+        console.log("Normal user detected, redirecting to home");
+        navigate("/");
+      }
+    }
+  }, [user, isAdmin, navigate]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -37,11 +52,22 @@ const LoginNew = () => {
     setLoading(true);
 
     try {
-      const user = await auth.signIn(loginForm.email, loginForm.password);
-      console.log("User logged in:", user);
+      await signIn(loginForm.email, loginForm.password);
+      console.log("Login successful!");
       
-      setSuccess("Login successful! Redirecting to home...");
-      setTimeout(() => navigate("/"), 1000);
+      setSuccess("Login successful! Redirecting...");
+      
+      // Add a small delay to allow the auth state to propagate
+      setTimeout(() => {
+        if (isAdmin) {
+          console.log("Redirecting to admin dashboard");
+          navigate("/admin");
+        } else {
+          console.log("Redirecting to home");
+          navigate("/");
+        }
+      }, 500);
+      
     } catch (err: any) {
       console.error("Login error:", err);
       if (err.message?.includes("bad_credentials")) {
@@ -58,50 +84,7 @@ const LoginNew = () => {
 
   const handleRegistration = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
-    setLoading(true);
-
-    // Validate passwords match
-    if (registration.password !== registration.confirmPassword) {
-      setError("Passwords do not match");
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const user = await auth.signUp(
-        registration.email,
-        registration.password,
-        `${registration.firstName} ${registration.lastName}`,
-        "en-US"
-      );
-      console.log("Registration successful:", user);
-      setSuccess("Registration successful! You can now sign in.");
-      
-      // Reset form and switch to login
-      setRegistration({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: ""
-      });
-      setShowRegistration(false);
-      
-      setTimeout(() => {
-        setSuccess("");
-      }, 3000);
-    } catch (err: any) {
-      console.error("Registration error:", err);
-      if (err.message?.includes("email_exists")) {
-        setError("An account with this email already exists");
-      } else {
-        setError(err.message || "Registration failed");
-      }
-    } finally {
-      setLoading(false);
-    }
+    setError("Registration is currently disabled. Please contact admin@ifudda.com for account access.");
   };
 
   return (

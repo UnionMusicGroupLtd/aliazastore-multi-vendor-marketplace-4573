@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
   Shield, ShoppingBag, Heart, Lock, Truck, Star, CheckCircle, 
-  ArrowRight, TrendingUp, Clock, Flame, Award, Sparkles 
+  ArrowRight, TrendingUp, Clock, Flame, Award, Sparkles, LogOut 
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
 
 interface Product {
   _row_id: number;
@@ -27,6 +28,7 @@ const IfuddaHomeNew = () => {
   const [showVerification, setShowVerification] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
   const { getCartCount, addToCart } = useCart();
+  const { user, isAdmin, signOut } = useAuth();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [activeHeroSlide, setActiveHeroSlide] = useState(0);
 
@@ -280,7 +282,26 @@ const IfuddaHomeNew = () => {
               <Link to="/categories" className="text-gray-300 hover:text-white transition-colors">Categories</Link>
               <Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
-              <Link to="/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link>
+              
+              {user ? (
+                <>
+                  {isAdmin ? (
+                    <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold">Admin Dashboard</Link>
+                  ) : (
+                    <span className="text-gray-300">Welcome, {user.email}</span>
+                  )}
+                  <button 
+                    onClick={signOut}
+                    className="text-gray-300 hover:text-white transition-colors flex items-center"
+                  >
+                    <LogOut className="w-4 h-4 mr-1" />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link to="/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link>
+              )}
+              
               <Link to="/cart" className="text-gray-300 hover:text-white transition-colors flex items-center">
                 <ShoppingBag className="w-5 h-5 mr-1" />
                 {getCartCount() > 0 && (
@@ -292,7 +313,22 @@ const IfuddaHomeNew = () => {
             </nav>
 
             <div className="md:hidden flex items-center space-x-4">
-              <Link to="/login" className="text-white text-sm">Sign In</Link>
+              {user ? (
+                <>
+                  {isAdmin && (
+                    <Link to="/admin" className="text-white text-sm">Admin</Link>
+                  )}
+                  <button 
+                    onClick={signOut}
+                    className="text-white text-sm flex items-center"
+                  >
+                    <LogOut className="w-4 h-4 mr-1" />
+                    Sign Out
+                  </button>
+                </>
+              ) : (
+                <Link to="/login" className="text-white text-sm">Sign In</Link>
+              )}
             </div>
           </div>
         </div>
