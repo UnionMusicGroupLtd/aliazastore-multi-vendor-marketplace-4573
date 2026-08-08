@@ -291,14 +291,6 @@ const IfuddaHomeNew = () => {
               <Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
               
-              {/* TEMPORARY: Direct Admin Access for Testing */}
-              <Link 
-                to="/admin" 
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-              >
-                🔧 Admin Dashboard
-              </Link>
-              
               {user ? (
                 <button 
                   onClick={signOut}

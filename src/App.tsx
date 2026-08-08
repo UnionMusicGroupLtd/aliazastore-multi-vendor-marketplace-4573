@@ -47,8 +47,8 @@ console.log("🚀 ADMIN LOGIN REDIRECT ENHANCED - Uses AuthContext state for rel
 console.log("🔍 ADMIN DASHBOARD DEBUGGING - Added component mount logging to track if dashboard loads");
 console.log("🏠 ADMIN HOME PAGE REDIRECT - Admin users are automatically redirected from home to /admin");
 console.log("🔧 CONSISTENT AUTH STATE - All auth checks now use AuthContext for consistency");
-console.log("🔧 DIRECT ADMIN ACCESS BUTTON - Added temporary admin access button to homepage for testing");
 console.log("🔧 FORCED ADMIN NAVIGATION - Using window.location.href for reliable admin dashboard access");
+console.log("✅ ADMIN BUTTON REMOVED - No admin links visible in public navigation (only accessible via direct URL)");
 const queryClient = new QueryClient();
 
 const App = () => (
