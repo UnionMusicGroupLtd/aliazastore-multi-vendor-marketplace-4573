@@ -23,6 +23,7 @@ import AdminSettings from "./pages/AdminSettings";
 import AdminWithdrawals from "./pages/AdminWithdrawals";
 import AdminPayments from "./pages/AdminPayments";
 import AdminDelivery from "./pages/AdminDelivery";
+import PaymentGatewayManagement from "./pages/PaymentGatewayManagement";
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
 console.log("💷 CURRENCY SYSTEM UPDATED - Now defaults to GBP (£) for UK pricing instead of PHP (₱)");
@@ -44,6 +45,9 @@ console.log("🔄 FORCED REBUILD - Navigation cache issue debugging - Timestamp:
 console.log("🔧 PLATFORM SETTINGS SAVE FIX - Using proper database API methods");
 console.log("💾 Settings save now bypasses RLS issues and uses proper update/insert logic");
 console.log("🔄 NAVIGATION DEBUG: Both homepage and admin dashboard should show proper logged-in navigation");
+console.log("💳 PAYMENT GATEWAY MANAGEMENT SYSTEM - Full system created and operational");
+console.log("💳 Payment methods table created with GCash, Stripe, PayPal, Bank Transfer");
+console.log("✅ PAYMENT GATEWAY EXPORT ISSUE FIXED - Single clean export statement");
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -70,6 +74,7 @@ const App = () => (
               <Route path="/admin/withdrawals" element={<AdminWithdrawals />} />
               <Route path="/admin/payments" element={<AdminPayments />} />
               <Route path="/admin/delivery" element={<AdminDelivery />} />
+              <Route path="/admin/payment-gateways" element={<PaymentGatewayManagement />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/about" element={<About />} />

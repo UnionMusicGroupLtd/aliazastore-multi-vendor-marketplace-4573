@@ -650,7 +650,7 @@ const PaymentGatewayManagement = () => {
                   <Input
                     value={formData.gcash_business_name}
                     onChange={(e) => setFormData({...formData, gcash_business_name: e.target.value})}
-                    placeholder="Aliaza Store Platform"
+                    placeholder="ifudda"
                   />
                 </div>
 
@@ -659,7 +659,7 @@ const PaymentGatewayManagement = () => {
                   <Input
                     value={formData.gcash_number}
                     onChange={(e) => setFormData({...formData, gcash_number: e.target.value})}
-                    placeholder="09172345678"
+                    placeholder="09912633528"
                     type="tel"
                   />
                   <p className="text-xs text-slate-500 mt-1">Customers can send payment to this GCash number</p>
@@ -689,37 +689,30 @@ const PaymentGatewayManagement = () => {
                       </Button>
                       <input
                         type="file"
-                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                        onChange={handleQRUpload}
-                        disabled={uploadingQR}
-                        className="hidden"
                         id="qr-code-file-input"
+                        accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                        className="hidden"
+                        onChange={handleQRUpload}
                       />
                     </div>
-                    {selectedFileName && !uploadingQR && (
-                      <div className="flex items-center gap-2 text-sm text-green-600">
-                        <CheckCircle className="w-4 h-4" />
-                        <span className="font-medium">{selectedFileName} selected</span>
+                    {selectedFileName && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                        <span className="font-medium">✅ {selectedFileName}</span>
                       </div>
                     )}
-                    <p className="text-xs text-slate-500">
-                      Upload your InstaPay QR code image. Customers can scan this to pay directly in GCash.
-                    </p>
+                    <p className="text-xs text-slate-500 mt-1">Upload GCash InstaPay QR code image (JPG, PNG, GIF, WebP, max 5MB)</p>
                   </div>
                 </div>
-                
+
                 {formData.gcash_qr_code && (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                    <div className="flex items-center gap-2 text-sm text-green-800">
-                      <CheckCircle className="w-4 h-4" />
-                      <span className="font-medium">✅ QR Code Image Uploaded!</span>
-                    </div>
-                    <p className="text-xs text-green-600 mt-1">This InstaPay QR code will open GCash app when scanned. Click 'Save Changes' to apply.</p>
-                    <div className="mt-3 flex items-center justify-center">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <p className="text-sm font-semibold text-blue-900 mb-2">✅ QR Code Image Uploaded!</p>
+                    <p className="text-xs text-blue-700 mb-3">This InstaPay QR code will open GCash app when scanned. Click 'Save Changes' to apply.</p>
+                    <div className="flex items-center justify-center">
                       <img 
                         src={formData.gcash_qr_code} 
                         alt="GCash QR Code Preview" 
-                        className="w-24 h-24 object-contain border border-green-300 rounded"
+                        className="w-24 h-24 object-contain border border-blue-300 rounded"
                       />
                     </div>
                   </div>
@@ -753,12 +746,4 @@ const PaymentGatewayManagement = () => {
   );
 };
 
-export default PaymentGatewayManagement;
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
-    );
-  };
-// Force rebuild - PaymentGatewayManagement export fix verified
 export default PaymentGatewayManagement;

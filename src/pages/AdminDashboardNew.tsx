@@ -6,7 +6,7 @@ import {
   Package, ShoppingCart, Users, TrendingUp, DollarSign,
   Settings, LogOut, Plus, Truck, CreditCard,
   Store, Upload, CheckCircle, ChevronRight, Badge,
-  Home, Menu, X
+  Home, Menu, X, Wallet
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -157,6 +157,13 @@ const AdminDashboardNew = () => {
       description: "Configure store preferences",
       href: "/admin/settings",
       color: "from-gray-600 to-slate-600"
+    },
+    {
+      icon: Wallet,
+      label: "Payment Gateways",
+      description: "Manage GCash, Stripe, PayPal and Bank Transfer",
+      href: "/admin/payment-gateways",
+      color: "from-green-600 to-emerald-600"
     }
   ];
 
