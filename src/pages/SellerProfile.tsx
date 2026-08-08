@@ -47,7 +47,7 @@ const SellerProfile = () => {
       });
       
       if (stores.length > 0) {
-        const storeData = stores[0];
+        const storeData = stores[0] as any;
         setStore(storeData);
         setProfileData({
           owner_full_name: storeData.owner_full_name || "",

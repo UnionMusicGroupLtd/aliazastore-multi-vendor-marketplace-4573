@@ -153,7 +153,8 @@ const SellerDashboard = () => {
       }
     } catch (error) {
       console.error("❌ Error loading dashboard data:", error);
-      console.error("Error details:", error.message, error.stack);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error("Error details:", errorMessage, error instanceof Error ? error.stack : 'No stack trace');
       // Set default values to prevent white screen
       setStore({
         name: "Error Loading Store",

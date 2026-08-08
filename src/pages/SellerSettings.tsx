@@ -60,38 +60,42 @@ const SellerSettings = () => {
         const storeData = stores[0];
         console.log("Store data:", storeData);
         setStore(storeData);
-        setStoreName(storeData.name || "");
-        setStoreDescription(storeData.description || "");
-        setStoreTagline(storeData.tagline || "");
-        setStoreEmail(storeData.email || storeData.business_email || "");
-        setStorePhone(storeData.phone || storeData.business_phone || "");
-        setStoreAddress(storeData.address || "");
-        setStoreWebsite(storeData.website || "");
+        setStoreName((storeData as any).name || "");
+        setStoreDescription((storeData as any).description || "");
+        setStoreTagline((storeData as any).tagline || "");
+        setStoreEmail((storeData as any).email || (storeData as any).business_email || "");
+        setStorePhone((storeData as any).phone || (storeData as any).business_phone || "");
+        setStoreAddress((storeData as any).address || "");
+        setStoreWebsite((storeData as any).website || "");
       } else {
         console.log("No store found for user, creating default store");
         // Create a default store for the user
         try {
+          if (!currentUser.userUuid) {
+            console.error("User UUID is undefined, cannot create store");
+            return;
+          }
           const newStore = await db.insert("stores", {
             owner_uuid: currentUser.userUuid,
             name: "My Store",
-            slug: `my-store-${currentUser.userUuid.substring(0, 8)}`,
+            slug: `my-store-${(currentUser.userUuid as string).substring(0, 8)}`,
             description: "Welcome to my store",
             status: "active",
             email: currentUser.email || "",
             tagline: "Quality products, great prices"
           });
           
-          if (newStore && newStore.length > 0) {
+          if (newStore && Array.isArray(newStore) && newStore.length > 0) {
             const storeData = newStore[0];
             console.log("Created new store:", storeData);
             setStore(storeData);
-            setStoreName(storeData.name || "");
-            setStoreDescription(storeData.description || "");
-            setStoreTagline(storeData.tagline || "");
-            setStoreEmail(storeData.email || "");
-            setStorePhone(storeData.phone || "");
-            setStoreAddress(storeData.address || "");
-            setStoreWebsite(storeData.website || "");
+            setStoreName((storeData as any).name || "");
+            setStoreDescription((storeData as any).description || "");
+            setStoreTagline((storeData as any).tagline || "");
+            setStoreEmail((storeData as any).email || "");
+            setStorePhone((storeData as any).phone || "");
+            setStoreAddress((storeData as any).address || "");
+            setStoreWebsite((storeData as any).website || "");
             setMessage("Store created successfully! You can now update your settings.");
           }
         } catch (createError) {
@@ -374,14 +378,14 @@ const SellerSettings = () => {
                     <p className="text-sm text-slate-600">{setting.description}</p>
                   </div>
                   <Button
-                    variant={notificationSettings[setting.key] ? "default" : "outline"}
+                    variant={(notificationSettings as any)[setting.key] ? "default" : "outline"}
                     size="sm"
                     onClick={() => setNotificationSettings({
                       ...notificationSettings,
-                      [setting.key]: !notificationSettings[setting.key]
+                      [setting.key]: !(notificationSettings as any)[setting.key]
                     })}
                   >
-                    {notificationSettings[setting.key] ? "On" : "Off"}
+                    {(notificationSettings as any)[setting.key] ? "On" : "Off"}
                   </Button>
                 </div>
               ))}

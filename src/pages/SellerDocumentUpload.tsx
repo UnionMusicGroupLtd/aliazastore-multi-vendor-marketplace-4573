@@ -48,7 +48,7 @@ const SellerDocumentUpload = () => {
         const store = stores[0];
         setStoreData(store);
         setFormData({
-          owner_govt_id: store.owner_govt_id || "",
+          owner_govt_id: (store.owner_govt_id as string) || "",
           owner_govt_id_file: null,
           store_logo: null
         });

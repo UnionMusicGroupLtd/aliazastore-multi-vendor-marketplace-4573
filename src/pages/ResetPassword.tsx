@@ -51,6 +51,10 @@ const ResetPasswordPage = () => {
 
     try {
       // Complete password reset through AliazaStore platform
+      if (!token) {
+        setError("Invalid password reset link. Please request a new password reset.");
+        return;
+      }
       await auth.completePasswordReset(token, password);
       setSuccess(true);
     } catch (err: any) {

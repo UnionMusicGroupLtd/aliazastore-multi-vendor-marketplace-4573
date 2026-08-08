@@ -22,8 +22,8 @@ const PaymentGatewayManagementSimple = () => {
   const loadCurrentSettings = async () => {
     try {
       const result = await db.query("payment_methods", { gateway_type: "eq.gcash" });
-      if (result && result.length > 0) {
-        const gateway = result[0];
+      if (result && Array.isArray(result) && result.length > 0) {
+        const gateway = result[0] as any;
         setGcashNumber(gateway.gcash_number || "");
         setGcashQRCode(gateway.gcash_qr_code || "");
         console.log("✅ Loaded current GCash settings:", {

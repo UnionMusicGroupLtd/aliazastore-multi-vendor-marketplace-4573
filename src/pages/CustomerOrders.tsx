@@ -34,12 +34,15 @@ const CustomerOrders = () => {
       for (const item of order.items) {
         await addToCart({
           _row_id: Date.now() + Math.random(), // Generate temporary ID
+          product_id: Date.now() + Math.random(), // Generate temporary product ID
+          id: Date.now() + Math.random(), // Alias for _row_id
           name: item.name,
           price: item.price,
+          original_price: item.price, // Use same price as original
           quantity: item.quantity,
-          primary_image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop', // Default image
+          image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop', // Default image
           store_name: 'Various Sellers',
-          category: 'Various'
+          rating: 4.5 // Default rating
         });
         addedCount += item.quantity;
       }

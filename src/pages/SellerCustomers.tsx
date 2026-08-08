@@ -53,7 +53,7 @@ const SellerCustomers = () => {
           }
           const customer = uniqueCustomers.get(order.customer_email);
           customer.totalOrders += 1;
-          customer.totalSpent += parseFloat(order.total) || 0;
+          customer.totalSpent += parseFloat(order.total as string) || 0;
         });
 
         setCustomers(Array.from(uniqueCustomers.values()));

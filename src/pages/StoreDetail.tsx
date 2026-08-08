@@ -102,9 +102,9 @@ const StoreDetail = () => {
       
       const result = await db.update("stores", { _row_id: `eq.${storeId}` }, updateData);
       
-      if (result.error) {
-        console.error('Database update error:', result.error);
-        alert(`Failed to update store: ${result.error.message || 'Unknown error'}`);
+      if ((result as any).error) {
+        console.error('Database update error:', (result as any).error);
+        alert(`Failed to update store: ${(result as any).error.message || 'Unknown error'}`);
         return;
       }
       

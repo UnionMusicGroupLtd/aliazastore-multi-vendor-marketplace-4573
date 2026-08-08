@@ -31,13 +31,13 @@ const SellerMessages = () => {
       }
 
       // Load real messages from database
-      const { data: sellerMessages, error } = await db.query('seller_messages', {
-        seller_uuid: `eq.${user.user_uuid}`,
+      const sellerMessages = await db.query('seller_messages', {
+        seller_uuid: `eq.${user.userUuid}`,
         order: 'created_at.desc'
       });
 
-      if (error) {
-        console.error("Error loading messages:", error);
+      if (!sellerMessages) {
+        console.error("Error loading messages:");
         setMessages([]);
         return;
       }
@@ -59,7 +59,9 @@ const SellerMessages = () => {
 
       // Auto-create sample messages if empty (for new users)
       if (transformedMessages.length === 0) {
-        await createSampleMessages(user.user_uuid);
+        if (user.userUuid) {
+          await createSampleMessages(user.userUuid);
+        }
       }
     } catch (error) {
       console.error("Error loading messages:", error);
@@ -121,7 +123,7 @@ const SellerMessages = () => {
       if (!user) return;
 
       await db.update('seller_messages', 
-        { _row_id: `eq.${messageId}`, seller_uuid: `eq.${user.user_uuid}` },
+        { _row_id: `eq.${messageId}`, seller_uuid: `eq.${user.userUuid}` },
         { 
           unread: 0,
           read_at: Math.floor(Date.now() / 1000),
@@ -147,7 +149,7 @@ const SellerMessages = () => {
       
       for (const msg of unreadMessages) {
         await db.update('seller_messages',
-          { _row_id: `eq.${msg.id}`, seller_uuid: `eq.${user.user_uuid}` },
+          { _row_id: `eq.${msg.id}`, seller_uuid: `eq.${user.userUuid}` },
           {
             unread: 0,
             read_at: Math.floor(Date.now() / 1000),

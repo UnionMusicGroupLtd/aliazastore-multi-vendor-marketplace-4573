@@ -108,7 +108,7 @@ const UserManagement = () => {
       setError("");
       const newEnabledStatus = user.enabled === 0 ? 1 : 0;
       await auth.updateUserByUuid(user.user_uuid, {
-        enabled: newEnabledStatus
+        enabled: newEnabledStatus === 1
       });
       setSuccess(`User ${user.enabled ? "disabled" : "enabled"} successfully!`);
       loadUsers();

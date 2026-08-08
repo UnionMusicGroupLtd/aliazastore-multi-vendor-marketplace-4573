@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ShoppingBag, Mail, Lock, User, Store, AlertCircle, CheckCircle2, ArrowRight } from "lucide-react";
 import auth from "@/lib/shared/kliv-auth.js";
 import { notifyNewShopRegistration } from "@/lib/notifications";
@@ -141,9 +140,20 @@ const Register = () => {
               {/* Account Type Selection */}
               <div className="space-y-2">
                 <Label>I want to</Label>
-                <RadioGroup value={accountType} onValueChange={setAccountType}>
-                  <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50 cursor-pointer">
-                    <RadioGroupItem value="customer" id="customer" />
+                <div className="space-y-2">
+                  <div 
+                    className={`flex items-center space-x-2 p-3 border rounded-lg cursor-pointer transition-colors ${accountType === 'customer' ? 'bg-orange-50 border-orange-500' : 'hover:bg-slate-50'}`}
+                    onClick={() => setAccountType('customer')}
+                  >
+                    <input 
+                      type="radio" 
+                      name="accountType" 
+                      id="customer" 
+                      value="customer"
+                      checked={accountType === 'customer'}
+                      onChange={(e) => setAccountType(e.target.value)}
+                      className="w-4 h-4 text-orange-600"
+                    />
                     <label htmlFor="customer" className="flex-1 cursor-pointer">
                       <div className="flex items-center space-x-2">
                         <User className="w-5 h-5 text-orange-600" />
@@ -152,8 +162,19 @@ const Register = () => {
                       <p className="text-sm text-slate-500 mt-1">Shop from thousands of sellers</p>
                     </label>
                   </div>
-                  <div className="flex items-center space-x-2 p-3 border rounded-lg hover:bg-slate-50 cursor-pointer">
-                    <RadioGroupItem value="seller" id="seller" />
+                  <div 
+                    className={`flex items-center space-x-2 p-3 border rounded-lg cursor-pointer transition-colors ${accountType === 'seller' ? 'bg-orange-50 border-orange-500' : 'hover:bg-slate-50'}`}
+                    onClick={() => setAccountType('seller')}
+                  >
+                    <input 
+                      type="radio" 
+                      name="accountType" 
+                      id="seller" 
+                      value="seller"
+                      checked={accountType === 'seller'}
+                      onChange={(e) => setAccountType(e.target.value)}
+                      className="w-4 h-4 text-orange-600"
+                    />
                     <label htmlFor="seller" className="flex-1 cursor-pointer">
                       <div className="flex items-center space-x-2">
                         <Store className="w-5 h-5 text-orange-600" />
@@ -162,7 +183,7 @@ const Register = () => {
                       <p className="text-sm text-slate-500 mt-1">Open your own store</p>
                     </label>
                   </div>
-                </RadioGroup>
+                </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -261,8 +282,9 @@ const Register = () => {
               <div className="flex items-start space-x-2">
                 <Checkbox
                   id="terms"
+                  name="terms"
                   checked={formData.acceptTerms}
-                  onCheckedChange={(checked) => setFormData({ ...formData, acceptTerms: checked as boolean })}
+                  onChange={(e) => setFormData({ ...formData, acceptTerms: e.target.checked })}
                 />
                 <label htmlFor="terms" className="text-sm text-slate-600 cursor-pointer">
                   I accept the{" "}

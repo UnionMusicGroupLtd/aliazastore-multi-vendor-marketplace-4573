@@ -34,13 +34,13 @@ const SellerMessageReply = () => {
       }
 
       // Load real message from database
-      const { data: messageData, error } = await db.query('seller_messages', {
+      const messageData = await db.query('seller_messages', {
         _row_id: `eq.${messageId}`,
-        seller_uuid: `eq.${user.user_uuid}`
+        seller_uuid: `eq.${user.userUuid}`
       });
 
-      if (error || !messageData || messageData.length === 0) {
-        console.error("Message not found or error loading:", error);
+      if (!messageData || messageData.length === 0) {
+        console.error("Message not found or error loading:");
         // Set default message
         setMessage({
           id: 1,
@@ -63,7 +63,7 @@ const SellerMessageReply = () => {
       // Mark message as read when opened
       if (dbMessage.unread === 1) {
         await db.update('seller_messages',
-          { _row_id: `eq.${messageId}`, seller_uuid: `eq.${user.user_uuid}` },
+          { _row_id: `eq.${messageId}`, seller_uuid: `eq.${user.userUuid}` },
           {
             unread: 0,
             read_at: Math.floor(Date.now() / 1000),
@@ -78,11 +78,13 @@ const SellerMessageReply = () => {
         customer_name: dbMessage.customer_name,
         customer_email: dbMessage.customer_email,
         message: dbMessage.message,
-        timestamp: new Date(dbMessage.created_at * 1000).toISOString(),
+        timestamp: new Date((dbMessage.created_at as number) * 1000).toISOString(),
         unread: dbMessage.unread === 1,
         product_id: dbMessage.product_id,
         product_name: dbMessage.product_name,
-        replies: dbMessage.reply_history ? JSON.parse(dbMessage.reply_history) : []
+        replies: (dbMessage.reply_history && typeof dbMessage.reply_history === 'string' && dbMessage.reply_history !== '{}') 
+          ? JSON.parse(dbMessage.reply_history) 
+          : []
       };
 
       setMessage(transformedMessage);
@@ -120,7 +122,7 @@ const SellerMessageReply = () => {
 
       // Update message in database with new reply
       await db.update('seller_messages',
-        { _row_id: `eq.${message.id}`, seller_uuid: `eq.${user.user_uuid}` },
+        { _row_id: `eq.${message.id}`, seller_uuid: `eq.${user.userUuid}` },
         {
           reply_history: JSON.stringify(updatedHistory),
           updated_at: Math.floor(Date.now() / 1000)
@@ -153,7 +155,7 @@ const SellerMessageReply = () => {
 
       // Update message as resolved in database
       await db.update('seller_messages',
-        { _row_id: `eq.${message.id}`, seller_uuid: `eq.${user.user_uuid}` },
+        { _row_id: `eq.${message.id}`, seller_uuid: `eq.${user.userUuid}` },
         {
           unread: 0,
           read_at: Math.floor(Date.now() / 1000),

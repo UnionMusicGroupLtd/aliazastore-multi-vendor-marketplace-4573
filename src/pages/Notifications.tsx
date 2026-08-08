@@ -39,9 +39,11 @@ const Notifications = () => {
       // If no notifications exist, create sample ones
       if (customerNotifications.length === 0) {
         console.log("No notifications found, creating sample ones");
-        await createSampleNotifications(currentUser.userUuid);
-        // Reload after creating samples
-        setTimeout(() => loadNotifications(), 500);
+        if (currentUser.userUuid) {
+          await createSampleNotifications(currentUser.userUuid);
+          // Reload after creating samples
+          setTimeout(() => loadNotifications(), 500);
+        }
       } else {
         setNotifications(customerNotifications);
       }
