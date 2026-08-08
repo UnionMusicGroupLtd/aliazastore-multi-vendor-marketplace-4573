@@ -78,7 +78,8 @@ const LoginNew = () => {
           
           if (isAdmin) {
             console.log("✅✅✅ ADMIN USER DETECTED - Redirecting to /admin");
-            navigate("/admin");
+            // Force direct navigation to bypass any React Router issues
+            window.location.href = "/admin";
           } else {
             console.log("✅ Normal user - Redirecting to home");
             navigate("/");
