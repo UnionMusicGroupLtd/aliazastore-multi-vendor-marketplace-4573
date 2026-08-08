@@ -475,12 +475,12 @@ const PaymentGatewayManagement = () => {
 
       {/* Edit Gateway Modal */}
       <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
           <DialogHeader>
             <DialogTitle>Configure Payment Gateway</DialogTitle>
             <DialogDescription>Update payment gateway settings</DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="flex-1 overflow-y-auto space-y-4 px-1">
             {error && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -726,25 +726,34 @@ const PaymentGatewayManagement = () => {
                 )}
               </div>
             )}
+          </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setShowEditModal(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="button"
-                  className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800"
-                  onClick={handleUpdateGateway}
-                  disabled={!formData.gateway_name}
-                >
-                  <CheckCircle className="w-4 h-4 mr-2" />
-                  Save Changes
-                </Button>
-              </div>
+          {/* Fixed footer - always visible */}
+          <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 shrink-0">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowEditModal(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800"
+              onClick={handleUpdateGateway}
+              disabled={!formData.gateway_name}
+            >
+              <CheckCircle className="w-4 h-4 mr-2" />
+              Save Changes
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default PaymentGatewayManagement;
             </div>
           </DialogContent>
         </Dialog>
