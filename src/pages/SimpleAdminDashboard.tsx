@@ -11,8 +11,12 @@ import {
 import { AuthContext } from "@/context/AuthContext";
 
 const SimpleAdminDashboard = () => {
-  const { user, isAdmin, signOut } = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
   const navigate = useNavigate();
+  
+  const user = authContext?.user;
+  const isAdmin = authContext?.isAdmin || false;
+  const signOut = authContext?.signOut || (() => Promise.resolve());
   
   // Add authentication check and redirect
   useEffect(() => {

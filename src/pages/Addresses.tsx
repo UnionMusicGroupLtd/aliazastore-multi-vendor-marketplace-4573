@@ -8,13 +8,25 @@ import { SimpleModal } from "@/components/ui/simple-modal";
 import { ShoppingBag, ArrowLeft, MapPin, Plus, Trash2, Edit, CheckCircle2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
+interface Address {
+  _row_id: number;
+  label: string;
+  name: string;
+  address: string;
+  city: string;
+  province: string;
+  postal_code: string;
+  phone: string;
+  is_default: boolean;
+}
+
 const Addresses = () => {
   const navigate = useNavigate();
-  const [addresses, setAddresses] = useState([]);
+  const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const [message, setMessage] = useState({ type: "", text: "" });
   const [formData, setFormData] = useState({
     label: "",
