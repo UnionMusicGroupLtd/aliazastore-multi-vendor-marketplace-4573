@@ -15,6 +15,14 @@ const LoginNew = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showRegistration, setShowRegistration] = useState(false);
+  const [isAdminEmail, setIsAdminEmail] = useState(false);
+
+  // Admin emails that should get admin UI and redirect
+  const ADMIN_EMAILS = [
+    'info@unionmusicgroup.co.uk',
+    'admin@ifudda.com',
+    'support@ifudda.com'
+  ];
 
   // Login form
   const [loginForm, setLoginForm] = useState({
@@ -54,6 +62,21 @@ const LoginNew = () => {
     
     checkUserAuth();
   }, [user, isAdmin, navigate]);
+
+  // Real-time admin email detection
+  useEffect(() => {
+    const email = loginForm.email.toLowerCase().trim();
+    const detectedAdmin = ADMIN_EMAILS.some(adminEmail => 
+      email === adminEmail.toLowerCase()
+    );
+    
+    if (detectedAdmin && !isAdminEmail) {
+      console.log("🛡️ Admin email detected:", email);
+      setIsAdminEmail(true);
+    } else if (!detectedAdmin && isAdminEmail) {
+      setIsAdminEmail(false);
+    }
+  }, [loginForm.email, isAdminEmail]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -107,7 +130,30 @@ const LoginNew = () => {
 
   const handleRegistration = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("Registration is currently disabled. Please contact admin@ifudda.com for account access.");
+    setError("");
+    setSuccess("");
+    setLoading(true);
+
+    try {
+      // Check if user is trying to register with an admin email
+      const isEmailAdmin = ADMIN_EMAILS.some(adminEmail => 
+        registration.email.toLowerCase().trim() === adminEmail.toLowerCase()
+      );
+
+      if (isEmailAdmin) {
+        setError("This email is reserved for admin accounts. Please contact support@ifudda.com for access.");
+        setLoading(false);
+        return;
+      }
+
+      // For now, disable all registrations
+      setError("Registration is currently disabled. Please contact admin@ifudda.com for account access.");
+    } catch (err: any) {
+      console.error("Registration error:", err);
+      setError(err.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -130,12 +176,28 @@ const LoginNew = () => {
             <Card className="border-gray-800 shadow-xl bg-gray-900/80 backdrop-blur-lg">
               <CardHeader className="space-y-1">
                 <div className="flex items-center space-x-2">
-                  <Users className="w-6 h-6 text-red-500" />
-                  <CardTitle className="text-2xl text-white">Welcome Back</CardTitle>
+                  {isAdminEmail ? (
+                    <Shield className="w-6 h-6 text-red-500" />
+                  ) : (
+                    <Users className="w-6 h-6 text-red-500" />
+                  )}
+                  <CardTitle className="text-2xl text-white">
+                    {isAdminEmail ? "Admin Portal" : "Welcome Back"}
+                  </CardTitle>
                 </div>
                 <CardDescription className="text-gray-400">
-                  Sign in to your ifudda account
+                  {isAdminEmail 
+                    ? "Admin access to ifudda management system" 
+                    : "Sign in to your ifudda account"}
                 </CardDescription>
+                {isAdminEmail && (
+                  <Alert className="bg-blue-50 border-blue-200 text-blue-800 mt-2">
+                    <CheckCircle2 className="h-4 w-4" />
+                    <AlertDescription>
+                      Admin account detected - Dashboard access enabled
+                    </AlertDescription>
+                  </Alert>
+                )}
               </CardHeader>
               <form onSubmit={handleLogin}>
                 <CardContent className="space-y-4">
@@ -193,10 +255,18 @@ const LoginNew = () => {
                 <CardFooter className="flex flex-col space-y-4">
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700"
+                    className={isAdminEmail 
+                      ? "w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                      : "w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700"
+                    }
                     disabled={loading}
                   >
-                    {loading ? "Signing in..." : "Sign In"}
+                    {loading 
+                      ? "Signing in..." 
+                      : isAdminEmail 
+                        ? "Access Admin Dashboard" 
+                        : "Sign In"
+                    }
                   </Button>
                   
                   <div className="text-sm text-center text-gray-400">
