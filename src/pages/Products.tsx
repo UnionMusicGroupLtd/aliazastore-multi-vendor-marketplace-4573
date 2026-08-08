@@ -170,6 +170,7 @@ const Products = () => {
 
   const addToCart = (product: any) => {
     const cartItem = {
+      id: Date.now(), // Use timestamp for unique cart item ID
       _row_id: Date.now(),
       product_id: product._row_id,
       name: product.name,

@@ -176,8 +176,8 @@ const CategoryPageNew = () => {
     return subCategories.filter(cat => cat.parent_id === parentId);
   };
 
-  const getIcon = (iconName: string): React.ElementType => {
-    const iconMap: { [key: string]: React.ElementType } = {
+  const getIcon = (iconName: string) => {
+    const iconMap: { [key: string]: any } = {
       'Vibrate': Zap,
       'Zap': Zap,
       'Heart': Heart,

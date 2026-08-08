@@ -60,7 +60,8 @@ const ProductDetail = () => {
 
   const handleAddToCart = () => {
     addToCart({
-      _row_id: Date.now(), // Use timestamp for unique cart item ID
+      id: Date.now(), // Use timestamp for unique cart item ID
+      _row_id: Date.now(),
       product_id: product._row_id,
       name: product.name,
       price: product.price,

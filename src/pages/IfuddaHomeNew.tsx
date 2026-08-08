@@ -180,6 +180,7 @@ const IfuddaHomeNew = () => {
 
   const handleAddToCart = (product: Product) => {
     addToCart({
+      id: Date.now(),
       _row_id: Date.now(),
       product_id: product._row_id,
       name: product.name,
