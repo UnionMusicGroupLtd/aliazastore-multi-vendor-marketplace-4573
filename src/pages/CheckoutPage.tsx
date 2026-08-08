@@ -263,7 +263,7 @@ const CheckoutPage = () => {
               <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                 checkoutStep === 'details' ? 'bg-blue-600 text-white' : 'bg-green-600 text-white'
               }`}>
-                {checkoutStep === 'complete' ? <CheckCircle className="w-5 h-5" /> : '1'}
+                {'1'}
               </div>
               <span className="ml-2 font-medium">Details</span>
             </div>
@@ -274,17 +274,15 @@ const CheckoutPage = () => {
               <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                 checkoutStep === 'payment' ? 'bg-blue-600 text-white' : 'bg-slate-200'
               }`}>
-                {checkoutStep === 'complete' ? <CheckCircle className="w-5 h-5" /> : '2'}
+                {'2'}
               </div>
               <span className="ml-2 font-medium">Payment</span>
             </div>
             <div className="w-12 h-1 bg-slate-200 rounded">
-              <div className={`h-full rounded transition-all ${checkoutStep === 'complete' ? 'w-full bg-green-600' : 'w-0'}`}></div>
+              <div className="h-full rounded w-0 bg-green-600"></div>
             </div>
-            <div className={`flex items-center ${checkoutStep === 'complete' ? 'text-green-600' : 'text-slate-400'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                checkoutStep === 'complete' ? 'bg-green-600 text-white' : 'bg-slate-200'
-              }`}>
+            <div className={`flex items-center 'text-slate-400'}`}>
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-slate-200`}>
                 <CheckCircle className="w-5 h-5" />
               </div>
               <span className="ml-2 font-medium">Complete</span>
@@ -462,7 +460,6 @@ const CheckoutPage = () => {
                     amount={total}
                     orderId={orderId} 
                     onComplete={handlePaymentComplete}
-                    disabled={loading}
                   />
                   {loading && (
                     <p className="text-center text-sm text-slate-600 mt-4">

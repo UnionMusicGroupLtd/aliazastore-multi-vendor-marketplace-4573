@@ -37,7 +37,7 @@ const AdminSettings = () => {
     const loadSettings = async () => {
       try {
         setLoading(true);
-        const result = await db.query('platform_settings', {});
+        const result = await db.query('platform_settings', {}) as any;
         console.log('Load settings result:', result);
         
         const data = result?.data || result;
@@ -149,7 +149,7 @@ const AdminSettings = () => {
       // Try to find existing settings first
       const existingResult = await db.query('platform_settings', { 
         section: `eq.${sectionLower}` 
-      });
+      }) as any;
       
       const existingData = existingResult?.data || existingResult;
       console.log(`📝 Existing settings found:`, existingData?.length || 0);
@@ -160,11 +160,11 @@ const AdminSettings = () => {
         const updateResult = await db.update('platform_settings', 
           { section: `eq.${sectionLower}` }, 
           { settings: settingsJson }
-        );
+        ) as any;
         
         console.log('📝 Update result:', updateResult);
         
-        if (updateResult.error) {
+        if ((updateResult as any)?.error) {
           console.error('❌ Update error:', updateResult.error);
           setError(`Failed to update: ${updateResult.error.message || updateResult.error}`);
         } else {
@@ -179,11 +179,11 @@ const AdminSettings = () => {
           id: `admin-settings-${sectionLower}`,
           section: sectionLower,
           settings: settingsJson
-        });
+        }) as any;
         
         console.log('📝 Insert result:', insertResult);
         
-        if (insertResult.error) {
+        if ((insertResult as any)?.error) {
           console.error('❌ Insert error:', insertResult.error);
           setError(`Failed to create: ${insertResult.error.message || insertResult.error}`);
         } else {

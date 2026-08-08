@@ -32,15 +32,16 @@ const AdminPasswordManagement = () => {
     setSearchResults([]);
 
     try {
-      // Use auth.listUsers instead of user_list
-      const result = await auth.listUsers({ email: searchEmail });
-      const users = result.users || [];
-      setSearchResults(users);
+      // Use auth.listUsers with correct API usage
+      const result = await auth.listUsers();
+      const users = result.data || [];
+      const filteredUsers = users.filter((u: any) => u.email?.toLowerCase().includes(searchEmail.toLowerCase()));
+      setSearchResults(filteredUsers);
       
-      if (users.length === 0) {
+      if (filteredUsers.length === 0) {
         setError("No users found with this email address");
       } else {
-        setSuccess(`Found ${users.length} user(s) with email: ${searchEmail}`);
+        setSuccess(`Found ${filteredUsers.length} user(s) with email: ${searchEmail}`);
       }
     } catch (err: any) {
       setError("Failed to search users: " + err.message);

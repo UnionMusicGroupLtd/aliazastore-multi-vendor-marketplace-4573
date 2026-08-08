@@ -200,7 +200,7 @@ const getSubscriptionStatus = (): SubscriptionStatus | null => {
 };
 
   const status = getSubscriptionStatus();
-  const StatusIcon = status?.icon;
+const StatusIcon = status?.icon || AlertCircle;
 
   const handlePayPalSubscription = () => {
     window.open(PAYPAL_SUBSCRIBE_LINK, '_blank');
@@ -293,6 +293,7 @@ const getSubscriptionStatus = (): SubscriptionStatus | null => {
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Status Banner */}
+        {status && (
         <Card className={`mb-8 border-0 shadow-lg ${
           status.status === "trial" ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white" :
           status.status === "active" ? "bg-gradient-to-r from-green-500 to-green-600 text-white" :
@@ -303,7 +304,7 @@ const getSubscriptionStatus = (): SubscriptionStatus | null => {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center">
-                  <StatusIcon className="w-8 h-8 text-white" />
+                  {typeof StatusIcon === 'function' ? <StatusIcon className="w-8 h-8 text-white" /> : <AlertCircle className="w-8 h-8 text-white" />}
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold mb-1">{status.label}</h2>
@@ -318,6 +319,7 @@ const getSubscriptionStatus = (): SubscriptionStatus | null => {
             </div>
           </CardContent>
         </Card>
+        )}
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Main Subscription Card */}
