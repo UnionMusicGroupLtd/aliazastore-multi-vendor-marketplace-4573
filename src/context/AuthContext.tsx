@@ -23,6 +23,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -36,20 +37,31 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (currentUser) {
         console.log("🔍 AuthContext: User metadata", currentUser.metadata);
         console.log("🔍 AuthContext: User role", currentUser.metadata?.role);
-        console.log("🔍 AuthContext: Is admin?", currentUser.metadata?.role === 'admin');
         
-        setUser({
+        const userData: User = {
           userUuid: currentUser.userUuid || '',
           email: currentUser.email || '',
           firstName: currentUser.firstName,
           lastName: currentUser.lastName,
           role: currentUser.metadata?.role as string,
           metadata: currentUser.metadata
-        });
+        };
+        
+        setUser(userData);
+        
+        // Enhanced admin detection
+        const adminCheck = 
+          currentUser.metadata?.role === 'admin' ||
+          currentUser.role === 'admin' ||
+          currentUser.appMetadata?.role === 'admin';
+        
+        console.log("🔍 AuthContext: Admin detection result:", adminCheck);
+        setIsAdmin(adminCheck);
       }
     } catch (error) {
       console.error("❌ AuthContext: Auth check failed:", error);
       setUser(null);
+      setIsAdmin(false);
     } finally {
       setLoading(false);
     }
@@ -57,7 +69,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const signIn = async (email: string, password: string) => {
     const signedUser = await auth.signIn(email, password);
-    console.log("User signed in:", signedUser);
+    console.log("🔍 AuthContext: User signed in:", signedUser);
     
     if (signedUser.status === 'totp_required') {
       throw new Error('Two-factor authentication required');
@@ -74,18 +86,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
     console.log("🔍 AuthContext: Setting user data", userData);
     console.log("🔍 AuthContext: User role", userData.role);
-    console.log("🔍 AuthContext: Is admin?", userData.role === 'admin');
     
     setUser(userData);
+    
+    // Set admin status
+    const adminCheck = 
+      userData.role === 'admin' ||
+      userData.metadata?.role === 'admin';
+    
+    console.log("🔍 AuthContext: Admin check after login:", adminCheck);
+    setIsAdmin(adminCheck);
   };
 
   const signOut = async () => {
     await auth.signOut();
     setUser(null);
-    console.log("User signed out");
+    setIsAdmin(false);
+    console.log("🔍 AuthContext: User signed out");
   };
-
-  const isAdmin = Boolean(user?.role === 'admin' || user?.metadata?.role === 'admin');
 
   return (
     <AuthContext.Provider value={{ user, loading, signIn, signOut, isAdmin }}>

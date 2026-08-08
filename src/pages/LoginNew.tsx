@@ -88,31 +88,41 @@ const LoginNew = () => {
       await signIn(loginForm.email, loginForm.password);
       console.log("✅ Login successful!");
       
-      setSuccess("✅ Login successful! Redirecting...");
+      setSuccess("✅ Login successful! Redirecting to dashboard...");
       
-      // Immediate redirect check using current user data
+      // Multiple redirect strategies for reliability
       setTimeout(async () => {
         try {
-          console.log("🔍 Direct redirect check after login");
+          console.log("🔍 Post-login redirect check");
+          console.log("🔍 Login email:", loginForm.email.toLowerCase().trim());
+          console.log("🔍 User from context:", user);
+          console.log("🔍 isAdmin from context:", isAdmin);
           
-          // Check if we just logged in with an admin email
+          // STRATEGY 1: Check admin email directly
           const isAdminUser = ADMIN_EMAILS.some(adminEmail => 
             loginForm.email.toLowerCase().trim() === adminEmail.toLowerCase()
           );
           
-          if (isAdminUser) {
-            console.log("✅✅✅ ADMIN EMAIL LOGIN - Redirecting to /admin");
+          console.log("🔍 Admin email check result:", isAdminUser);
+          
+          // STRATEGY 2: Check AuthContext state
+          const isAdminByContext = isAdmin;
+          console.log("🔍 Admin context check result:", isAdminByContext);
+          
+          // Use either check to determine admin access
+          if (isAdminUser || isAdminByContext) {
+            console.log("✅✅✅ ADMIN ACCESS CONFIRMED - Redirecting to /admin");
             window.location.href = "/admin";
           } else {
             console.log("✅ Normal user - Redirecting to home");
             navigate("/");
           }
         } catch (err) {
-          console.error("❌ Error checking user role:", err);
+          console.error("❌ Error in redirect check:", err);
           console.log("🔄 Fallback: Redirecting to home due to error");
           navigate("/");
         }
-      }, 1000);
+      }, 1500);
       
     } catch (err: any) {
       console.error("Login error:", err);
