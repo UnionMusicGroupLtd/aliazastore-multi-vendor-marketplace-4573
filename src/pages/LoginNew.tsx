@@ -90,18 +90,18 @@ const LoginNew = () => {
       
       setSuccess("✅ Login successful! Redirecting...");
       
-      // Immediate redirect check using AuthContext state
+      // Immediate redirect check using current user data
       setTimeout(async () => {
         try {
-          // Use the AuthContext state directly - it's more reliable
-          console.log("🔍 Using AuthContext state for redirect");
-          console.log("🔍 User from context:", user);
-          console.log("🔍 User role from context:", user?.role);
-          console.log("🔍 isAdmin from context:", isAdmin);
+          console.log("🔍 Direct redirect check after login");
           
-          if (isAdmin) {
-            console.log("✅✅✅ ADMIN USER DETECTED - Redirecting to /admin");
-            // Force direct navigation to bypass any React Router issues
+          // Check if we just logged in with an admin email
+          const isAdminUser = ADMIN_EMAILS.some(adminEmail => 
+            loginForm.email.toLowerCase().trim() === adminEmail.toLowerCase()
+          );
+          
+          if (isAdminUser) {
+            console.log("✅✅✅ ADMIN EMAIL LOGIN - Redirecting to /admin");
             window.location.href = "/admin";
           } else {
             console.log("✅ Normal user - Redirecting to home");
@@ -112,7 +112,7 @@ const LoginNew = () => {
           console.log("🔄 Fallback: Redirecting to home due to error");
           navigate("/");
         }
-      }, 2000);
+      }, 1000);
       
     } catch (err: any) {
       console.error("Login error:", err);

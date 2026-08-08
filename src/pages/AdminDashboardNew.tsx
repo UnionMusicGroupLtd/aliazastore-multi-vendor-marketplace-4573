@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,17 +8,36 @@ import {
   Store, Upload, CheckCircle, ChevronRight, Badge,
   Home, Menu, X
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 const AdminDashboardNew = () => {
   const navigate = useNavigate();
+  const { user, isAdmin, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   console.log("🔍 AdminDashboardNew: Component mounted");
   console.log("🔍 AdminDashboardNew: Current URL:", window.location.href);
+  console.log("🔍 AdminDashboardNew: User from AuthContext:", user);
+  console.log("🔍 AdminDashboardNew: isAdmin from AuthContext:", isAdmin);
 
-  const handleSignOut = () => {
+  // Authentication guard - redirect if not logged in or not admin
+  useEffect(() => {
+    console.log("🔍 AdminDashboardNew: Authentication guard check");
+    if (!user) {
+      console.log("❌ AdminDashboardNew: No user found, redirecting to login");
+      navigate("/login");
+    } else if (!isAdmin) {
+      console.log("❌ AdminDashboardNew: User is not admin, redirecting to home");
+      navigate("/");
+    } else {
+      console.log("✅ AdminDashboardNew: User is authenticated admin, showing dashboard");
+    }
+  }, [user, isAdmin, navigate]);
+
+  const handleSignOut = async () => {
     console.log("🔍 AdminDashboardNew: Sign out triggered");
-    // Simple sign out - clear any session and redirect to login
+    // Use the real signOut function from AuthContext
+    await signOut();
     navigate("/login");
   };
 
@@ -140,7 +159,7 @@ const AdminDashboardNew = () => {
                 Sign in
               </Link>
               <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                A
+                {user?.email?.charAt(0).toUpperCase() || "A"}
               </div>
               <button 
                 onClick={handleSignOut}
