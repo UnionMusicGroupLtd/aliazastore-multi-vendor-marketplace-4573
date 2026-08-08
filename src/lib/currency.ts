@@ -37,7 +37,7 @@ export const loadCurrencies = async (): Promise<Currency[]> => {
 /**
  * Get currency by code
  */
-export const getCurrency = async (code: string = "PHP"): Promise<Currency | null> => {
+export const getCurrency = async (code: string = "GBP"): Promise<Currency | null> => {
   try {
     const currencies = await loadCurrencies();
     return currencies.find(c => c.code === code) || null;
@@ -48,14 +48,14 @@ export const getCurrency = async (code: string = "PHP"): Promise<Currency | null
 };
 
 /**
- * Format price with currency symbol (defaults to PHP)
+ * Format price with currency symbol (defaults to GBP)
  */
 export const formatPrice = (
   price: number,
   currency?: Currency
 ): string => {
-  // Default to PHP if no currency provided
-  const symbol = currency?.symbol || "₱";
+  // Default to GBP if no currency provided
+  const symbol = currency?.symbol || "£";
   const rate = currency?.exchange_rate || 1.0;
   
   // Convert to target currency if rate is available
@@ -72,41 +72,41 @@ export const formatPrice = (
  */
 export const convertPrice = (
   price: number,
-  fromCurrency: string = "PHP",
+  fromCurrency: string = "GBP",
   toCurrency: string = "USD"
 ): number => {
   // This would typically use real exchange rates
   // For now, using cached rates from database
   const rates: Record<string, number> = {
-    PHP: 1.0,
-    USD: 0.018,
-    EUR: 0.016,
-    GBP: 0.014,
-    JPY: 2.65,
-    AUD: 0.027,
-    CAD: 0.025,
-    SGD: 0.024,
-    AED: 0.066,
-    SAR: 0.068
+    GBP: 1.0,
+    USD: 1.27,
+    EUR: 1.16,
+    PHP: 70.5,
+    JPY: 190.5,
+    AUD: 1.92,
+    CAD: 1.76,
+    SGD: 1.71,
+    AED: 4.71,
+    SAR: 4.85
   };
   
   const fromRate = rates[fromCurrency] || 1.0;
   const toRate = rates[toCurrency] || 1.0;
   
-  // Convert to PHP first, then to target currency
-  const priceInPHP = price / fromRate;
-  return priceInPHP * toRate;
+  // Convert to GBP first, then to target currency
+  const priceInGBP = price / fromRate;
+  return priceInGBP * toRate;
 };
 
 /**
  * Get currency symbol by code
  */
-export const getCurrencySymbol = (currencyCode: string = "PHP"): string => {
+export const getCurrencySymbol = (currencyCode: string = "GBP"): string => {
   const symbols: Record<string, string> = {
-    PHP: "₱",
+    GBP: "£",
     USD: "$",
     EUR: "€",
-    GBP: "£",
+    PHP: "₱",
     JPY: "¥",
     AUD: "A$",
     CAD: "C$",
@@ -115,7 +115,7 @@ export const getCurrencySymbol = (currencyCode: string = "PHP"): string => {
     SAR: "ر.س"
   };
   
-  return symbols[currencyCode] || "₱";
+  return symbols[currencyCode] || "£";
 };
 
 /**
@@ -126,7 +126,7 @@ export const formatPriceRange = (
   maxPrice: number,
   currency?: Currency
 ): string => {
-  const symbol = currency?.symbol || "₱";
+  const symbol = currency?.symbol || "£";
   const rate = currency?.exchange_rate || 1.0;
   
   const convertedMin = minPrice * rate;
