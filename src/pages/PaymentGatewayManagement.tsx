@@ -24,6 +24,7 @@ const PaymentGatewayManagement = () => {
   const [loading, setLoading] = useState(true);
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedGateway, setSelectedGateway] = useState<any>(null);
+  const [isAddingGateway, setIsAddingGateway] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [uploadingQR, setUploadingQR] = useState(false);
@@ -92,6 +93,37 @@ const PaymentGatewayManagement = () => {
     } catch (err) {
       console.error("Error updating gateway:", err);
       setError("Failed to update payment gateway");
+    }
+  };
+
+  const handleAddGateway = async () => {
+    try {
+      setError("");
+      
+      console.log("Adding new gateway:", formData);
+      
+      await db.insert("payment_methods", {
+        ...formData,
+        is_enabled: formData.is_enabled ? 1 : 0,
+        supports_cod: formData.supports_cod ? 1 : 0,
+        supports_ewallet: formData.supports_ewallet ? 1 : 0,
+        supports_card: formData.supports_card ? 1 : 0,
+        supports_bank: formData.supports_bank ? 1 : 0,
+        gcash_qr_code: formData.gcash_qr_code || "",
+        transaction_fee_percentage: formData.transaction_fee_percentage || 0.0,
+        fixed_fee: formData.fixed_fee || 0.0,
+        min_amount: formData.min_amount || 0.0,
+        max_amount: formData.max_amount || 0.0
+      });
+
+      setSuccess("New payment gateway added successfully!");
+      setShowEditModal(false);
+      setSelectedGateway(null);
+      setIsAddingGateway(false);
+      loadGateways();
+    } catch (err) {
+      console.error("Error adding gateway:", err);
+      setError("Failed to add payment gateway");
     }
   };
 
@@ -205,6 +237,33 @@ const PaymentGatewayManagement = () => {
       gcash_business_name: gateway.gcash_business_name || ""
     });
     setShowEditModal(true);
+    setIsAddingGateway(false);
+  };
+
+  const openAddGatewayModal = () => {
+    setSelectedGateway(null);
+    setFormData({
+      gateway_name: "",
+      gateway_type: "gcash",
+      api_key: "",
+      api_secret: "",
+      merchant_id: "",
+      is_enabled: true,
+      supports_cod: false,
+      supports_ewallet: true,
+      supports_card: false,
+      supports_bank: false,
+      transaction_fee_percentage: 0.0,
+      fixed_fee: 0.0,
+      min_amount: 0.0,
+      max_amount: 0.0,
+      config_json: "",
+      gcash_number: "",
+      gcash_qr_code: "",
+      gcash_business_name: ""
+    });
+    setShowEditModal(true);
+    setIsAddingGateway(true);
   };
 
   const getGatewayIcon = (type: string) => {
@@ -267,10 +326,17 @@ const PaymentGatewayManagement = () => {
                 </div>
               </div>
             </div>
+            <Button
+              onClick={openAddGatewayModal}
+              className="bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800"
+            >
+              <CreditCard className="w-4 h-4 mr-2" />
+              Add Gateway
+            </Button>
           </div>
         </div>
       </nav>
-
+      
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Stats Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -356,22 +422,19 @@ const PaymentGatewayManagement = () => {
                         {getGatewayIcon(gateway.gateway_type)}
                       </div>
                       <div>
-                        <CardTitle className="text-lg">{gateway.gateway_name}</CardTitle>
-                        <CardDescription className="flex items-center gap-1 mt-1">
-                          <Badge className={`${getGatewayColor(gateway.gateway_type)} text-xs`}>
+                        <p className="font-semibold text-lg">{gateway.gateway_name}</p>
+                        <p className="text-sm text-slate-600">{gateway.gateway_type.toUpperCase()}</p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <Badge className={getGatewayColor(gateway.gateway_type)}>
                             {gateway.gateway_type.toUpperCase()}
                           </Badge>
                           <span className="text-xs text-slate-500">•</span>
                           <span className="text-xs text-slate-500">
                             {gateway.is_enabled ? "Active" : "Disabled"}
                           </span>
-                        </CardDescription>
+                        </div>
                       </div>
                     </div>
-                    <Badge className={`${gateway.is_enabled ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} flex items-center gap-1`}>
-                      {gateway.is_enabled ? <CheckCircle className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
-                      {gateway.is_enabled ? "Enabled" : "Disabled"}
-                    </Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -476,10 +539,10 @@ const PaymentGatewayManagement = () => {
       {/* Edit Gateway Modal */}
       <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
         <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle>Configure Payment Gateway</DialogTitle>
-            <DialogDescription>Update payment gateway settings</DialogDescription>
-          </DialogHeader>
+        <DialogHeader>
+          <DialogTitle>{isAddingGateway ? "Add New Payment Gateway" : "Configure Payment Gateway"}</DialogTitle>
+          <DialogDescription>{isAddingGateway ? "Add a new payment gateway to your store" : "Update payment gateway settings"}</DialogDescription>
+        </DialogHeader>
           <div className="flex-1 overflow-y-auto space-y-4 px-1">
             {error && (
               <Alert variant="destructive">
@@ -733,11 +796,11 @@ const PaymentGatewayManagement = () => {
             <Button
               type="button"
               className="bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800"
-              onClick={handleUpdateGateway}
+              onClick={isAddingGateway ? handleAddGateway : handleUpdateGateway}
               disabled={!formData.gateway_name}
             >
               <CheckCircle className="w-4 h-4 mr-2" />
-              Save Changes
+              {isAddingGateway ? "Add Gateway" : "Save Changes"}
             </Button>
           </div>
         </DialogContent>
