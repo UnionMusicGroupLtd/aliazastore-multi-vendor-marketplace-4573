@@ -31,29 +31,29 @@ const LoginNew = () => {
     confirmPassword: ""
   });
 
-  // Check if user is already logged in
+  // Check if user is already logged in using AuthContext
   useEffect(() => {
     const checkUserAuth = async () => {
       try {
-        const currentUser = await (await import('@/lib/shared/kliv-auth.js')).default.getUser();
-        console.log("User already logged in:", currentUser);
+        // Use AuthContext state instead of raw auth check
+        console.log("🔍 LoginNew: Using AuthContext for logged-in check");
+        console.log("🔍 LoginNew: User from context:", user);
+        console.log("🔍 LoginNew: isAdmin:", isAdmin);
         
-        if (currentUser) {
-          if (currentUser.metadata?.role === 'admin') {
-            console.log("Admin user detected, redirecting to /admin");
-            navigate("/admin");
-          } else {
-            console.log("Normal user detected, redirecting to home");
-            navigate("/");
-          }
+        if (user && isAdmin) {
+          console.log("✅ Admin user already logged in, redirecting to /admin");
+          navigate("/admin");
+        } else if (user && !isAdmin) {
+          console.log("✅ Normal user already logged in, redirecting to home");
+          navigate("/");
         }
       } catch (err) {
-        console.error("Error checking auth status:", err);
+        console.error("❌ Error checking auth status:", err);
       }
     };
     
     checkUserAuth();
-  }, [navigate]);
+  }, [user, isAdmin, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,19 +67,16 @@ const LoginNew = () => {
       
       setSuccess("✅ Login successful! Redirecting...");
       
-      // Immediate redirect check
+      // Immediate redirect check using AuthContext state
       setTimeout(async () => {
         try {
-          const auth = (await import('@/lib/shared/kliv-auth.js')).default;
-          const currentUser = await auth.getUser();
-          console.log("🔍 Current user after login:", currentUser);
-          console.log("🔍 User metadata:", currentUser?.metadata);
+          // Use the AuthContext state directly - it's more reliable
+          console.log("🔍 Using AuthContext state for redirect");
+          console.log("🔍 User from context:", user);
+          console.log("🔍 User role from context:", user?.role);
+          console.log("🔍 isAdmin from context:", isAdmin);
           
-          const userRole = currentUser?.metadata?.role as string;
-          console.log("🔍 Detected user role:", userRole);
-          console.log("🔍 Is admin check:", userRole === 'admin');
-          
-          if (userRole === 'admin') {
+          if (isAdmin) {
             console.log("✅✅✅ ADMIN USER DETECTED - Redirecting to /admin");
             navigate("/admin");
           } else {

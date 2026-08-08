@@ -85,7 +85,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     console.log("User signed out");
   };
 
-  const isAdmin = Boolean(user?.role === 'admin');
+  const isAdmin = Boolean(user?.role === 'admin' || user?.metadata?.role === 'admin');
 
   return (
     <AuthContext.Provider value={{ user, loading, signIn, signOut, isAdmin }}>

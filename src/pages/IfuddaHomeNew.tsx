@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Shield, ShoppingBag, Heart, Lock, Truck, Star, CheckCircle, 
   ArrowRight, TrendingUp, Clock, Flame, Award, Sparkles, LogOut 
@@ -24,6 +24,7 @@ interface Product {
 }
 
 const IfuddaHomeNew = () => {
+  const navigate = useNavigate();
   const [ageVerified, setAgeVerified] = useState(false);
   const [showVerification, setShowVerification] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);
@@ -37,6 +38,13 @@ const IfuddaHomeNew = () => {
     if (verified === 'true') {
       setAgeVerified(true);
       setShowVerification(false);
+    }
+    
+    // Redirect admin users to dashboard
+    if (isAdmin && user) {
+      console.log("🔧 Admin user detected on home page, redirecting to /admin");
+      navigate('/admin');
+      return;
     }
     
     // Load sample products
