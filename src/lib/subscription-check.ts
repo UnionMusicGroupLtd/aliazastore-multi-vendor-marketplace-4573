@@ -3,7 +3,7 @@
  * Checks if a store has an active subscription/trial and what features are available
  */
 
-import { Gift, CheckCircle, Lock, Clock, XCircle, AlertCircle } from "lucide-react";
+import { Gift, CheckCircle, Lock, Clock, XCircle } from "lucide-react";
 
 export interface SubscriptionStatus {
   status: 'trial' | 'active' | 'trial_ended' | 'subscription_expired' | 'suspended' | 'cancelled';

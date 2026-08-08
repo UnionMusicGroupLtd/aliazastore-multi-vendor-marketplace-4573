@@ -74,7 +74,7 @@ const Addresses = () => {
     setLoading(false);
   }, []);
 
-  const saveAddresses = (updatedAddresses) => {
+  const saveAddresses = (updatedAddresses: Address[]) => {
     setAddresses(updatedAddresses);
     localStorage.setItem('user_addresses', JSON.stringify(updatedAddresses));
   };
@@ -93,13 +93,13 @@ const Addresses = () => {
     setShowAddModal(true);
   };
 
-  const handleEdit = (address) => {
+  const handleEdit = (address: Address) => {
     setSelectedAddress(address);
     setFormData({ ...address });
     setShowEditModal(true);
   };
 
-  const handleDelete = (addressId) => {
+  const handleDelete = (addressId: number) => {
     if (window.confirm('Are you sure you want to delete this address?')) {
       const updatedAddresses = addresses.filter(addr => addr._row_id !== addressId);
       saveAddresses(updatedAddresses);
@@ -108,7 +108,7 @@ const Addresses = () => {
     }
   };
 
-  const handleSetDefault = (addressId) => {
+  const handleSetDefault = (addressId: number) => {
     const updatedAddresses = addresses.map(addr => ({
       ...addr,
       is_default: addr._row_id === addressId
@@ -118,7 +118,7 @@ const Addresses = () => {
     setTimeout(() => setMessage({ type: "", text: "" }), 3000);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!formData.label || !formData.name || !formData.address || !formData.city || !formData.province || !formData.postal_code || !formData.phone) {
@@ -128,7 +128,7 @@ const Addresses = () => {
 
     let updatedAddresses;
     
-    if (showEditModal) {
+    if (showEditModal && selectedAddress) {
       // Update existing address
       updatedAddresses = addresses.map(addr => 
         addr._row_id === selectedAddress._row_id 
@@ -156,7 +156,7 @@ const Addresses = () => {
     setTimeout(() => setMessage({ type: "", text: "" }), 3000);
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,

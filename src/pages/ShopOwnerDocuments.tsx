@@ -78,7 +78,7 @@ const ShopOwnerDocuments = () => {
       const result = await content.uploadFile(file, folder);
       
       const timestamp = Date.now();
-      const updateData = uploadType === "govt_id" ? {
+      const updateData: Record<string, any> = uploadType === "govt_id" ? {
         owner_govt_id_file: result.path,
         owner_govt_id_uploaded: 1,
         owner_govt_id_uploaded_at: timestamp

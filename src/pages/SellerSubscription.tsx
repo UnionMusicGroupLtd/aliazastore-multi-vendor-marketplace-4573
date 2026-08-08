@@ -369,7 +369,7 @@ const StatusIcon = status?.icon || AlertCircle;
             </Card>
 
             {/* Trial Information */}
-            {status.status === "trial" && (
+            {status && status.status === "trial" && (
               <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50 to-blue-50">
                 <CardHeader>
                   <CardTitle className="text-xl flex items-center">
@@ -391,7 +391,7 @@ const StatusIcon = status?.icon || AlertCircle;
                     <div>
                       <p className="text-slate-600 mb-1">Trial Ends</p>
                       <p className="font-semibold text-slate-900">
-                        {status.trialEnd ? 
+                        {status?.trialEnd ? 
                           status.trialEnd.toLocaleDateString() : 
                           'Not set'
                         }
@@ -399,7 +399,7 @@ const StatusIcon = status?.icon || AlertCircle;
                     </div>
                   </div>
                   
-                  {status.daysRemaining !== undefined && (
+                  {status && status.daysRemaining !== undefined && (
                     <div className="bg-purple-100 border border-purple-200 rounded-lg p-4 text-center">
                       <p className="text-purple-800 font-medium">
                         {status.daysRemaining} days remaining in your free trial
@@ -547,7 +547,7 @@ const StatusIcon = status?.icon || AlertCircle;
                 <CardTitle className="text-lg">Subscribe Now</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                {status.status === "trial_ended" || status.status === "trial" || status.status === "unknown" ? (
+                {status && (status.status === "trial_ended" || status.status === "trial" || status.status === "unknown") ? (
                   <>
                     <Button 
                       className="w-full bg-blue-600 hover:bg-blue-700"
@@ -571,7 +571,7 @@ const StatusIcon = status?.icon || AlertCircle;
                       <p>₱200/month • Cancel anytime</p>
                     </div>
                   </>
-                ) : status.status === "active" ? (
+                ) : status && status.status === "active" ? (
                   <>
                     <Button variant="outline" className="w-full">
                       <Settings className="w-4 h-4 mr-2" />
