@@ -205,10 +205,10 @@ const Contact = () => {
                   <div className="flex-1">
                     <h3 className="font-semibold text-slate-900">Email Support</h3>
                     <p className="text-slate-600">Send us a detailed message</p>
-                    <p className="text-sm font-medium text-purple-600">info@aliazastore.com</p>
+                    <p className="text-sm font-medium text-purple-600">info@unionmusicgroup.co.uk</p>
                     <p className="text-sm text-slate-500">Response within 24 hours</p>
                     <a 
-                      href="mailto:info@aliazastore.com" 
+                      href="mailto:info@unionmusicgroup.co.uk" 
                       className="inline-flex items-center justify-center w-full mt-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium transition-colors"
                     >
                       Send Email
