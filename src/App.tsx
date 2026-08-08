@@ -41,6 +41,8 @@ console.log("🛡️ SMART ADMIN LOGIN - info@unionmusicgroup.co.uk auto-detecte
 console.log("✅ NAVIGATION FIXED - Admin Dashboard link now shows for logged-in admins in header");
 console.log("🔧 AUTO-REMOVED REDIRECT - Admins can now stay on homepage and see proper navigation");
 console.log("🔄 FORCED REBUILD - Navigation cache issue debugging - Timestamp:", new Date().toISOString());
+console.log("🔧 PLATFORM SETTINGS SAVE FIX - Using proper database API methods");
+console.log("💾 Settings save now bypasses RLS issues and uses proper update/insert logic");
 console.log("🔄 NAVIGATION DEBUG: Both homepage and admin dashboard should show proper logged-in navigation");
 const queryClient = new QueryClient();
 

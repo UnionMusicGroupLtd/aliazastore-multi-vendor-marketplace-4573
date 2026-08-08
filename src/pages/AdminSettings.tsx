@@ -116,7 +116,7 @@ const AdminSettings = () => {
       setSaving(true);
       setError("");
       
-      console.log(`Saving ${section} settings...`);
+      console.log(`💾 SAVING ${section} settings...`);
       
       // Get the settings object for the current section
       let settingsToSave;
@@ -142,65 +142,59 @@ const AdminSettings = () => {
       
       // Convert to JSON string for storage
       const settingsJson = JSON.stringify(settingsToSave);
+      const sectionLower = section.toLowerCase();
       
-      // Check if settings already exist
-      console.log(`Checking for existing ${section} settings...`);
-      const queryResult = await db.query('platform_settings', { 
-        section: `eq.${section.toLowerCase()}` 
+      console.log(`🔧 Settings to save for ${sectionLower}:`, settingsJson);
+      
+      // Try to find existing settings first
+      const existingResult = await db.query('platform_settings', { 
+        section: `eq.${sectionLower}` 
       });
       
-      console.log('Query result:', queryResult);
+      const existingData = existingResult?.data || existingResult;
+      console.log(`📝 Existing settings found:`, existingData?.length || 0);
       
-      const existingSettings = queryResult?.data || queryResult;
-      console.log(`Existing settings found:`, existingSettings ? existingSettings.length : 0);
-      
-      // Always update or insert based on section, not _row_id
-      // This avoids UNIQUE constraint issues
-      if (existingSettings && existingSettings.length > 0) {
-        // Update existing settings using section instead of _row_id
-        console.log('Updating existing settings for section:', section.toLowerCase());
-        console.log('Settings to save:', settingsJson);
-        
-        const result = await db.update('platform_settings', 
-          { section: `eq.${section.toLowerCase()}` }, 
+      if (existingData && existingData.length > 0) {
+        // Update existing record
+        console.log(`🔄 Updating existing ${section} settings...`);
+        const updateResult = await db.update('platform_settings', 
+          { section: `eq.${sectionLower}` }, 
           { settings: settingsJson }
         );
         
-        console.log('Update result:', result);
+        console.log('📝 Update result:', updateResult);
         
-        if (result.error) {
-          console.error('Database update error:', result.error);
-          const errorMessage = result.error instanceof Error ? result.error.message : JSON.stringify(result.error);
-          setError(`Failed to save ${section} settings. Database error: ${errorMessage}`);
-          return;
+        if (updateResult.error) {
+          console.error('❌ Update error:', updateResult.error);
+          setError(`Failed to update: ${updateResult.error.message || updateResult.error}`);
+        } else {
+          console.log(`✅ ${section} settings updated successfully!`);
+          setSuccess(`${section} settings saved successfully! Changes applied immediately.`);
+          setTimeout(() => setSuccess(""), 5000);
         }
       } else {
-        // Insert new settings
-        console.log('Inserting new settings');
-        console.log('Settings to save:', settingsJson);
-        
-        const result = await db.insert('platform_settings', {
-          id: `admin-settings-${section.toLowerCase()}`,
-          section: section.toLowerCase(),
+        // Insert new record
+        console.log(`➕ Creating new ${section} settings...`);
+        const insertResult = await db.insert('platform_settings', {
+          id: `admin-settings-${sectionLower}`,
+          section: sectionLower,
           settings: settingsJson
         });
         
-        console.log('Insert result:', result);
+        console.log('📝 Insert result:', insertResult);
         
-        if (result.error) {
-          console.error('Database insert error:', result.error);
-          const errorMessage = result.error instanceof Error ? result.error.message : JSON.stringify(result.error);
-          setError(`Failed to save ${section} settings. Database error: ${errorMessage}`);
-          return;
+        if (insertResult.error) {
+          console.error('❌ Insert error:', insertResult.error);
+          setError(`Failed to create: ${insertResult.error.message || insertResult.error}`);
+        } else {
+          console.log(`✅ ${section} settings created successfully!`);
+          setSuccess(`${section} settings saved successfully! Changes applied immediately.`);
+          setTimeout(() => setSuccess(""), 5000);
         }
       }
       
-      console.log(`${section} settings saved successfully`);
-      
-      setSuccess(`${section} settings saved successfully! Changes will take effect immediately.`);
-      setTimeout(() => setSuccess(""), 5000);
     } catch (err) {
-      console.error("Error saving settings:", err);
+      console.error("❌ Error saving settings:", err);
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       setError(`Failed to save settings. ${errorMessage}`);
       setTimeout(() => setError(""), 5000);
