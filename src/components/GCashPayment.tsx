@@ -43,7 +43,7 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
           });
           
           // Convert content filesystem path to accessible URL if needed
-          if (config.gcash_qr_code && config.gcash_qr_code.startsWith('/content/')) {
+          if (config.gcash_qr_code && typeof config.gcash_qr_code === 'string' && config.gcash_qr_code.startsWith('/content/')) {
             console.log("🔄 Converting content path to accessible URL");
             // Content files are accessible via special URL format
             // The path itself should work, but let's verify accessibility

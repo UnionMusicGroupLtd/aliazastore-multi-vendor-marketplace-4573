@@ -1,5 +1,5 @@
 // Radix UI primitive polyfill to provide all required exports
-export const IS_DEVELOPMENT = import.meta.env.DEV;
+export const IS_DEVELOPMENT = (import.meta as any).env?.DEV || false;
 
 // Additional exports that Radix UI packages might need
 export const DismissableLayer = null;

@@ -25,7 +25,7 @@ export const loadCurrencies = async (): Promise<Currency[]> => {
     const data = await db.query("currencies", {
       is_active: "eq.1",
       order: "display_order.asc"
-    });
+    }) as Currency[];
     currenciesCache = data;
     return data;
   } catch (error) {

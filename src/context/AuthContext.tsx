@@ -56,8 +56,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         // Enhanced admin detection
         const adminCheck = 
           currentUser.metadata?.role === 'admin' ||
-          currentUser.role === 'admin' ||
-          currentUser.appMetadata?.role === 'admin';
+          (currentUser as any).role === 'admin';
         
         console.log("🔍 AuthContext: Admin detection result:", adminCheck);
         setIsAdmin(adminCheck);
