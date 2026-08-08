@@ -39,6 +39,8 @@ console.log("🆔 ADMIN USER CREATED - admin@ifudda.com created with role: admin
 console.log("🛡️ SMART ADMIN LOGIN - info@unionmusicgroup.co.uk auto-detected as admin email");
 console.log("✅ NAVIGATION FIXED - Admin Dashboard link now shows for logged-in admins in header");
 console.log("🔧 AUTO-REMOVED REDIRECT - Admins can now stay on homepage and see proper navigation");
+console.log("🔄 FORCED REBUILD - Navigation cache issue debugging - Timestamp:", new Date().toISOString());
+console.log("🔄 NAVIGATION DEBUG: Both homepage and admin dashboard should show proper logged-in navigation");
 const queryClient = new QueryClient();
 
 const App = () => (

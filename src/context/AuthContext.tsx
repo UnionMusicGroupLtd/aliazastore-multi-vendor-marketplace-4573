@@ -27,7 +27,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     checkAuth();
-  }, []);
+    console.log("🔄 FORCED REBUILD - AuthContext navigation debugging");
+    console.log("🔄 AuthContext: Current user state:", user);
+    console.log("🔄 AuthContext: Current isAdmin state:", isAdmin);
+    console.log("🔄 AuthContext: Loading state:", loading);
+  }, [user, isAdmin, loading]);
 
   const checkAuth = async () => {
     try {

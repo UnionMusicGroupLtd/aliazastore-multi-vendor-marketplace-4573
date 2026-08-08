@@ -40,6 +40,12 @@ const IfuddaHomeNew = () => {
       setShowVerification(false);
     }
     
+    // Force rebuild and log navigation state
+    console.log('🔄 IfuddaHomeNew: Component mounted');
+    console.log('🔄 IfuddaHomeNew: User state:', user);
+    console.log('🔄 IfuddaHomeNew: isAdmin state:', isAdmin);
+    console.log('🔄 IfuddaHomeNew: Navigation should show:', user ? (isAdmin ? 'Admin Dashboard + Sign Out' : 'Dashboard + Sign Out') : 'Sign In');
+    
     // Load sample products
     const sampleProducts: Product[] = [
       {

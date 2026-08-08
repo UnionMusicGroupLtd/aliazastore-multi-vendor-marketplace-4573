@@ -21,6 +21,8 @@ const AdminDashboardNew = () => {
   console.log("🔍 AdminDashboardNew: User from AuthContext:", user);
   console.log("🔍 AdminDashboardNew: isAdmin from AuthContext:", isAdmin);
   console.log("🔍 AdminDashboardNew: authLoading:", authLoading);
+  console.log("🔄 FORCED REBUILD - AdminDashboardNew navigation fix applied");
+  console.log("🔄 AdminDashboardNew: Navigation should show: Home | Admin Dashboard | Avatar | Sign Out");
 
   // Authentication guard - redirect if not logged in or not admin
   useEffect(() => {
@@ -196,8 +198,8 @@ const AdminDashboardNew = () => {
                 <Home className="w-4 h-4" />
                 <span>Home</span>
               </Link>
-              <Link to="/login" className="text-gray-400 text-sm hover:text-white transition-colors">
-                Sign in
+              <Link to="/admin" className="text-red-400 text-sm hover:text-red-300 transition-colors font-semibold">
+                Admin Dashboard
               </Link>
               <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
                 {user?.email?.charAt(0).toUpperCase() || "A"}
@@ -233,11 +235,11 @@ const AdminDashboardNew = () => {
                   <span>Home</span>
                 </Link>
                 <Link 
-                  to="/login" 
-                  className="text-gray-400 text-sm hover:text-white transition-colors"
+                  to="/admin" 
+                  className="text-red-400 text-sm hover:text-red-300 transition-colors font-semibold"
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  Sign in
+                  Admin Dashboard
                 </Link>
                 <button 
                   onClick={() => {
