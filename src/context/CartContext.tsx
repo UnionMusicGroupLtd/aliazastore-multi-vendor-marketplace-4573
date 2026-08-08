@@ -3,6 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 interface CartItem {
   _row_id: number;
   product_id: number;
+  id: number; // Alias for _row_id for easier access
   name: string;
   price: number;
   original_price: number;
@@ -54,16 +55,18 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [cartItems]);
 
   const addToCart = (item: CartItem) => {
+    // Ensure id is set for compatibility
+    const cartItem = { ...item, id: item._row_id };
     setCartItems(prevItems => {
       const existingItem = prevItems.find(i => i.product_id === item.product_id);
       if (existingItem) {
         return prevItems.map(i =>
           i.product_id === item.product_id
-            ? { ...i, quantity: i.quantity + item.quantity }
-            : i
+            ? { ...i, quantity: i.quantity + item.quantity, id: i._row_id }
+            : { ...i, id: i._row_id }
         );
       }
-      return [...prevItems, item];
+      return [...prevItems, cartItem];
     });
   };
 

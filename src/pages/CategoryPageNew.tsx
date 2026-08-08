@@ -176,7 +176,7 @@ const CategoryPageNew = () => {
     return subCategories.filter(cat => cat.parent_id === parentId);
   };
 
-  const getIcon = (iconName: string) => {
+  const getIcon = (iconName: string): React.ElementType => {
     const iconMap: { [key: string]: React.ElementType } = {
       'Vibrate': Zap,
       'Zap': Zap,
@@ -199,8 +199,7 @@ const CategoryPageNew = () => {
       'Flame': Flame,
       'Snowflake': Snowflake,
     };
-    const IconComponent = iconMap[iconName] || ShoppingBagIcon;
-    return IconComponent;
+    return iconMap[iconName] || ShoppingBagIcon;
   };
 
   const toggleCategory = (categoryId: number) => {

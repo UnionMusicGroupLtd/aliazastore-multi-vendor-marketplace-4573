@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '@/context/CartContext';
-import { ShoppingCart, Heart, Filter, Grid, List, Search, Star, Store, Bolt, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ShoppingCart, ShoppingBag, Heart, Filter, Grid, List, Search, Star, Store, Bolt, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';

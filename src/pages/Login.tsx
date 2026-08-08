@@ -44,35 +44,34 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const user = await auth.signIn(customerLogin.email, customerLogin.password);
+      const result = await auth.signIn(customerLogin.email, customerLogin.password);
+      console.log("Login result:", result);
+      
+      // Handle TOTP required
+      if (result.status === 'totp_required') {
+        setError("Two-factor authentication required. Please use the admin authentication flow.");
+        setLoading(false);
+        return;
+      }
+      
+      const user = result.user;
       console.log("Customer logged in:", user);
       console.log("User groups:", user.groups);
-      console.log("Group keys:", user.groups?.map((g: any) => g.key));
-      console.log("App metadata:", user.app_metadata);
-      console.log("Regular metadata:", user.metadata);
+      console.log("User metadata:", user.metadata);
       
-      // Check app_metadata.role first - this takes priority over groups
-      const userRole = user.app_metadata?.role || user.metadata?.role;
+      // Check metadata.role 
+      const userRole = user.metadata?.role as string | undefined;
       console.log("User role:", userRole);
       
-      // Check if user is in admin group as fallback
+      // Check if user is in admin group
       const isAdmin = user.groups?.some((g: any) => 
-        g.key === 'admins' || g.key === 'tenant_admin' || g.name === 'Admins' || g.name === 'Kliv Administrators'
+        g === 'admins' || g === 'tenant_admin' || g?.key === 'admins' || g?.key === 'tenant_admin' || g?.name === 'Admins' || g?.name === 'Kliv Administrators'
       );
       console.log("Is admin by group:", isAdmin);
       
-      // Only redirect to admin if role is explicitly "admin" or user is in admin group
-      if (userRole === 'admin' || isAdmin) {
-        setSuccess("Admin login successful! Redirecting to admin dashboard...");
-        setTimeout(() => navigate("/admin"), 1000);
-      } else if (userRole === 'seller') {
-        setSuccess("Seller account detected! Redirecting to admin dashboard...");
-        setTimeout(() => navigate("/admin"), 1000);
-      } else {
-        // Default to admin dashboard for simplified platform
-        setSuccess("Login successful! Redirecting to admin dashboard...");
-        setTimeout(() => navigate("/admin"), 1000);
-      }
+      // All users redirect to admin dashboard for simplified platform
+      setSuccess("Login successful! Redirecting to admin dashboard...");
+      setTimeout(() => navigate("/admin"), 1000);
     } catch (err: any) {
       console.error("Login error:", err);
       if (err.message.includes("bad_credentials")) {
@@ -94,35 +93,34 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const user = await auth.signIn(sellerLogin.email, sellerLogin.password);
+      const result = await auth.signIn(sellerLogin.email, sellerLogin.password);
+      console.log("Login result:", result);
+      
+      // Handle TOTP required
+      if (result.status === 'totp_required') {
+        setError("Two-factor authentication required. Please use the admin authentication flow.");
+        setLoading(false);
+        return;
+      }
+      
+      const user = result.user;
       console.log("Seller logged in:", user);
       console.log("User groups:", user.groups);
-      console.log("Group keys:", user.groups?.map((g: any) => g.key));
-      console.log("App metadata:", user.app_metadata);
-      console.log("Regular metadata:", user.metadata);
+      console.log("User metadata:", user.metadata);
       
-      // Check app_metadata.role first - this takes priority over groups
-      const userRole = user.app_metadata?.role || user.metadata?.role;
+      // Check metadata.role 
+      const userRole = user.metadata?.role as string | undefined;
       console.log("Seller login - User role:", userRole);
       
-      // Check if user is in admin group as fallback
+      // Check if user is in admin group
       const isAdmin = user.groups?.some((g: any) => 
-        g.key === 'admins' || g.key === 'tenant_admin' || g.name === 'Admins' || g.name === 'Kliv Administrators'
+        g === 'admins' || g === 'tenant_admin' || g?.key === 'admins' || g?.key === 'tenant_admin' || g?.name === 'Admins' || g?.name === 'Kliv Administrators'
       );
       console.log("Seller login - Is admin by group:", isAdmin);
       
-      // Force admin redirect for simplified platform
-      if (userRole === 'admin' || isAdmin) {
-        setSuccess("Admin login successful! Redirecting to admin dashboard...");
-        setTimeout(() => navigate("/admin"), 1000);
-      } else if (userRole === 'seller') {
-        setSuccess("Seller login successful! Redirecting to admin dashboard...");
-        setTimeout(() => navigate("/admin"), 1000);
-      } else {
-        // All users redirect to admin dashboard for simplified platform
-        setSuccess("Login successful! Redirecting to admin dashboard...");
-        setTimeout(() => navigate("/admin"), 1000);
-      }
+      // All users redirect to admin dashboard for simplified platform
+      setSuccess("Login successful! Redirecting to admin dashboard...");
+      setTimeout(() => navigate("/admin"), 1000);
     } catch (err: any) {
       console.error("Login error:", err);
       if (err.message.includes("bad_credentials")) {

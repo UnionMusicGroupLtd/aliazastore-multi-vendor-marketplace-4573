@@ -141,6 +141,7 @@ const CategoryPage = () => {
 
   const addToCart = (product: any) => {
     const cartItem = {
+      id: Date.now(),
       _row_id: Date.now(),
       product_id: product._row_id,
       name: product.name,

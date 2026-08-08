@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -115,78 +115,89 @@ const SellerSubscription = () => {
     }
   };
 
-  const getSubscriptionStatus = () => {
-    if (!subscription) return null;
+interface SubscriptionStatus {
+  status: string;
+  label: string;
+  color: string;
+  icon: React.ElementType;
+  message: string;
+  daysRemaining?: number;
+  trialEnd?: Date;
+  subscriptionEnd?: Date;
+}
 
-    const now = new Date();
-    // Convert Unix timestamps to Date objects (database uses seconds, JavaScript uses milliseconds)
-    const trialEnd = subscription.trial_end_date ? new Date(subscription.trial_end_date * 1000) : null;
-    const subscriptionEnd = subscription.subscription_end_date ? new Date(subscription.subscription_end_date * 1000) : null;
+const getSubscriptionStatus = (): SubscriptionStatus | null => {
+  if (!subscription) return null;
 
-    if (subscription.subscription_status === "cancelled") {
-      return {
-        status: "cancelled",
-        label: "Cancelled",
-        color: "bg-red-100 text-red-700",
-        icon: AlertCircle,
-        message: "Your subscription has been cancelled"
-      };
-    }
+  const now = new Date();
+  // Convert Unix timestamps to Date objects (database uses seconds, JavaScript uses milliseconds)
+  const trialEnd = subscription.trial_end_date ? new Date(subscription.trial_end_date * 1000) : null;
+  const subscriptionEnd = subscription.subscription_end_date ? new Date(subscription.subscription_end_date * 1000) : null;
 
-    if (subscription.subscription_status === "suspended") {
-      return {
-        status: "suspended",
-        label: "Suspended",
-        color: "bg-orange-100 text-orange-700",
-        icon: AlertCircle,
-        message: "Your account is currently suspended"
-      };
-    }
-
-    if (trialEnd && trialEnd > now) {
-      const daysRemaining = Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-      return {
-        status: "trial",
-        label: `Free Trial (${daysRemaining} days left)`,
-        color: "bg-purple-100 text-purple-700",
-        icon: Gift,
-        daysRemaining,
-        trialEnd,
-        message: `Enjoy your free trial! ${daysRemaining} days remaining`
-      };
-    }
-
-    if (subscriptionEnd && subscriptionEnd > now) {
-      const daysRemaining = Math.ceil((subscriptionEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-      return {
-        status: "active",
-        label: `Active Subscription (${daysRemaining} days left)`,
-        color: "bg-green-100 text-green-700",
-        icon: CheckCircle,
-        daysRemaining,
-        subscriptionEnd,
-        message: `Your subscription is active! ${daysRemaining} days until renewal`
-      };
-    }
-
-    if (trialEnd && trialEnd <= now && !subscription.subscription_start_date) {
-      return {
-        status: "trial_ended",
-        label: "Trial Ended",
-        color: "bg-red-100 text-red-700",
-        icon: Clock,
-        message: "Your free trial has ended. Subscribe to continue selling!"
-      };
-    }
-
+  if (subscription.subscription_status === "cancelled") {
     return {
-      status: "unknown",
-      label: "Unknown Status",
-      color: "bg-gray-100 text-gray-700",
+      status: "cancelled",
+      label: "Cancelled",
+      color: "bg-red-100 text-red-700",
       icon: AlertCircle,
-      message: "Please contact support for assistance"
+      message: "Your subscription has been cancelled"
     };
+  }
+
+  if (subscription.subscription_status === "suspended") {
+    return {
+      status: "suspended",
+      label: "Suspended",
+      color: "bg-orange-100 text-orange-700",
+      icon: AlertCircle,
+      message: "Your account is currently suspended"
+    };
+  }
+
+  if (trialEnd && trialEnd > now) {
+    const daysRemaining = Math.ceil((trialEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    return {
+      status: "trial",
+      label: `Free Trial (${daysRemaining} days left)`,
+      color: "bg-purple-100 text-purple-700",
+      icon: Gift,
+      daysRemaining,
+      trialEnd,
+      message: `Enjoy your free trial! ${daysRemaining} days remaining`
+    };
+  }
+
+  if (subscriptionEnd && subscriptionEnd > now) {
+    const daysRemaining = Math.ceil((subscriptionEnd.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    return {
+      status: "active",
+      label: `Active Subscription (${daysRemaining} days left)`,
+      color: "bg-green-100 text-green-700",
+      icon: CheckCircle,
+      daysRemaining,
+      subscriptionEnd,
+      message: `Your subscription is active! ${daysRemaining} days until renewal`
+    };
+  }
+
+  if (trialEnd && trialEnd <= now && !subscription.subscription_start_date) {
+    return {
+      status: "trial_ended",
+      label: "Trial Ended",
+      color: "bg-red-100 text-red-700",
+      icon: Clock,
+      message: "Your free trial has ended. Subscribe to continue selling!"
+    };
+  }
+
+  return {
+    status: "unknown",
+    label: "Unknown Status",
+    color: "bg-gray-100 text-gray-700",
+    icon: AlertCircle,
+    message: "Please contact support for assistance"
   };
+};
 
   const status = getSubscriptionStatus();
   const StatusIcon = status?.icon;
