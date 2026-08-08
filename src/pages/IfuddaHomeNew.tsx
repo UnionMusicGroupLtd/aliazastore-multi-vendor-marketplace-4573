@@ -40,13 +40,6 @@ const IfuddaHomeNew = () => {
       setShowVerification(false);
     }
     
-    // Redirect admin users to dashboard
-    if (isAdmin && user) {
-      console.log("🔧 Admin user detected on home page, redirecting to /admin");
-      navigate('/admin');
-      return;
-    }
-    
     // Load sample products
     const sampleProducts: Product[] = [
       {
@@ -292,13 +285,20 @@ const IfuddaHomeNew = () => {
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
               
               {user ? (
-                <button 
-                  onClick={signOut}
-                  className="text-gray-300 hover:text-white transition-colors flex items-center"
-                >
-                  <LogOut className="w-4 h-4 mr-1" />
-                  Sign Out
-                </button>
+                <>
+                  {isAdmin ? (
+                    <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold">Admin Dashboard</Link>
+                  ) : (
+                    <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors">Dashboard</Link>
+                  )}
+                  <button 
+                    onClick={signOut}
+                    className="text-gray-300 hover:text-white transition-colors flex items-center"
+                  >
+                    <LogOut className="w-4 h-4 mr-1" />
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <Link to="/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link>
               )}
@@ -315,13 +315,18 @@ const IfuddaHomeNew = () => {
 
             <div className="md:hidden flex items-center space-x-4">
               {user ? (
-                <button 
-                  onClick={signOut}
-                  className="text-white text-sm flex items-center"
-                >
-                  <LogOut className="w-4 h-4 mr-1" />
-                  Sign Out
-                </button>
+                <>
+                  {isAdmin && (
+                    <Link to="/admin" className="text-red-400 text-xs font-semibold">Admin</Link>
+                  )}
+                  <button 
+                    onClick={signOut}
+                    className="text-white text-sm flex items-center"
+                  >
+                    <LogOut className="w-4 h-4 mr-1" />
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <Link to="/login" className="text-white text-sm">Sign In</Link>
               )}

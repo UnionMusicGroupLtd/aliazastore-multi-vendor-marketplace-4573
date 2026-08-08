@@ -32,24 +32,13 @@ console.log("🎨 NEW HOMEPAGE DESIGN - Product-focused template with featured p
 console.log("🗂️ COMPLETE CATEGORY SYSTEM - 15 main categories with 60+ subcategories implemented in database and UI");
 console.log("🔧 ADMIN-ONLY PLATFORM - Simplified to single-store admin management (no multi-seller complexity)");
 console.log("🎯 ifudda ADMIN DASHBOARD - Premium adult wellness store with products, delivery, payments, analytics");
-console.log("🚫 ADMIN LINKS COMPLETELY REMOVED - Admin links removed from header navigation (desktop & mobile) and footer - only accessible via direct URL");
 console.log("🔐 AUTHENTICATION SYSTEM - Complete auth context with admin detection and proper redirect logic");
-console.log("🚫 BROKEN DASHBOARD LINK REMOVED - Removed non-functional 'Dashboard' link, kept Admin Dashboard for admins only");
 console.log("🔧 ADMIN AUTH FIX - Fixed isAdmin check to use user.role and user.metadata.role");
 console.log("🎯 ADMIN DASHBOARD NOW WORKS - Admin users can now properly access /admin route");
 console.log("🆔 ADMIN USER CREATED - admin@ifudda.com created with role: admin in metadata");
-console.log("🔧 LOGIN REDIRECT FIX - Fixed login to use AuthContext state instead of raw auth data");
-console.log("🔧 AUTH GUARDS ADDED - Added authentication checks to SimpleAdminDashboard to protect admin routes");
-console.log("🔧 ALL ADMIN CARDS FIXED - Orders, Customers, Settings, Delivery, Payments, Withdrawals now working");
-console.log("🗄️ PLATFORM SETTINGS TABLE CREATED - Settings save now works properly");
-console.log("🔧 AUTHCONTEXT EXPORT FIX - Added missing export statement for AuthContext in AuthContext.tsx");
-console.log("🚀 ADMIN LOGIN REDIRECT ENHANCED - Uses AuthContext state for reliable admin detection");
-console.log("🔍 ADMIN DASHBOARD DEBUGGING - Added component mount logging to track if dashboard loads");
-console.log("🏠 ADMIN HOME PAGE REDIRECT - Admin users are automatically redirected from home to /admin");
-console.log("🔧 CONSISTENT AUTH STATE - All auth checks now use AuthContext for consistency");
 console.log("🛡️ SMART ADMIN LOGIN - info@unionmusicgroup.co.uk auto-detected as admin email");
-console.log("🔧 FORCED ADMIN NAVIGATION - Using window.location.href for reliable admin dashboard access");
-console.log("✅ ADMIN BUTTON REMOVED - No admin links visible in public navigation (only accessible via direct URL)");
+console.log("✅ NAVIGATION FIXED - Admin Dashboard link now shows for logged-in admins in header");
+console.log("🔧 AUTO-REMOVED REDIRECT - Admins can now stay on homepage and see proper navigation");
 const queryClient = new QueryClient();
 
 const App = () => (
