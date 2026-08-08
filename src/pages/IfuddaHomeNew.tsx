@@ -282,7 +282,6 @@ const IfuddaHomeNew = () => {
               <Link to="/categories" className="text-gray-300 hover:text-white transition-colors">Categories</Link>
               <Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
-              <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold">Admin</Link>
               
               {user ? (
                 <button 
@@ -307,7 +306,6 @@ const IfuddaHomeNew = () => {
             </nav>
 
             <div className="md:hidden flex items-center space-x-4">
-              <Link to="/admin" className="text-white text-sm">Admin</Link>
               {user ? (
                 <button 
                   onClick={signOut}
