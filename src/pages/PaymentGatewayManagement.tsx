@@ -502,11 +502,11 @@ const PaymentGatewayManagement = () => {
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div>
                       <p className="text-slate-600">Transaction Fee</p>
-                      <p className="font-medium">{gateway.transaction_fee_percentage}% + ₱{gateway.fixed_fee}</p>
+                      <p className="font-medium">{gateway.transaction_fee_percentage}% + £{gateway.fixed_fee}</p>
                     </div>
                     <div>
                       <p className="text-slate-600">Min/Max Amount</p>
-                      <p className="font-medium">₱{gateway.min_amount} / ₱{gateway.max_amount}</p>
+                      <p className="font-medium">£{gateway.min_amount} / £{gateway.max_amount}</p>
                     </div>
                   </div>
 
@@ -660,7 +660,7 @@ const PaymentGatewayManagement = () => {
                 />
               </div>
               <div>
-                <Label>Fixed Fee (₱)</Label>
+                <Label>Fixed Fee (£)</Label>
                 <Input
                   type="number"
                   step="0.01"
@@ -673,7 +673,7 @@ const PaymentGatewayManagement = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <Label>Minimum Amount (₱)</Label>
+                <Label>Minimum Amount (£)</Label>
                 <Input
                   type="number"
                   step="0.01"
@@ -683,7 +683,7 @@ const PaymentGatewayManagement = () => {
                 />
               </div>
               <div>
-                <Label>Maximum Amount (₱)</Label>
+                <Label>Maximum Amount (£)</Label>
                 <Input
                   type="number"
                   step="0.01"
