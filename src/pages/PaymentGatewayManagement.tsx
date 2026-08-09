@@ -538,8 +538,8 @@ const PaymentGatewayManagement = () => {
 
       {/* Edit Gateway Modal */}
       <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
-        <DialogContent className="max-w-2xl h-[85vh] flex flex-col p-0">
-        <DialogHeader className="px-6 pt-6 pb-4 border-b">
+        <DialogContent className="h-[90vh] sm:h-[85vh] w-full sm:w-full flex flex-col p-0">
+        <DialogHeader className="px-6 pt-6 pb-4 border-b shrink-0">
           <DialogTitle>{isAddingGateway ? "Add New Payment Gateway" : "Configure Payment Gateway"}</DialogTitle>
           <DialogDescription>{isAddingGateway ? "Add a new payment gateway to your store" : "Update payment gateway settings"}</DialogDescription>
         </DialogHeader>
@@ -785,7 +785,7 @@ const PaymentGatewayManagement = () => {
           </div>
 
           {/* Fixed footer - always visible */}
-          <div className="flex justify-end gap-3 px-6 py-4 bg-white border-t border-slate-200 shrink-0">
+          <div className="flex justify-end gap-3 px-6 py-4 bg-white border-t border-slate-200 shrink-0 mt-auto">
             <Button
               type="button"
               variant="outline"

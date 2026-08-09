@@ -107,14 +107,14 @@ const DialogContent = React.forwardRef<
         ref={ref}
         className={cn(
           // Base positioning
-          "fixed z-50 grid gap-4 bg-white shadow-lg",
-          // Mobile: FULL SCREEN from edges, no transforms
-          "inset-0 sm:inset-auto",
+          "fixed z-50 bg-white shadow-lg",
+          // Mobile: FULL SCREEN from edges with flex layout
+          "inset-0 flex flex-col sm:inset-auto",
           "sm:left-[50%] sm:top-[50%]", 
           "sm:translate-x-[-50%] sm:translate-y-[-50%]",
-          // Desktop styling
-          "sm:rounded-lg sm:border sm:max-w-lg",
-          // Allow custom max-height from parent, but ensure overflow works
+          // Desktop styling with flex layout
+          "sm:rounded-lg sm:border sm:max-w-2xl sm:flex sm:flex-col",
+          // Allow custom styling from parent
           className
         )}
         {...props}
