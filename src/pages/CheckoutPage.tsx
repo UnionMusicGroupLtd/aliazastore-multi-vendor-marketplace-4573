@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,6 +18,8 @@ const CheckoutPage = () => {
   const { cartItems, clearCart, getCartTotal } = useCart();
   const navigate = useNavigate();
   
+  console.log('🚨 CART & CHECKOUT FIX APPLIED - Fresh Build');
+  
   // Customer details form state
   const [customerDetails, setCustomerDetails] = useState({
     fullName: '',
@@ -35,7 +37,7 @@ const CheckoutPage = () => {
   
   // Calculate order totals
   const subtotal = getCartTotal();
-  const shipping = subtotal > 1000 ? 0 : 50;
+  const shipping = subtotal > 50 ? 0 : 4.99;
   const total = subtotal + shipping;
   
   const orderId = `ORD-${Date.now()}`;
@@ -55,8 +57,8 @@ const CheckoutPage = () => {
     
     if (!customerDetails.mobile.trim()) {
       errors.mobile = 'Mobile number is required';
-    } else if (!/^09\d{9}$/.test(customerDetails.mobile.replace(/\s/g, ''))) {
-      errors.mobile = 'Please enter a valid mobile number (09XX XXX XXXX)';
+    } else if (!/^07\d{8,9}$/.test(customerDetails.mobile.replace(/\s/g, ''))) {
+      errors.mobile = 'Please enter a valid UK mobile number (e.g., 07700 900123)';
     }
     
     if (!customerDetails.address.trim()) {
@@ -308,7 +310,7 @@ const CheckoutPage = () => {
                     <Label htmlFor="fullName">Full Name *</Label>
                     <Input
                       id="fullName"
-                      placeholder="Juan Dela Cruz"
+                      placeholder="John Smith"
                       value={customerDetails.fullName}
                       onChange={(e) => handleInputChange('fullName', e.target.value)}
                       className={formErrors.fullName ? 'border-red-500' : ''}
@@ -322,7 +324,7 @@ const CheckoutPage = () => {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="juan@example.com"
+                      placeholder="john.smith@example.com"
                       value={customerDetails.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       className={formErrors.email ? 'border-red-500' : ''}
@@ -337,13 +339,13 @@ const CheckoutPage = () => {
                     <Input
                       id="mobile"
                       type="tel"
-                      placeholder="09XX XXX XXXX"
+                      placeholder="07700 900123"
                       value={customerDetails.mobile}
                       onChange={(e) => handleInputChange('mobile', e.target.value)}
                       className={formErrors.mobile ? 'border-red-500' : ''}
                     />
                     {formErrors.mobile && <p className="text-sm text-red-500">{formErrors.mobile}</p>}
-                    <p className="text-xs text-slate-500">Format: 09XX XXX XXXX (11 digits)</p>
+                    <p className="text-xs text-slate-500">Format: UK mobile number (e.g., 07700 900123)</p>
                   </div>
 
                   <div className="border-t border-slate-200 pt-6">
@@ -358,7 +360,7 @@ const CheckoutPage = () => {
                     <Label htmlFor="address">Street Address *</Label>
                     <Input
                       id="address"
-                      placeholder="House number, street name, barangay"
+                      placeholder="House number, street name"
                       value={customerDetails.address}
                       onChange={(e) => handleInputChange('address', e.target.value)}
                       className={formErrors.address ? 'border-red-500' : ''}
@@ -372,7 +374,7 @@ const CheckoutPage = () => {
                       <Label htmlFor="city">City/Municipality *</Label>
                       <Input
                         id="city"
-                        placeholder="e.g., Manila"
+                        placeholder="e.g., London"
                         value={customerDetails.city}
                         onChange={(e) => handleInputChange('city', e.target.value)}
                         className={formErrors.city ? 'border-red-500' : ''}
@@ -384,7 +386,7 @@ const CheckoutPage = () => {
                       <Label htmlFor="province">Province *</Label>
                       <Input
                         id="province"
-                        placeholder="e.g., Metro Manila"
+                        placeholder="e.g., Greater London"
                         value={customerDetails.province}
                         onChange={(e) => handleInputChange('province', e.target.value)}
                         className={formErrors.province ? 'border-red-500' : ''}
@@ -398,7 +400,7 @@ const CheckoutPage = () => {
                     <Label htmlFor="postalCode">Postal Code *</Label>
                     <Input
                       id="postalCode"
-                      placeholder="e.g., 1000"
+                      placeholder="e.g., SW1A 1AA"
                       value={customerDetails.postalCode}
                       onChange={(e) => handleInputChange('postalCode', e.target.value)}
                       className={formErrors.postalCode ? 'border-red-500' : ''}
@@ -535,7 +537,7 @@ const CheckoutPage = () => {
                 {shipping > 0 && (
                   <div className="bg-blue-50 p-3 rounded-lg">
                     <p className="text-xs text-blue-700">
-                      🚚 Add £{(1000 - subtotal).toFixed(2)} more for free shipping!
+                      🚚 Add £{(50 - subtotal).toFixed(2)} more for free shipping!
                     </p>
                   </div>
                 )}

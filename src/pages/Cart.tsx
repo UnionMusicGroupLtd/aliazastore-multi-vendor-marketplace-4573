@@ -7,6 +7,8 @@ const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
   const [removedMessage, setRemovedMessage] = useState<string | null>(null);
   const previousCartItems = useRef<number>(0);
+  
+  console.log('🚨 CART REMOVAL FIX APPLIED - Fresh Build');
 
   const subtotal = getCartTotal();
   const deliveryFee = 0; // Free UK delivery

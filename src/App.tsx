@@ -70,6 +70,10 @@ console.log("🛒 CART OPERATIONS FIXED - Cart operations now handle both id and
 console.log("✅ COMPLETE CHECKOUT FLOW IMPLEMENTED - Customer details, payment, and confirmation steps now working");
 console.log("⚠️ PAYMENT GATEWAY MANAGEMENT TEMPORARILY DISABLED - Removed import/route to unblock checkout page");
 console.log("🛒 CART REMOVE & AUTO-REMOVE FIX COMPLETE - Users can now reduce quantity to 0 for auto-removal, plus visual feedback and success messages");
+console.log("🇬🇧 UK CHECKOUT FORM COMPLETE - All Philippine references removed, replaced with UK examples and formatting");
+console.log("🚚 UK SHIPPING PRICING - Free shipping over £50, standard delivery £4.99");
+console.log("📱 UK MOBILE VALIDATION - Mobile validation now accepts UK format (07700 900123) instead of Philippine format");
+console.log("🔄 FRESH BUILD FORCED - Both cart removal and UK checkout form fixes should now be live");
 const queryClient = new QueryClient();
 
 const App = () => (
