@@ -209,11 +209,6 @@ const Checkout = () => {
                   Continue Shopping
                 </Button>
               </Link>
-              <Link to="/orders">
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  View Orders
-                </Button>
-              </Link>
             </div>
           </div>
         </div>

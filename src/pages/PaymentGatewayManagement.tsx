@@ -313,7 +313,7 @@ const PaymentGatewayManagement = () => {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link to="/dashboard/admin" className="flex items-center space-x-2">
+              <Link to="/admin" className="flex items-center space-x-2">
                 <ArrowLeft className="w-5 h-5 text-slate-600" />
               </Link>
               <div className="flex items-center space-x-2">

@@ -25,7 +25,6 @@ import AdminPayments from "./pages/AdminPayments";
 import AdminDelivery from "./pages/AdminDelivery";
 import PaymentGatewayManagement from "./pages/PaymentGatewayManagement";
 import ForgotPassword from "./pages/ForgotPassword";
-import CustomerOrders from "./pages/CustomerOrders";
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
 console.log("💷 CURRENCY SYSTEM UPDATED - Now defaults to GBP (£) for UK pricing instead of PHP (₱)");
@@ -90,7 +89,6 @@ const App = () => (
               <Route path="/" element={<IfuddaHomeNew />} />
               <Route path="/login" element={<LoginNew />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
-              <Route path="/orders" element={<CustomerOrders />} />
               <Route path="/categories" element={<CategoryPageNew />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetail />} />
