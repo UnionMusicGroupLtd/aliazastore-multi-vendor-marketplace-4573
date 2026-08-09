@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { ShoppingCart, Trash2, Plus, Minus, CreditCard, Shield, Truck, CheckCircle } from "lucide-react";
@@ -6,10 +6,24 @@ import { ShoppingCart, Trash2, Plus, Minus, CreditCard, Shield, Truck, CheckCirc
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
   const [removedMessage, setRemovedMessage] = useState<string | null>(null);
+  const previousCartItems = useRef<number>(0);
 
   const subtotal = getCartTotal();
   const deliveryFee = 0; // Free UK delivery
   const finalTotal = subtotal + deliveryFee;
+
+  // Detect auto-removal due to quantity reaching 0
+  useEffect(() => {
+    if (previousCartItems.current > 0 && cartItems.length < previousCartItems.current) {
+      // Items were removed (likely due to quantity reaching 0)
+      const removedCount = previousCartItems.current - cartItems.length;
+      if (removedCount === 1) {
+        setRemovedMessage("Item removed from cart due to quantity reaching 0");
+        setTimeout(() => setRemovedMessage(null), 3000);
+      }
+    }
+    previousCartItems.current = cartItems.length;
+  }, [cartItems.length]);
 
   const handleRemoveItem = (id: number, name: string) => {
     removeFromCart(id);
@@ -115,12 +129,21 @@ const Cart = () => {
                                 updateQuantity(itemId, item.quantity - 1);
                               }
                             }}
-                            disabled={item.quantity <= 1}
-                            className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
+                            className={`p-2 transition-all ${
+                              item.quantity === 1 
+                                ? 'text-red-500 hover:bg-red-500/20 rounded-lg' 
+                                : 'text-gray-400 hover:text-white'
+                            }`}
+                            title={item.quantity === 1 ? "Click to remove item" : "Decrease quantity"}
                           >
                             <Minus className="w-4 h-4" />
                           </button>
-                          <span className="text-white font-semibold w-8 text-center">{item.quantity}</span>
+                          <div className="text-center">
+                            <span className="text-white font-semibold w-8">{item.quantity}</span>
+                            {item.quantity === 1 && (
+                              <span className="block text-xs text-red-400">Remove</span>
+                            )}
+                          </div>
                           <button 
                             onClick={() => {
                               const itemId = item._row_id || item.id;

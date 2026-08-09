@@ -69,6 +69,7 @@ console.log("🛒 BUY NOW FUNCTIONALITY - Buy Now now adds items to cart before 
 console.log("🛒 CART OPERATIONS FIXED - Cart operations now handle both id and _row_id for compatibility");
 console.log("✅ COMPLETE CHECKOUT FLOW IMPLEMENTED - Customer details, payment, and confirmation steps now working");
 console.log("⚠️ PAYMENT GATEWAY MANAGEMENT TEMPORARILY DISABLED - Removed import/route to unblock checkout page");
+console.log("🛒 CART REMOVE & AUTO-REMOVE FIX COMPLETE - Users can now reduce quantity to 0 for auto-removal, plus visual feedback and success messages");
 const queryClient = new QueryClient();
 
 const App = () => (

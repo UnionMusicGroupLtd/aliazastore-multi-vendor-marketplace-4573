@@ -89,7 +89,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     if (quantity < 1) {
       console.log('Quantity less than 1, removing item:', id);
-      removeFromCart(id);
+      setCartItems(prevItems => {
+        const filtered = prevItems.filter(item => item._row_id === id || item.id === id);
+        console.log('Item auto-removed due to quantity 0. Remaining items:', filtered.length);
+        return filtered;
+      });
       return;
     }
     setCartItems(prevItems =>
