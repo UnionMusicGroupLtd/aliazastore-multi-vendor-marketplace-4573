@@ -1,13 +1,21 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
-import { ShoppingCart, Trash2, Plus, Minus, CreditCard, Shield, Truck } from "lucide-react";
+import { ShoppingCart, Trash2, Plus, Minus, CreditCard, Shield, Truck, CheckCircle } from "lucide-react";
 
 const Cart = () => {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
+  const [removedMessage, setRemovedMessage] = useState<string | null>(null);
 
   const subtotal = getCartTotal();
   const deliveryFee = 0; // Free UK delivery
   const finalTotal = subtotal + deliveryFee;
+
+  const handleRemoveItem = (id: number, name: string) => {
+    removeFromCart(id);
+    setRemovedMessage(`"${name}" removed from cart`);
+    setTimeout(() => setRemovedMessage(null), 3000);
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -48,6 +56,14 @@ const Cart = () => {
       </header>
 
       <div className="container mx-auto px-4 py-12">
+        {/* Success Message */}
+        {removedMessage && (
+          <div className="mb-6 bg-green-500/20 border border-green-500/30 text-green-300 px-4 py-3 rounded-lg flex items-center gap-2">
+            <CheckCircle className="w-5 h-5" />
+            <span>{removedMessage}</span>
+          </div>
+        )}
+        
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">Shopping Cart</h1>
           <p className="text-gray-400">{cartItems.length} items in your cart</p>
@@ -72,8 +88,14 @@ const Cart = () => {
                         <p className="text-sm text-gray-400">Premium Quality</p>
                       </div>
                       <button
-                        onClick={() => removeFromCart(item._row_id)}
-                        className="text-red-500 hover:text-red-400"
+                        onClick={() => {
+                          const itemId = item._row_id || item.id;
+                          if (itemId) {
+                            handleRemoveItem(itemId, item.name);
+                          }
+                        }}
+                        className="text-red-500 hover:text-red-400 transition-colors p-2 hover:bg-red-500/10 rounded-lg"
+                        title="Remove item"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -87,7 +109,12 @@ const Cart = () => {
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-2 bg-gray-800 rounded-lg">
                           <button 
-                            onClick={() => updateQuantity(item._row_id, item.quantity - 1)}
+                            onClick={() => {
+                              const itemId = item._row_id || item.id;
+                              if (itemId) {
+                                updateQuantity(itemId, item.quantity - 1);
+                              }
+                            }}
                             disabled={item.quantity <= 1}
                             className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
                           >
@@ -95,7 +122,12 @@ const Cart = () => {
                           </button>
                           <span className="text-white font-semibold w-8 text-center">{item.quantity}</span>
                           <button 
-                            onClick={() => updateQuantity(item._row_id, item.quantity + 1)}
+                            onClick={() => {
+                              const itemId = item._row_id || item.id;
+                              if (itemId) {
+                                updateQuantity(itemId, item.quantity + 1);
+                              }
+                            }}
                             className="p-2 text-gray-400 hover:text-white"
                           >
                             <Plus className="w-4 h-4" />

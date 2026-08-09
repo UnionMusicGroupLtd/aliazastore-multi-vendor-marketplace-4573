@@ -71,11 +71,27 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const removeFromCart = (id: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item._row_id === id || item.id === id));
+    if (!id) {
+      console.error('removeFromCart called with invalid id:', id);
+      return;
+    }
+    setCartItems(prevItems => {
+      const filtered = prevItems.filter(item => item._row_id === id || item.id === id);
+      console.log('Removed item with id:', id, 'Remaining items:', filtered.length);
+      return filtered;
+    });
   };
 
   const updateQuantity = (id: number, quantity: number) => {
-    if (quantity < 1) return;
+    if (!id) {
+      console.error('updateQuantity called with invalid id:', id);
+      return;
+    }
+    if (quantity < 1) {
+      console.log('Quantity less than 1, removing item:', id);
+      removeFromCart(id);
+      return;
+    }
     setCartItems(prevItems =>
       prevItems.map(item =>
         (item._row_id === id || item.id === id) ? { ...item, quantity } : item
