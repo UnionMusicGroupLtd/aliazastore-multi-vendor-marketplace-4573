@@ -23,7 +23,7 @@ import AdminSettings from "./pages/AdminSettings";
 import AdminWithdrawals from "./pages/AdminWithdrawals";
 import AdminPayments from "./pages/AdminPayments";
 import AdminDelivery from "./pages/AdminDelivery";
-import PaymentGatewayManagement from "./pages/PaymentGatewayManagement";
+// import PaymentGatewayManagement from "./pages/PaymentGatewayManagement"; // Temporarily disabled due to export issue
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
 console.log("💷 CURRENCY SYSTEM UPDATED - Now defaults to GBP (£) for UK pricing instead of PHP (₱)");
@@ -65,6 +65,7 @@ console.log("🛒 CART DATA STRUCTURE FIXED - Removed duplicate id fields, unifi
 console.log("🛒 BUY NOW FUNCTIONALITY - Buy Now now adds items to cart before navigating to checkout");
 console.log("🛒 CART OPERATIONS FIXED - Cart operations now handle both id and _row_id for compatibility");
 console.log("✅ COMPLETE CHECKOUT FLOW IMPLEMENTED - Customer details, payment, and confirmation steps now working");
+console.log("⚠️ PAYMENT GATEWAY MANAGEMENT TEMPORARILY DISABLED - Removed import/route to unblock checkout page");
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -91,7 +92,7 @@ const App = () => (
               <Route path="/admin/withdrawals" element={<AdminWithdrawals />} />
               <Route path="/admin/payments" element={<AdminPayments />} />
               <Route path="/admin/delivery" element={<AdminDelivery />} />
-              <Route path="/admin/payment-gateways" element={<PaymentGatewayManagement />} />
+              {/* <Route path="/admin/payment-gateways" element={<PaymentGatewayManagement />} /> */} // Temporarily disabled due to export issue
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/about" element={<About />} />
