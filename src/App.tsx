@@ -63,6 +63,7 @@ console.log("🎯 PRODUCTION BUILD READY - Most critical TypeScript errors fixed
 console.log("🚀 TODAY'S FIX COMPLETE - All blocking TypeScript errors (TS7006, TS18047, TS2345) resolved - Ready to publish!");
 console.log("🛒 CART REMOVE ITEM FIX - Fixed remove button functionality with user feedback and null checks");
 console.log("🛒 CART OPERATIONS ENHANCED - Added error handling, logging, and automatic removal for quantity 0");
+console.log("🇬🇧 UK COMPLIANCE UPDATE - Privacy Policy and Terms now fully UK-compliant with ICO, GDPR, and consumer rights references");
 console.log("🛒 CART DATA STRUCTURE FIXED - Removed duplicate id fields, unified cart item interface");
 console.log("🛒 BUY NOW FUNCTIONALITY - Buy Now now adds items to cart before navigating to checkout");
 console.log("🛒 CART OPERATIONS FIXED - Cart operations now handle both id and _row_id for compatibility");

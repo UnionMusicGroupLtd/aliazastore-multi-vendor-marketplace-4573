@@ -34,11 +34,12 @@ const Terms = () => {
           {/* Content */}
           <div className="space-y-6 text-gray-300">
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">🔞 Age Requirement & Verification</h2>
+              <h2 className="text-xl font-bold text-white mb-3">🔞 Age Requirement & Verification (UK Law)</h2>
               <div className="space-y-2 text-gray-400">
                 <p><strong className="text-white">18+ Only:</strong> ifudda is strictly for adults aged 18 and over. By using our website, you confirm that you are 18+.</p>
-                <p><strong className="text-white">Age Verification:</strong> We use age verification systems to ensure compliance with UK law. Providing false information is a breach of these terms.</p>
-                <p><strong className="text-white">Legal Requirement:</strong> Under UK law, it is illegal to sell age-restricted products to minors. We actively prevent underage access.</p>
+                <p><strong className="text-white">UK Legal Requirement:</strong> Under UK law, it is illegal to sell age-restricted products to minors. We comply with all relevant UK legislation including the Video Recordings Act 1984 and the Intoxicating Substances Act 1972.</p>
+                <p><strong className="text-white">Age Verification:</strong> We use robust age verification systems to ensure compliance with UK law. Providing false information is a breach of these terms and may be reported to authorities.</p>
+                <p><strong className="text-white">Enforcement:</strong> We actively prevent underage access and cooperate with UK authorities including Trading Standards and the Police.</p>
               </div>
             </section>
 
@@ -60,14 +61,16 @@ const Terms = () => {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">Products & Services</h2>
+              <h2 className="text-xl font-bold text-white mb-3">Products & Services (UK Compliant)</h2>
               <div className="space-y-2 text-gray-400">
                 <ul className="list-disc ml-6 space-y-1">
                   <li><strong className="text-white">Adult Wellness Products:</strong> We sell age-restricted products for adult wellness and intimate use</li>
-                  <li><strong className="text-white">Product Accuracy:</strong> We strive for accurate descriptions, images, and pricing</li>
-                  <li><strong className="text-white">Availability:</strong> Products subject to stock availability</li>
-                  <li><strong className="text-white">Body-Safe Materials:</strong> All products comply with UK safety standards</li>
-                  <li><strong className="text-white">Medical Devices:</strong> Some products may be CE marked as medical devices</li>
+                  <li><strong className="text-white">UK Safety Standards:</strong> All products comply with UK safety regulations and CE marking requirements</li>
+                  <li><strong className="text-white">Product Accuracy:</strong> We comply with UK Consumer Rights Act 2015 for accurate descriptions, images, and pricing</li>
+                  <li><strong className="text-white">Availability:</strong> Products subject to stock availability - UK warehouse stock</li>
+                  <li><strong className="text-white">Body-Safe Materials:</strong> Products comply with UK REACH regulations for materials safety</li>
+                  <li><strong className="text-white">Medical Devices:</strong> Some products may be CE marked as medical devices under UK Medical Devices Regulations 2002</li>
+                  <li><strong className="text-white">Electrical Safety:</strong> Electrical products comply with UK Electrical Equipment (Safety) Regulations 2016</li>
                 </ul>
               </div>
             </section>
@@ -102,14 +105,17 @@ const Terms = () => {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">Returns & Refunds</h2>
+              <h2 className="text-xl font-bold text-white mb-3">Returns & Refunds (UK Consumer Rights Act 2015)</h2>
               <div className="space-y-2 text-gray-400">
+                <p><strong className="text-white">Your UK Consumer Rights:</strong> Under the Consumer Rights Act 2015, you have the right to reject goods that are unsatisfactory quality, unfit for purpose, or not as described.</p>
                 <ul className="list-disc ml-6 space-y-1">
-                  <li><strong className="text-white">30-Day Returns:</strong> Unopened items can be returned within 30 days</li>
-                  <li><strong className="text-white">Hygiene Reasons:</strong> Opened intimate products cannot be returned for hygiene reasons</li>
-                  <li><strong className="text-white">Faulty Products:</strong> Full refund for defective items (including opened)</li>
-                  <li><strong className="text-white">Refund Method:</strong> Refunds processed to original payment method</li>
-                  <li><strong className="text-white">Return Costs:</strong> Customer pays return postage unless item is faulty</li>
+                  <li><strong className="text-white">30-Day Returns:</strong> Unopened items can be returned within 30 days as per UK distance selling regulations</li>
+                  <li><strong className="text-white">Consumer Rights:</strong> Your statutory rights are not affected - faulty items can be returned for up to 6 months</li>
+                  <li><strong className="text-white">Hygiene Exception:</strong> Opened intimate products cannot be returned for hygiene reasons (per UK regulations)</li>
+                  <li><strong className="text-white">Faulty Products:</strong> Full refund for defective items including opened items within 30 days of delivery</li>
+                  <li><strong className="text-white">Refund Method:</strong> Refunds processed within 14 days to original payment method as required by UK law</li>
+                  <li><strong className="text-white">Return Costs:</strong> Customer pays return postage unless item is faulty - UK standard return rates apply</li>
+                  <li><strong className="text-white">Alternative Dispute Resolution:</strong> We offer alternative dispute resolution for UK consumer complaints</li>
                 </ul>
               </div>
             </section>
@@ -164,10 +170,12 @@ const Terms = () => {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">Governing Law & Jurisdiction</h2>
+              <h2 className="text-xl font-bold text-white mb-3">Governing Law & Jurisdiction (UK)</h2>
               <div className="space-y-2 text-gray-400">
-                <p>These terms are governed by the laws of England and Wales. Any disputes shall be resolved in UK courts under English law.</p>
-                <p className="mt-2">Your statutory rights as a UK consumer are not affected by these terms.</p>
+                <p>These terms are governed by the laws of <strong className="text-white">England and Wales</strong>. Any disputes shall be resolved in UK courts under English law.</p>
+                <p className="mt-2"><strong className="text-white">UK Consumer Protection:</strong> Your statutory rights as a UK consumer under the Consumer Rights Act 2015, Consumer Protection from Unfair Trading Regulations 2008, and other UK consumer protection laws are not affected by these terms.</p>
+                <p className="mt-2"><strong className="text-white">Alternative Dispute Resolution:</strong> If you have a complaint that cannot be resolved with us, you may use the European Commission Online Dispute Resolution (ODR) platform or UK-based alternative dispute resolution services.</p>
+                <p className="mt-2"><strong className="text-white">Regulatory Bodies:</strong> We cooperate with UK regulatory bodies including Trading Standards, the Information Commissioner's Office (ICO), and the Financial Conduct Authority (FCA) for payment services.</p>
               </div>
             </section>
 
@@ -180,12 +188,33 @@ const Terms = () => {
             </section>
 
             <section>
+              <h2 className="text-xl font-bold text-white mb-3">UK Government Resources</h2>
+              <div className="space-y-2 text-gray-400">
+                <p>For UK consumer protection, data protection, and regulatory information:</p>
+                <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700 mt-3 space-y-2">
+                  <p><strong className="text-white">Information Commissioner's Office (ICO):</strong></p>
+                  <p className="text-sm">Data protection regulator | <a href="https://ico.org.uk" className="text-red-500 underline" target="_blank" rel="noopener noreferrer">ico.org.uk</a> | Phone: 0303 123 1113</p>
+                  
+                  <p className="mt-2"><strong className="text-white">Citizens Advice Bureau:</strong></p>
+                  <p className="text-sm">Consumer rights advice | <a href="https://citizensadvice.org.uk" className="text-red-500 underline" target="_blank" rel="noopener noreferrer">citizensadvice.org.uk</a></p>
+                  
+                  <p className="mt-2"><strong className="text-white">Trading Standards:</strong></p>
+                  <p className="text-sm">Consumer protection enforcement | Contact via your local council</p>
+                  
+                  <p className="mt-2"><strong className="text-white">UK Government Consumer Rights:</strong></p>
+                  <p className="text-sm">Official guidance | <a href="https://gov.uk/consumer-rights" className="text-red-500 underline" target="_blank" rel="noopener noreferrer">gov.uk/consumer-rights</a></p>
+                </div>
+              </div>
+            </section>
+
+            <section>
               <h2 className="text-xl font-bold text-white mb-3">Contact Information</h2>
               <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
                 <p className="text-gray-300 mb-2">For questions about these Terms & Conditions:</p>
                 <p className="text-white"><strong>Email:</strong> legal@ifudda.co.uk</p>
                 <p className="text-white"><strong>Website:</strong> www.ifudda.co.uk</p>
-                <p className="text-gray-400 text-sm mt-2">Operating as a UK company since 2000</p>
+                <p className="text-white"><strong>Operating as:</strong> UK Company since 2000</p>
+                <p className="text-gray-400 text-sm mt-2">Registered in England & Wales | VAT registration available on request</p>
               </div>
             </section>
           </div>

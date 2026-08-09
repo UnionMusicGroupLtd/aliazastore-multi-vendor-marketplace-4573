@@ -82,18 +82,20 @@ const Privacy = () => {
             </section>
 
             <section>
-              <h2 className="text-xl font-bold text-white mb-3">Your Rights (UK GDPR)</h2>
+              <h2 className="text-xl font-bold text-white mb-3">Your Rights (UK GDPR & Data Protection Act 2018)</h2>
               <div className="space-y-2 text-gray-400">
-                <p>Under UK GDPR, you have the right to:</p>
+                <p>Under the UK GDPR and Data Protection Act 2018, you have the right to:</p>
                 <ul className="list-disc ml-6 space-y-1">
-                  <li><strong className="text-white">Access:</strong> Request a copy of your personal data</li>
-                  <li><strong className="text-white">Correction:</strong> Update inaccurate or incomplete information</li>
-                  <li><strong className="text-white">Deletion:</strong> Request deletion of your personal data</li>
-                  <li><strong className="text-white">Objection:</strong> Object to processing of your data</li>
-                  <li><strong className="text-white">Restriction:</strong> Request restriction of data processing</li>
-                  <li><strong className="text-white">Portability:</strong> Request data transfer to another service</li>
+                  <li><strong className="text-white">Right to Access:</strong> Request a copy of your personal data (Subject Access Request)</li>
+                  <li><strong className="text-white">Right to Rectification:</strong> Update inaccurate or incomplete information</li>
+                  <li><strong className="text-white">Right to Erasure:</strong> Request deletion of your personal data ("right to be forgotten")</li>
+                  <li><strong className="text-white">Right to Object:</strong> Object to processing of your data for direct marketing</li>
+                  <li><strong className="text-white">Right to Restrict:</strong> Request restriction of data processing in certain circumstances</li>
+                  <li><strong className="text-white">Right to Portability:</strong> Request data transfer to another service</li>
+                  <li><strong className="text-white">Right to Withdraw Consent:</strong> Withdraw consent at any time where we rely on consent</li>
                 </ul>
                 <p className="mt-3">To exercise these rights, contact us at privacy@ifudda.co.uk</p>
+                <p className="text-sm text-gray-500 mt-2">You also have the right to complain to the Information Commissioner's Office (ICO) if you believe we have breached your data protection rights.</p>
               </div>
             </section>
 
@@ -109,13 +111,32 @@ const Privacy = () => {
             <section>
               <h2 className="text-xl font-bold text-white mb-3 flex items-center">
                 <FileText className="w-5 h-5 mr-2" />
+                UK Data Protection Compliance
+              </h2>
+              <div className="space-y-2 text-gray-400">
+                <p>ifudda is fully compliant with UK data protection laws:</p>
+                <ul className="list-disc ml-6 space-y-1">
+                  <li><strong className="text-white">Data Protection Act 2018:</strong> We comply with all UK data protection legislation</li>
+                  <li><strong className="text-white">UK GDPR:</strong> We follow the UK General Data Protection Regulation principles</li>
+                  <li><strong className="text-white">ICO Registered:</strong> We are registered with the Information Commissioner's Office</li>
+                  <li><strong className="text-white">Data Security:</strong> Technical and organizational measures to protect your data</li>
+                  <li><strong className="text-white">International Transfers:</strong> Your data is processed and stored within the UK/EEA</li>
+                </ul>
+                <p className="mt-2">For more information about your data protection rights, you can contact the <strong className="text-white">Information Commissioner's Office (ICO)</strong> at <a href="https://ico.org.uk" className="text-red-500 underline" target="_blank" rel="noopener noreferrer">ico.org.uk</a> or phone 0303 123 1113.</p>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-xl font-bold text-white mb-3 flex items-center">
+                <FileText className="w-5 h-5 mr-2" />
                 Contact Us
               </h2>
               <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
                 <p className="text-gray-300 mb-2">For privacy-related inquiries or to exercise your rights:</p>
                 <p className="text-white"><strong>Email:</strong> privacy@ifudda.co.uk</p>
                 <p className="text-white"><strong>Website:</strong> www.ifudda.co.uk</p>
-                <p className="text-gray-400 text-sm mt-2">We typically respond within 5 working days.</p>
+                <p className="text-white"><strong>ICO Reference:</strong> Our ICO registration number is available on request</p>
+                <p className="text-gray-400 text-sm mt-2">We typically respond within 5 working days as required by UK data protection laws.</p>
               </div>
             </section>
           </div>
