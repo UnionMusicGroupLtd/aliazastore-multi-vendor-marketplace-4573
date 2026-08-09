@@ -44,7 +44,7 @@ const IfuddaHomeNew = () => {
     console.log('🔄 IfuddaHomeNew: Component mounted');
     console.log('🔄 IfuddaHomeNew: User state:', user);
     console.log('🔄 IfuddaHomeNew: isAdmin state:', isAdmin);
-    console.log('🔄 IfuddaHomeNew: Navigation should show:', user ? (isAdmin ? 'Admin Dashboard + Sign Out' : 'Dashboard + Sign Out') : 'Sign In');
+    console.log('🔄 IfuddaHomeNew: Navigation should show:', user ? (isAdmin ? 'Admin Dashboard + Sign Out' : 'Sign Out only') : 'Sign In');
     
     // Load sample products
     const sampleProducts: Product[] = [
@@ -293,10 +293,8 @@ const IfuddaHomeNew = () => {
               
               {user ? (
                 <>
-                  {isAdmin ? (
+                  {isAdmin && (
                     <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold">Admin Dashboard</Link>
-                  ) : (
-                    <Link to="/dashboard" className="text-gray-300 hover:text-white transition-colors">Dashboard</Link>
                   )}
                   <button 
                     onClick={signOut}

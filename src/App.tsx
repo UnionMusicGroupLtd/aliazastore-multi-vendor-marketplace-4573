@@ -40,6 +40,7 @@ console.log("🎯 ADMIN DASHBOARD NOW WORKS - Admin users can now properly acces
 console.log("🆔 ADMIN USER CREATED - admin@ifudda.com created with role: admin in metadata");
 console.log("🛡️ SMART ADMIN LOGIN - info@unionmusicgroup.co.uk auto-detected as admin email");
 console.log("✅ NAVIGATION FIXED - Admin Dashboard link now shows for logged-in admins in header");
+console.log("🚫 BROKEN DASHBOARD LINK REMOVED - Removed /dashboard link for regular users (route doesn't exist)");
 console.log("🔧 AUTO-REMOVED REDIRECT - Admins can now stay on homepage and see proper navigation");
 console.log("🔄 FORCED REBUILD - Navigation cache issue debugging - Timestamp:", new Date().toISOString());
 console.log("🔧 PLATFORM SETTINGS SAVE FIX - Using proper database API methods");
