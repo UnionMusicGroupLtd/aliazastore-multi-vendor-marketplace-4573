@@ -1,10 +1,11 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import { ShoppingCart, Shield, Truck, Heart, Check } from 'lucide-react';
 
 const ProductDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
@@ -59,8 +60,7 @@ const ProductDetail = () => {
   const product = allProducts.find(p => p._row_id === parseInt(id || '1')) || allProducts[0];
 
   const handleAddToCart = () => {
-    addToCart({
-      id: Date.now(), // Use timestamp for unique cart item ID
+    const cartItem = {
       _row_id: Date.now(),
       product_id: product._row_id,
       name: product.name,
@@ -70,11 +70,33 @@ const ProductDetail = () => {
       image: product.image_url,
       store_name: 'ifudda',
       rating: 4.5
-    });
+    };
+    
+    addToCart(cartItem);
     
     // Show success feedback
     setShowSuccessMessage(true);
     setTimeout(() => setShowSuccessMessage(false), 3000);
+  };
+
+  const handleBuyNow = () => {
+    // Add item to cart first
+    const cartItem = {
+      _row_id: Date.now(),
+      product_id: product._row_id,
+      name: product.name,
+      price: product.price,
+      original_price: product.compare_price || product.price,
+      quantity: 1,
+      image: product.image_url,
+      store_name: 'ifudda',
+      rating: 4.5
+    };
+    
+    addToCart(cartItem);
+    
+    // Navigate directly to checkout
+    navigate('/checkout');
   };
 
   return (
@@ -176,12 +198,12 @@ const ProductDetail = () => {
                 Add to Cart
               </button>
 
-              <Link
-                to="/checkout"
-                className="block w-full bg-gray-800 text-white py-4 rounded-lg font-semibold hover:bg-gray-700 transition-all text-center"
+              <button
+                onClick={handleBuyNow}
+                className="block w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all text-center"
               >
                 Buy Now
-              </Link>
+              </button>
             </div>
 
             <div className="mt-6 space-y-2 text-sm text-gray-400">

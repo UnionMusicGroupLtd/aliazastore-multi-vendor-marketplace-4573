@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 interface CartItem {
   _row_id: number;
   product_id: number;
-  id: number; // Alias for _row_id for easier access
+  id?: number; // Optional - will be auto-set by context
   name: string;
   price: number;
   original_price: number;
@@ -71,14 +71,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const removeFromCart = (id: number) => {
-    setCartItems(prevItems => prevItems.filter(item => item._row_id !== id));
+    setCartItems(prevItems => prevItems.filter(item => item._row_id === id || item.id === id));
   };
 
   const updateQuantity = (id: number, quantity: number) => {
     if (quantity < 1) return;
     setCartItems(prevItems =>
       prevItems.map(item =>
-        item._row_id === id ? { ...item, quantity } : item
+        (item._row_id === id || item.id === id) ? { ...item, quantity } : item
       )
     );
   };

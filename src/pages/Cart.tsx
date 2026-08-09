@@ -57,7 +57,7 @@ const Cart = () => {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
-              <div key={item.id} className="bg-gray-900/50 backdrop-blur-lg rounded-xl p-6 border border-gray-800">
+              <div key={item.id || item._row_id} className="bg-gray-900/50 backdrop-blur-lg rounded-xl p-6 border border-gray-800">
                 <div className="flex gap-4">
                   <img 
                     src={item.image} 
@@ -72,7 +72,7 @@ const Cart = () => {
                         <p className="text-sm text-gray-400">Premium Quality</p>
                       </div>
                       <button
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item._row_id)}
                         className="text-red-500 hover:text-red-400"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -87,7 +87,7 @@ const Cart = () => {
                       <div className="flex items-center space-x-4">
                         <div className="flex items-center space-x-2 bg-gray-800 rounded-lg">
                           <button 
-                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            onClick={() => updateQuantity(item._row_id, item.quantity - 1)}
                             disabled={item.quantity <= 1}
                             className="p-2 text-gray-400 hover:text-white disabled:opacity-50"
                           >
@@ -95,7 +95,7 @@ const Cart = () => {
                           </button>
                           <span className="text-white font-semibold w-8 text-center">{item.quantity}</span>
                           <button 
-                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            onClick={() => updateQuantity(item._row_id, item.quantity + 1)}
                             className="p-2 text-gray-400 hover:text-white"
                           >
                             <Plus className="w-4 h-4" />

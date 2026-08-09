@@ -94,8 +94,7 @@ const Products = () => {
     : products.filter(p => p.category === selectedCategory);
 
   const handleAddToCart = (product: Product) => {
-    addToCart({
-      id: Date.now(), // Use timestamp for unique cart item ID
+    const cartItem = {
       _row_id: Date.now(),
       product_id: product._row_id,
       name: product.name,
@@ -105,12 +104,34 @@ const Products = () => {
       image: product.image_url,
       store_name: 'ifudda',
       rating: 4.5
-    });
+    };
+    
+    addToCart(cartItem);
     
     // Show success feedback
     setAddedProductName(product.name);
     setShowSuccessMessage(true);
     setTimeout(() => setShowSuccessMessage(false), 3000);
+  };
+
+  const handleBuyNow = (product: Product) => {
+    // Add item to cart first
+    const cartItem = {
+      _row_id: Date.now(),
+      product_id: product._row_id,
+      name: product.name,
+      price: product.price,
+      original_price: product.compare_price || product.price,
+      quantity: 1,
+      image: product.image_url,
+      store_name: 'ifudda',
+      rating: 4.5
+    };
+    
+    addToCart(cartItem);
+    
+    // Navigate directly to checkout
+    navigate('/checkout');
   };
 
   if (loading) {
@@ -242,6 +263,15 @@ const Products = () => {
                     className="flex-1 bg-gradient-to-r from-red-600 to-pink-600 text-white py-2 rounded-lg font-semibold hover:from-red-700 hover:to-pink-700 transition-all"
                   >
                     Add to Cart
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleBuyNow(product);
+                    }}
+                    className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all"
+                  >
+                    Buy Now
                   </button>
                   <button
                     onClick={(e) => {
