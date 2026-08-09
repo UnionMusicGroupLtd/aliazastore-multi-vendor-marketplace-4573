@@ -10,6 +10,8 @@ import {
   Settings, Package, DollarSign, Percent, Truck, Image as ImageIcon,
   CheckCircle2, AlertCircle, Eye, EyeOff 
 } from "lucide-react";
+import db from "@/lib/shared/kliv-database.js";
+import { content } from "@/lib/shared/kliv-content.js";
 
 interface Product {
   _row_id: number;
@@ -88,74 +90,17 @@ const AdminProductManagement = () => {
     loadProducts();
   }, []);
 
-  const loadProducts = () => {
+  const loadProducts = async () => {
     setLoading(true);
-    // Sample product data - in production this would load from database
-    const sampleProducts: Product[] = [
-      {
-        _row_id: 1,
-        name: 'Premium Luxury Vibrator',
-        description: 'Experience ultimate pleasure with our premium luxury vibrator featuring 10 vibration modes, whisper-quiet operation, and waterproof design.',
-        price: 49.99,
-        compare_price: 69.99,
-        image_url: 'https://images.pexels.com/photos/11482458/pexels-photo-11482458.jpeg?auto=compress&cs=tinysrgb&h=400&w=400',
-        category: 'Vibrators',
-        in_stock: 1,
-        featured: 1,
-        age_restricted: 1,
-        is_banned: 0,
-        on_sale: 1,
-        sale_price: 39.99,
-        discount_percentage: 20,
-        sale_start_date: '2024-01-01',
-        sale_end_date: '2024-12-31',
-        offer_badge: 'Best Seller',
-        offer_description: 'Customer favorite - limited time offer!',
-        delivery_enabled: 1,
-        delivery_fee: 0,
-        free_delivery_threshold: 50,
-        delivery_time: '2-3 business days'
-      },
-      {
-        _row_id: 2,
-        name: 'Couples Ring Enhancement',
-        description: 'Enhance intimacy with this premium silicone couples ring. Features 7 vibration patterns and wireless remote control.',
-        price: 34.99,
-        compare_price: 44.99,
-        image_url: 'https://images.pexels.com/photos/33538414/pexels-photo-33538414.png?auto=compress&cs=tinysrgb&h=400&w=400',
-        category: 'Couples Toys',
-        in_stock: 1,
-        featured: 1,
-        age_restricted: 1,
-        is_banned: 0,
-        on_sale: 0,
-        delivery_enabled: 1,
-        delivery_fee: 4.99,
-        free_delivery_threshold: 50,
-        delivery_time: '3-5 business days'
-      },
-      {
-        _row_id: 3,
-        name: 'Massage Oil Collection',
-        description: 'Premium massage oil collection in three sensual scents. Made from natural ingredients.',
-        price: 24.99,
-        compare_price: 29.99,
-        image_url: 'https://images.pexels.com/photos/33538415/pexels-photo-33538415.png?auto=compress&cs=tinysrgb&h=400&w=400',
-        category: 'Massage',
-        in_stock: 1,
-        featured: 0,
-        age_restricted: 0,
-        is_banned: 0,
-        on_sale: 0,
-        delivery_enabled: 1,
-        delivery_fee: 0,
-        free_delivery_threshold: 30,
-        delivery_time: '2-3 business days'
-      }
-    ];
-    
-    setProducts(sampleProducts);
-    setLoading(false);
+    try {
+      const productsData = await db.query("products", { order: "_created_at.desc" });
+      setProducts(productsData as unknown as Product[]);
+    } catch (err) {
+      console.error("Error loading products:", err);
+      setError("Failed to load products");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -178,15 +123,16 @@ const AdminProductManagement = () => {
     setError('');
 
     try {
-      // Create image preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-        setProductForm({ ...productForm, image_url: reader.result as string });
-      };
-      reader.readAsDataURL(file);
+      // Upload to content filesystem
+      const result = await content.uploadFile(file, '/content/product-images/');
       
-      setSuccess('Image uploaded successfully!');
+      if (result && result.path) {
+        setImagePreview(result.path);
+        setProductForm({ ...productForm, image_url: result.path });
+        setSuccess('Image uploaded successfully!');
+      } else {
+        setError('Failed to upload image');
+      }
     } catch (err: any) {
       setError('Failed to upload image: ' + err.message);
     } finally {
@@ -257,85 +203,111 @@ const AdminProductManagement = () => {
     setShowBanModal(true);
   };
 
-  const handleSaveProduct = () => {
+  const handleSaveProduct = async () => {
     // Basic validation
     if (!productForm.name || !productForm.price || !productForm.description) {
       setError('Name, price, and description are required');
       return;
     }
 
-    const newProduct: Product = {
-      _row_id: selectedProduct ? selectedProduct._row_id : Date.now(),
-      name: productForm.name,
-      description: productForm.description,
-      price: parseFloat(productForm.price),
-      compare_price: productForm.compare_price ? parseFloat(productForm.compare_price) : undefined,
-      image_url: productForm.image_url || 'https://images.pexels.com/photos/11482458/pexels-photo-11482458.jpeg?auto=compress&cs=tinysrgb&h=400&w=400',
-      category: productForm.category,
-      in_stock: parseInt(productForm.in_stock),
-      featured: parseInt(productForm.featured),
-      age_restricted: parseInt(productForm.age_restricted),
-      is_banned: 0,
-      on_sale: parseInt(productForm.on_sale),
-      sale_price: productForm.sale_price ? parseFloat(productForm.sale_price) : undefined,
-      discount_percentage: productForm.discount_percentage ? parseFloat(productForm.discount_percentage) : undefined,
-      sale_start_date: productForm.sale_start_date || undefined,
-      sale_end_date: productForm.sale_end_date || undefined,
-      offer_badge: productForm.offer_badge || undefined,
-      offer_description: productForm.offer_description || undefined,
-      delivery_enabled: parseInt(productForm.delivery_enabled),
-      delivery_fee: productForm.delivery_fee ? parseFloat(productForm.delivery_fee) : undefined,
-      free_delivery_threshold: productForm.free_delivery_threshold ? parseFloat(productForm.free_delivery_threshold) : undefined,
-      delivery_time: productForm.delivery_time
-    };
+    try {
+      const productData = {
+        name: productForm.name,
+        description: productForm.description,
+        price: parseFloat(productForm.price),
+        compare_price: productForm.compare_price ? parseFloat(productForm.compare_price) : null,
+        image_url: productForm.image_url || 'https://images.pexels.com/photos/11482458/pexels-photo-11482458.jpeg?auto=compress&cs=tinysrgb&h=400&w=400',
+        category: productForm.category,
+        in_stock: parseInt(productForm.in_stock),
+        featured: parseInt(productForm.featured),
+        age_restricted: parseInt(productForm.age_restricted),
+        is_banned: 0,
+        on_sale: parseInt(productForm.on_sale),
+        sale_price: productForm.sale_price ? parseFloat(productForm.sale_price) : null,
+        discount_percentage: productForm.discount_percentage ? parseFloat(productForm.discount_percentage) : null,
+        sale_start_date: productForm.sale_start_date || null,
+        sale_end_date: productForm.sale_end_date || null,
+        offer_badge: productForm.offer_badge || null,
+        offer_description: productForm.offer_description || null,
+        delivery_enabled: parseInt(productForm.delivery_enabled),
+        delivery_fee: productForm.delivery_fee ? parseFloat(productForm.delivery_fee) : null,
+        free_delivery_threshold: productForm.free_delivery_threshold ? parseFloat(productForm.free_delivery_threshold) : null,
+        delivery_time: productForm.delivery_time
+      };
 
-    if (selectedProduct) {
-      // Update existing product
-      setProducts(products.map(p => p._row_id === selectedProduct._row_id ? newProduct : p));
-      setSuccess('Product updated successfully!');
-    } else {
-      // Add new product
-      setProducts([...products, newProduct]);
-      setSuccess('Product added successfully!');
+      if (selectedProduct) {
+        // Update existing product
+        await db.update("products", { 
+          filter: { _row_id: selectedProduct._row_id }
+        }, productData);
+        setSuccess('Product updated successfully!');
+      } else {
+        // Add new product
+        await db.insert("products", productData);
+        setSuccess('Product added successfully!');
+      }
+
+      setShowAddModal(false);
+      setShowEditModal(false);
+      setTimeout(() => setSuccess(''), 3000);
+      loadProducts(); // Reload products from database
+    } catch (err: any) {
+      setError('Failed to save product: ' + err.message);
     }
-
-    setShowAddModal(false);
-    setShowEditModal(false);
-    setTimeout(() => setSuccess(''), 3000);
   };
 
-  const handleBanProduct = () => {
+  const handleBanProduct = async () => {
     if (!selectedProduct) return;
 
-    const updatedProduct = {
-      ...selectedProduct,
-      is_banned: 1,
-      ban_reason: banForm.ban_reason || 'Violates content guidelines'
-    };
+    try {
+      await db.update("products", { 
+        filter: { _row_id: selectedProduct._row_id }
+      }, {
+        is_banned: 1,
+        ban_reason: banForm.ban_reason || 'Violates content guidelines'
+      });
 
-    setProducts(products.map(p => p._row_id === selectedProduct._row_id ? updatedProduct : p));
-    setSuccess(`Product "${selectedProduct.name}" has been banned`);
-    setShowBanModal(false);
-    setTimeout(() => setSuccess(''), 3000);
-  };
-
-  const handleUnbanProduct = (product: Product) => {
-    const updatedProduct = {
-      ...product,
-      is_banned: 0,
-      ban_reason: undefined
-    };
-
-    setProducts(products.map(p => p._row_id === product._row_id ? updatedProduct : p));
-    setSuccess(`Product "${product.name}" has been restored`);
-    setTimeout(() => setSuccess(''), 3000);
-  };
-
-  const handleDeleteProduct = (product: Product) => {
-    if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
-      setProducts(products.filter(p => p._row_id !== product._row_id));
-      setSuccess(`Product "${product.name}" has been deleted`);
+      setSuccess(`Product "${selectedProduct.name}" has been banned`);
+      setShowBanModal(false);
       setTimeout(() => setSuccess(''), 3000);
+      loadProducts();
+    } catch (err: any) {
+      setError('Failed to ban product: ' + err.message);
+    }
+  };
+
+  const handleUnbanProduct = async (product: Product) => {
+    try {
+      await db.update("products", { 
+        filter: { _row_id: product._row_id }
+      }, {
+        is_banned: 0,
+        ban_reason: null
+      });
+
+      setSuccess(`Product "${product.name}" has been restored`);
+      setTimeout(() => setSuccess(''), 3000);
+      loadProducts();
+    } catch (err: any) {
+      setError('Failed to unban product: ' + err.message);
+    }
+  };
+
+  const handleDeleteProduct = async (product: Product) => {
+    if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
+      try {
+        // Use db.query with delete operation
+        await db.query("products", { 
+          filter: { _row_id: product._row_id },
+          action: 'delete'
+        });
+        
+        setSuccess(`Product "${product.name}" has been deleted`);
+        setTimeout(() => setSuccess(''), 3000);
+        loadProducts();
+      } catch (err: any) {
+        setError('Failed to delete product: ' + err.message);
+      }
     }
   };
 
