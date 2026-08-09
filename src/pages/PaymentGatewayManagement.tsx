@@ -538,12 +538,12 @@ const PaymentGatewayManagement = () => {
 
       {/* Edit Gateway Modal */}
       <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
-        <DialogContent className="max-w-2xl max-h-[90vh] flex flex-col">
-        <DialogHeader>
+        <DialogContent className="max-w-2xl h-[85vh] flex flex-col p-0">
+        <DialogHeader className="px-6 pt-6 pb-4 border-b">
           <DialogTitle>{isAddingGateway ? "Add New Payment Gateway" : "Configure Payment Gateway"}</DialogTitle>
           <DialogDescription>{isAddingGateway ? "Add a new payment gateway to your store" : "Update payment gateway settings"}</DialogDescription>
         </DialogHeader>
-          <div className="flex-1 overflow-y-auto space-y-4 px-1">
+          <div className="flex-1 overflow-y-auto space-y-4 px-6 py-4">
             {error && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -785,7 +785,7 @@ const PaymentGatewayManagement = () => {
           </div>
 
           {/* Fixed footer - always visible */}
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-200 shrink-0">
+          <div className="flex justify-end gap-3 px-6 py-4 bg-white border-t border-slate-200 shrink-0">
             <Button
               type="button"
               variant="outline"

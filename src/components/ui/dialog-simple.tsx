@@ -114,13 +114,7 @@ const DialogContent = React.forwardRef<
           "sm:translate-x-[-50%] sm:translate-y-[-50%]",
           // Desktop styling
           "sm:rounded-lg sm:border sm:max-w-lg",
-          "sm:max-h-[calc(100vh-2rem)] sm:overflow-y-auto",
-          // Mobile padding (smaller), desktop padding (larger)
-          "p-4 sm:p-6",
-          // Mobile-specific: ensure no overflow
-          "overflow-y-auto max-h-[100dvh]",
-          // Desktop margin
-          "sm:my-4 sm:mx-4",
+          // Allow custom max-height from parent, but ensure overflow works
           className
         )}
         {...props}
