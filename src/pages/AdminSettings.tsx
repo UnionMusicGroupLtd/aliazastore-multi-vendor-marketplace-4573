@@ -208,7 +208,7 @@ const AdminSettings = () => {
       <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center space-x-4">
-            <Link to="/dashboard/admin" className="flex items-center space-x-2">
+            <Link to="/admin" className="flex items-center space-x-2">
               <ArrowLeft className="w-5 h-5 text-slate-600" />
             </Link>
             <div className="flex items-center space-x-2">
@@ -280,7 +280,7 @@ const AdminSettings = () => {
                     <Input
                       value={generalSettings.contactPhone}
                       onChange={(e) => setGeneralSettings({...generalSettings, contactPhone: e.target.value})}
-                      placeholder="+63 912 345 6789"
+                      placeholder="+44 20 7123 4567"
                     />
                   </div>
                   <div>
@@ -430,7 +430,7 @@ const AdminSettings = () => {
 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <Label>Minimum Withdrawal (₱)</Label>
+                    <Label>Minimum Withdrawal (£)</Label>
                     <Input
                       type="number"
                       value={paymentSettings.minimumWithdrawal}

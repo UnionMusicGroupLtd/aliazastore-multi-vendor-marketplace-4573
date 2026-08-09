@@ -23,7 +23,9 @@ import AdminSettings from "./pages/AdminSettings";
 import AdminWithdrawals from "./pages/AdminWithdrawals";
 import AdminPayments from "./pages/AdminPayments";
 import AdminDelivery from "./pages/AdminDelivery";
-// import PaymentGatewayManagement from "./pages/PaymentGatewayManagement"; // Temporarily disabled due to export issue
+import PaymentGatewayManagement from "./pages/PaymentGatewayManagement";
+import ForgotPassword from "./pages/ForgotPassword";
+import CustomerOrders from "./pages/CustomerOrders";
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
 console.log("💷 CURRENCY SYSTEM UPDATED - Now defaults to GBP (£) for UK pricing instead of PHP (₱)");
@@ -87,6 +89,8 @@ const App = () => (
             <Routes>
               <Route path="/" element={<IfuddaHomeNew />} />
               <Route path="/login" element={<LoginNew />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/orders" element={<CustomerOrders />} />
               <Route path="/categories" element={<CategoryPageNew />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetail />} />
@@ -100,7 +104,7 @@ const App = () => (
               <Route path="/admin/withdrawals" element={<AdminWithdrawals />} />
               <Route path="/admin/payments" element={<AdminPayments />} />
               <Route path="/admin/delivery" element={<AdminDelivery />} />
-              {/* <Route path="/admin/payment-gateways" element={<PaymentGatewayManagement />} /> */} // Temporarily disabled due to export issue
+              <Route path="/admin/payment-gateways" element={<PaymentGatewayManagement />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
               <Route path="/about" element={<About />} />

@@ -325,14 +325,14 @@ const AdminProductManagement = () => {
       <header className="bg-black/50 backdrop-blur-lg border-b border-gray-800">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link to="/dashboard/admin" className="flex items-center space-x-2">
+            <Link to="/admin" className="flex items-center space-x-2">
               <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">i</span>
               </div>
               <span className="text-2xl font-bold text-white">ifudda Admin</span>
             </Link>
             
-            <Link to="/dashboard/admin" className="text-gray-300 hover:text-white transition-colors">
+            <Link to="/admin" className="text-gray-300 hover:text-white transition-colors">
               Back to Dashboard
             </Link>
           </div>
