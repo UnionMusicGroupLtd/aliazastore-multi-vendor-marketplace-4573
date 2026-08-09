@@ -128,7 +128,7 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold text-slate-900">Payment Amount</h3>
             <Badge className="bg-blue-100 text-blue-700 text-lg font-bold">
-              ₱{amount.toFixed(2)}
+              £{amount.toFixed(2)}
             </Badge>
           </div>
           
@@ -194,7 +194,7 @@ const GCashPayment = ({ amount, orderId, onComplete }: GCashPaymentProps) => {
             ) : (
               <p>2. Enter the GCash number above</p>
             )}
-            <p>3. Enter exact amount: ₱{amount.toFixed(2)}</p>
+            <p>3. Enter exact amount: £{amount.toFixed(2)}</p>
             <p>4. Complete payment and click button below</p>
           </div>
         </div>

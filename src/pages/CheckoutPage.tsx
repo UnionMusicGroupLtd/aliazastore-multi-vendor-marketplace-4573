@@ -108,13 +108,13 @@ const CheckoutPage = () => {
         customerName: customerDetails.fullName,
         customerEmail: customerDetails.email,
         customerPhone: customerDetails.mobile,
-        totalAmount: `₱${total.toFixed(2)}`,
+        totalAmount: `£${total.toFixed(2)}`,
         shippingAddress: `${customerDetails.address}, ${customerDetails.city}, ${customerDetails.province} ${customerDetails.postalCode}`,
         city: customerDetails.city,
         postalCode: customerDetails.postalCode,
         paymentMethod: "GCash",
         orderItems: cartItems.map(item => 
-          `${item.name} x${item.quantity} - ₱${(item.price * item.quantity).toFixed(2)}`
+          `${item.name} x${item.quantity} - £${(item.price * item.quantity).toFixed(2)}`
         ).join("\n"),
         notes: customerDetails.notes
       });
@@ -191,7 +191,7 @@ const CheckoutPage = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-slate-600">Amount Paid:</span>
-                    <span className="font-semibold text-green-600">₱{total.toFixed(2)}</span>
+                    <span className="font-semibold text-green-600">£{total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -513,29 +513,29 @@ const CheckoutPage = () => {
                       <p className="font-medium">{item.name}</p>
                       <p className="text-sm text-slate-600">Qty: {item.quantity}</p>
                     </div>
-                    <p className="font-semibold">₱{(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-semibold">£{(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 ))}
                 
                 <div className="border-t border-slate-200 pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-600">Subtotal</span>
-                    <span>₱{subtotal.toFixed(2)}</span>
+                    <span>£{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-600">Shipping</span>
-                    <span>{shipping === 0 ? "FREE" : `₱${shipping.toFixed(2)}`}</span>
+                    <span>{shipping === 0 ? "FREE" : `£${shipping.toFixed(2)}`}</span>
                   </div>
                   <div className="flex justify-between font-bold text-lg">
                     <span>Total</span>
-                    <span className="text-blue-600">₱{total.toFixed(2)}</span>
+                    <span className="text-blue-600">£{total.toFixed(2)}</span>
                   </div>
                 </div>
 
                 {shipping > 0 && (
                   <div className="bg-blue-50 p-3 rounded-lg">
                     <p className="text-xs text-blue-700">
-                      🚚 Add ₱{(1000 - subtotal).toFixed(2)} more for free shipping!
+                      🚚 Add £{(1000 - subtotal).toFixed(2)} more for free shipping!
                     </p>
                   </div>
                 )}
@@ -553,7 +553,7 @@ const CheckoutPage = () => {
               <h4 className="font-medium text-slate-900 mb-2">📋 Delivery Information</h4>
               <ul className="text-xs text-slate-600 space-y-1">
                 <li>• Standard delivery: 3-5 business days</li>
-                <li>• Free shipping on orders over ₱1,000</li>
+                <li>• Free shipping on orders over £50</li>
                 <li>• You'll receive tracking updates via email</li>
                 <li>• Secure payment processing</li>
               </ul>

@@ -169,13 +169,13 @@ const DeliverySelection = ({ shopOwnerId, orderAmount, onDeliverySelect, selecte
                     ) : (
                       <div className="flex items-center space-x-1">
                         <DollarSign className="w-4 h-4 text-slate-600" />
-                        <span className="font-semibold">₱{fee.toFixed(2)}</span>
+                        <span className="font-semibold">£{fee.toFixed(2)}</span>
                       </div>
                     )}
                     
                     {option.minimum_order > 0 && orderAmount < option.minimum_order && (
                       <p className="text-xs text-orange-600 mt-1">
-                        Min. order: ₱{option.minimum_order.toFixed(2)}
+                        Min. order: £{option.minimum_order.toFixed(2)}
                       </p>
                     )}
                   </div>
@@ -192,7 +192,7 @@ const DeliverySelection = ({ shopOwnerId, orderAmount, onDeliverySelect, selecte
               <div className="flex items-center space-x-2">
                 <span className="font-medium">{selected.courier_name}</span>
                 <Badge className="bg-blue-100 text-blue-700">
-                  {checkFreeDelivery(selected) ? "FREE" : `₱${calculateFee(selected).toFixed(2)}`}
+                  {checkFreeDelivery(selected) ? "FREE" : `£${calculateFee(selected).toFixed(2)}`}
                 </Badge>
               </div>
             </div>

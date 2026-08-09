@@ -27,6 +27,7 @@ import AdminDelivery from "./pages/AdminDelivery";
 
 console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
 console.log("💷 CURRENCY SYSTEM UPDATED - Now defaults to GBP (£) for UK pricing instead of PHP (₱)");
+console.log("💷 CHECKOUT CURRENCY FIXED - All payment checkout flows now use British Pounds (£) instead of Philippine Peso (₱)");
 console.log("✅ Product click navigation fixed - Products are now clickable");
 console.log("🛒 Add to Cart functionality fixed - Cart items now persist and show count");
 console.log("🔧 Admin Product Management System - Complete with ban, upload, sales, pricing, delivery");
