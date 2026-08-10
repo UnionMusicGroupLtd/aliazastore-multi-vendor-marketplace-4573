@@ -8,7 +8,9 @@ const Cart = () => {
   const [removedMessage, setRemovedMessage] = useState<string | null>(null);
   const previousCartItems = useRef<number>(0);
   
-  console.log('🚨 CART REMOVAL FIX APPLIED - Fresh Build');
+  console.log('🛒 CART SYSTEM DEBUG - Version 2.0 - ', new Date().toISOString());
+  console.log('🛒 Cart Items:', cartItems.length);
+  console.log('🛒 Cart Functions Available:', { removeFromCart: typeof removeFromCart, updateQuantity: typeof updateQuantity });
 
   const subtotal = getCartTotal();
   const deliveryFee = 0; // Free UK delivery

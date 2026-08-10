@@ -71,27 +71,29 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const removeFromCart = (id: number) => {
+    console.log('🗑️ REMOVE CART ITEM CALLED - ID:', id);
     if (!id) {
-      console.error('removeFromCart called with invalid id:', id);
+      console.error('❌ removeFromCart called with invalid id:', id);
       return;
     }
     setCartItems(prevItems => {
       const filtered = prevItems.filter(item => item._row_id === id || item.id === id);
-      console.log('Removed item with id:', id, 'Remaining items:', filtered.length);
+      console.log('✅ Removed item with id:', id, 'Remaining items:', filtered.length);
       return filtered;
     });
   };
 
   const updateQuantity = (id: number, quantity: number) => {
+    console.log('📦 UPDATE QUANTITY CALLED - ID:', id, 'New Quantity:', quantity);
     if (!id) {
-      console.error('updateQuantity called with invalid id:', id);
+      console.error('❌ updateQuantity called with invalid id:', id);
       return;
     }
     if (quantity < 1) {
-      console.log('Quantity less than 1, removing item:', id);
+      console.log('🗑️ Quantity less than 1, removing item:', id);
       setCartItems(prevItems => {
         const filtered = prevItems.filter(item => item._row_id === id || item.id === id);
-        console.log('Item auto-removed due to quantity 0. Remaining items:', filtered.length);
+        console.log('✅ Item auto-removed due to quantity 0. Remaining items:', filtered.length);
         return filtered;
       });
       return;

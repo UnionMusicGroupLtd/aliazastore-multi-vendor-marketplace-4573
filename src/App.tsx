@@ -75,6 +75,7 @@ console.log("🇬🇧 UK CHECKOUT FORM COMPLETE - All Philippine references remo
 console.log("🚚 UK SHIPPING PRICING - Free shipping over £50, standard delivery £4.99");
 console.log("📱 UK MOBILE VALIDATION - Mobile validation now accepts UK format (07700 900123) instead of Philippine format");
 console.log("🔄 FRESH BUILD FORCED - Both cart removal and UK checkout form fixes should now be live");
+console.log(`🚀 SUPER FRESH BUILD - ${new Date().toISOString()} - CART DEBUG ENHANCED`);
 const queryClient = new QueryClient();
 
 const App = () => (
