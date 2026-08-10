@@ -1,13 +1,48 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Mail, MessageCircle, 
-  Clock, ShoppingBag
+  MessageCircle, 
+  Clock, ShoppingBag, Send, CheckCircle, AlertCircle
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSubmitting(true);
+    
+    try {
+      // Simulate form submission
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      setSubmitted(true);
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      setTimeout(() => setSubmitted(false), 3000);
+    } catch (err) {
+      setError("Failed to send message. Please try again.");
+      console.error("Contact form error:", err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -54,9 +89,116 @@ const Contact = () => {
         </p>
 
         <div className="grid md:grid-cols-2 gap-8">
+          {/* Contact Form */}
+          <Card className="border-0 shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-2xl">Send us a message</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Your Name *
+                  </label>
+                  <Input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    placeholder="Enter your full name"
+                    className="w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Email Address *
+                  </label>
+                  <Input
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    placeholder="your.email@example.com"
+                    className="w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Subject *
+                  </label>
+                  <select
+                    name="subject"
+                    value={formData.subject}
+                    onChange={(e) => handleChange(e as any)}
+                    required
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+                  >
+                    <option value="">Select a subject</option>
+                    <option value="order">Order Issues</option>
+                    <option value="payment">Payment Problems</option>
+                    <option value="account">Account Help</option>
+                    <option value="product">Product Information</option>
+                    <option value="technical">Technical Issues</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Message *
+                  </label>
+                  <Textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    placeholder="Describe your issue or question in detail..."
+                    rows={6}
+                    className="w-full"
+                  />
+                </div>
+
+                {error && (
+                  <div className="flex items-center space-x-2 text-red-600 mb-4">
+                    <AlertCircle className="w-5 h-5" />
+                    <span>{error}</span>
+                  </div>
+                )}
+                
+                {submitted ? (
+                  <div className="flex items-center justify-center space-x-2 text-green-600 py-3 bg-green-50 rounded-lg border border-green-200">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="font-medium">Message sent successfully! We'll respond within 24 hours.</span>
+                  </div>
+                ) : (
+                  <Button 
+                    type="submit" 
+                    disabled={submitting}
+                    className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? (
+                      <>
+                        <span className="mr-2">Sending...</span>
+                        <Clock className="w-4 h-4 animate-spin" />
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        Send Message
+                      </>
+                    )}
+                  </Button>
+                )}
+              </form>
+            </CardContent>
+          </Card>
+
           {/* Contact Information */}
           <div className="space-y-6">
-            {/* Quick Contact */}
+            {/* Live Chat Only */}
             <Card className="border-0 shadow-lg">
               <CardHeader>
                 <CardTitle className="text-xl">Quick Contact</CardTitle>
@@ -78,25 +220,6 @@ const Contact = () => {
                       className="inline-flex items-center justify-center w-full mt-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-medium transition-colors"
                     >
                       Start Chat
-                    </a>
-                  </div>
-                </div>
-
-                {/* Email Support */}
-                <div className="flex items-start space-x-3">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <Mail className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900">Email Support</h3>
-                    <p className="text-slate-600">Send us a detailed message</p>
-                    <p className="text-sm font-medium text-purple-600">info@unionmusicgroup.co.uk</p>
-                    <p className="text-sm text-slate-500">Response within 24 hours</p>
-                    <a 
-                      href="mailto:info@unionmusicgroup.co.uk" 
-                      className="inline-flex items-center justify-center w-full mt-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium transition-colors"
-                    >
-                      Send Email
                     </a>
                   </div>
                 </div>
@@ -131,34 +254,34 @@ const Contact = () => {
               </CardContent>
             </Card>
           </div>
-
-          {/* FAQ Section */}
-          <Card className="border-0 shadow-lg">
-            <CardHeader>
-              <CardTitle className="text-xl">Frequently Asked Questions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-2 gap-4">
-                <Link to="/help" className="p-4 border rounded-lg hover:border-red-300 transition-colors">
-                  <h3 className="font-semibold text-slate-900 mb-1">Order Tracking</h3>
-                  <p className="text-sm text-slate-600">Learn how to track your orders</p>
-                </Link>
-                <Link to="/returns" className="p-4 border rounded-lg hover:border-red-300 transition-colors">
-                  <h3 className="font-semibold text-slate-900 mb-1">Return Policy</h3>
-                  <p className="text-sm text-slate-600">2-5 day return policy information</p>
-                </Link>
-                <Link to="/help" className="p-4 border rounded-lg hover:border-red-300 transition-colors">
-                  <h3 className="font-semibold text-slate-900 mb-1">Shipping Information</h3>
-                  <p className="text-sm text-slate-600">UK delivery times and options</p>
-                </Link>
-                <Link to="/help" className="p-4 border rounded-lg hover:border-red-300 transition-colors">
-                  <h3 className="font-semibold text-slate-900 mb-1">Payment Methods</h3>
-                  <p className="text-sm text-slate-600">Available payment options</p>
-                </Link>
-              </div>
-            </CardContent>
-          </Card>
         </div>
+
+        {/* FAQ Section */}
+        <Card className="mt-8 border-0 shadow-lg">
+          <CardHeader>
+            <CardTitle className="text-xl">Frequently Asked Questions</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-4">
+              <Link to="/help" className="p-4 border rounded-lg hover:border-red-300 transition-colors">
+                <h3 className="font-semibold text-slate-900 mb-1">Order Tracking</h3>
+                <p className="text-sm text-slate-600">Learn how to track your orders</p>
+              </Link>
+              <Link to="/returns" className="p-4 border rounded-lg hover:border-red-300 transition-colors">
+                <h3 className="font-semibold text-slate-900 mb-1">Return Policy</h3>
+                <p className="text-sm text-slate-600">2-5 day return policy information</p>
+              </Link>
+              <Link to="/help" className="p-4 border rounded-lg hover:border-red-300 transition-colors">
+                <h3 className="font-semibold text-slate-900 mb-1">Shipping Information</h3>
+                <p className="text-sm text-slate-600">UK delivery times and options</p>
+              </Link>
+              <Link to="/help" className="p-4 border rounded-lg hover:border-red-300 transition-colors">
+                <h3 className="font-semibold text-slate-900 mb-1">Payment Methods</h3>
+                <p className="text-sm text-slate-600">Available payment options</p>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
