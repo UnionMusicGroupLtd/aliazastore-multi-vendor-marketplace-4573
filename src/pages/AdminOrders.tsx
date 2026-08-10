@@ -4,47 +4,92 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   ShoppingCart, Package, CheckCircle, XCircle, Clock, 
-  Truck, Eye, ArrowLeft, Search, Filter, Download
+  Truck, Eye, ArrowLeft, Search, Filter, Download, X, Box
 } from "lucide-react";
 
 const AdminOrders = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
 
-  // Sample orders data
+  // Enhanced sample orders data with detailed items
   const orders = [
     {
       id: "ORD-2026-001",
       customer: "James Smith",
       email: "james.smith@email.com",
-      items: 3,
+      phone: "+44 20 7123 4567",
+      address: "123 Baker Street, London, UK",
+      items: [
+        { name: "Premium Wireless Headphones", quantity: 1, price: "£29.99" },
+        { name: "Smart Fitness Watch", quantity: 1, price: "£39.99" },
+        { name: "Portable Phone Charger", quantity: 1, price: "£19.99" }
+      ],
       total: "£89.97",
+      subtotal: "£89.97",
+      shipping: "£4.99",
       status: "pending",
       date: "2026-08-07",
-      payment: "GCash"
+      time: "14:32",
+      payment: "GCash",
+      tracking: "GB-123456789",
+      notes: "Customer requested gift wrapping"
     },
     {
       id: "ORD-2026-002", 
       customer: "Emma Johnson",
       email: "emma.j@email.com",
-      items: 1,
+      phone: "+44 161 234 5678",
+      address: "456 King Street, Manchester, UK",
+      items: [
+        { name: "Luxury Skincare Set", quantity: 1, price: "£45.00" }
+      ],
       total: "£45.00",
+      subtotal: "£45.00",
+      shipping: "£0.00",
       status: "processing",
       date: "2026-08-07",
-      payment: "Card"
+      time: "10:15",
+      payment: "Card",
+      tracking: "GB-987654321",
+      notes: "Express delivery requested"
     },
     {
       id: "ORD-2026-003",
       customer: "Michael Brown",
       email: "m.brown@email.com",
-      items: 2,
+      phone: "+44 131 345 6789",
+      address: "789 Queen Street, Edinburgh, UK",
+      items: [
+        { name: "Professional Hair Dryer", quantity: 1, price: "£35.00" },
+        { name: "Hair Styling Kit", quantity: 1, price: "£32.50" }
+      ],
       total: "£67.50",
+      subtotal: "£67.50",
+      shipping: "£0.00",
       status: "shipped",
       date: "2026-08-06",
-      payment: "PayPal"
+      time: "16:45",
+      payment: "PayPal",
+      tracking: "GB-456789123",
+      notes: "Delivery to business address"
     }
   ];
+
+  const handleViewDetails = (orderId: string) => {
+    setSelectedOrder(orders.find(order => order.id === orderId));
+  };
+
+  const handleCloseModal = () => {
+    setSelectedOrder(null);
+  };
+
+  const updateOrderStatus = (orderId: string, newStatus: string) => {
+    console.log(`Updating order ${orderId} to ${newStatus}`);
+    // In a real app, this would update the database
+  };
 
   const getStatusBadge = (status: string) => {
     const badges = {
@@ -209,7 +254,7 @@ const AdminOrders = () => {
                           </div>
                           <div>
                             <p className="text-gray-400">Order Details</p>
-                            <p className="text-white">{order.items} items</p>
+                            <p className="text-white">{order.items?.length || 0} items</p>
                             <p className="text-green-400 font-semibold">{order.total}</p>
                           </div>
                           <div>
@@ -220,7 +265,11 @@ const AdminOrders = () => {
                         </div>
                       </div>
                       <div className="flex flex-col gap-2">
-                        <Button size="sm" className="bg-red-600 hover:bg-red-700 text-white">
+                        <Button 
+                          size="sm" 
+                          className="bg-red-600 hover:bg-red-700 text-white"
+                          onClick={() => handleViewDetails(order.id)}
+                        >
                           <Eye className="mr-2 w-4 h-4" />
                           View Details
                         </Button>
@@ -232,6 +281,152 @@ const AdminOrders = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Order Details Modal */}
+        {selectedOrder && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <Card className="bg-gray-900 border border-gray-700 max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="text-white text-xl">Order Details - {selectedOrder.id}</CardTitle>
+                    <CardDescription className="text-gray-400 mt-1">
+                      Placed on {selectedOrder.date} at {selectedOrder.time}
+                    </CardDescription>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={handleCloseModal}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <X className="w-5 h-5" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* Order Status */}
+                <div className="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                  <div className="flex items-center gap-3">
+                    {getStatusBadge(selectedOrder.status)}
+                  </div>
+                  <div className="text-right">
+                    <p className="text-gray-400 text-sm">Total Amount</p>
+                    <p className="text-2xl font-bold text-green-400">{selectedOrder.total}</p>
+                  </div>
+                </div>
+
+                {/* Customer Information */}
+                <div className="border border-gray-700 rounded-lg p-4">
+                  <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
+                    <Box className="w-4 h-4" />
+                    Customer Information
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <p className="text-gray-400">Name</p>
+                      <p className="text-white">{selectedOrder.customer}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Email</p>
+                      <p className="text-white">{selectedOrder.email}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Phone</p>
+                      <p className="text-white">{selectedOrder.phone}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-400">Address</p>
+                      <p className="text-white">{selectedOrder.address}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Order Items */}
+                <div className="border border-gray-700 rounded-lg p-4">
+                  <h3 className="text-white font-semibold mb-3">Order Items</h3>
+                  <div className="space-y-3">
+                    {selectedOrder.items?.map((item, index) => (
+                      <div key={index} className="flex justify-between items-center p-3 bg-gray-800/30 rounded">
+                        <div className="flex-1">
+                          <p className="text-white font-medium">{item.name}</p>
+                          <p className="text-gray-400 text-sm">Quantity: {item.quantity}</p>
+                        </div>
+                        <p className="text-white font-semibold">{item.price}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-4 pt-4 border-t border-gray-700 space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Subtotal</span>
+                      <span className="text-white">{selectedOrder.subtotal}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-400">Shipping</span>
+                      <span className="text-white">{selectedOrder.shipping}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400 font-medium">Total</span>
+                      <span className="text-green-400 font-bold text-lg">{selectedOrder.total}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment & Shipping */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="border border-gray-700 rounded-lg p-4">
+                    <h3 className="text-white font-semibold mb-3">Payment Information</h3>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <p className="text-gray-400">Method</p>
+                        <p className="text-white">{selectedOrder.payment}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400">Status</p>
+                        <p className="text-green-400">Paid</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="border border-gray-700 rounded-lg p-4">
+                    <h3 className="text-white font-semibold mb-3">Shipping Information</h3>
+                    <div className="space-y-2 text-sm">
+                      <div>
+                        <p className="text-gray-400">Tracking Number</p>
+                        <p className="text-white font-mono text-xs">{selectedOrder.tracking}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-400">Delivery Type</p>
+                        <p className="text-white">{selectedOrder.shipping === '£0.00' ? 'Free Shipping' : 'Standard Delivery'}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Order Notes */}
+                {selectedOrder.notes && (
+                  <div className="border border-gray-700 rounded-lg p-4">
+                    <h3 className="text-white font-semibold mb-2">Order Notes</h3>
+                    <p className="text-gray-300 text-sm">{selectedOrder.notes}</p>
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex gap-3 pt-4">
+                  <Button 
+                    variant="outline" 
+                    className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800"
+                    onClick={handleCloseModal}
+                  >
+                    Close
+                  </Button>
+                  <Button className="flex-1 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white">
+                    Print Order
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );

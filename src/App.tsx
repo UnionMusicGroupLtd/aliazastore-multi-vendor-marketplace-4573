@@ -55,7 +55,7 @@ function AppContent() {
     console.log("🔐 AUTHENTICATION - Admin login system with proper redirects working");
     console.log("🎯 ADMIN DASHBOARD - Clean admin panel for single-store management");
     console.log("💳 PAYMENT GATEWAY - Stripe and PayPal payment methods available");
-    console.log("🚚 UK DELIVERY SYSTEM WORKING - All delivery options functional with edit/add/delete capabilities");
+    console.log("📦 ADMIN ORDERS VIEW DETAILS FIXED - View Details button now functional with comprehensive modal");
     console.log("🗑️ PHILIPPINE DELIVERY - Completely removed old AliazaStore delivery with peso pricing");
     console.log("🚀 PRODUCTION READY - All old code removed, platform ready for launch");
     console.log("📍 Current route:", location.pathname);
