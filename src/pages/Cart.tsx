@@ -82,9 +82,25 @@ const Cart = () => {
           </div>
         )}
         
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Shopping Cart</h1>
-          <p className="text-gray-400">{cartItems.length} items in your cart</p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-white mb-2">Shopping Cart</h1>
+            <p className="text-gray-400">{cartItems.length} items in your cart</p>
+          </div>
+          
+          {/* EMERGENCY CLEAR CART BUTTON */}
+          <button
+            onClick={() => {
+              if (confirm('⚠️ EMERGENCY: Clear all items from cart? This cannot be undone!')) {
+                localStorage.removeItem('aliazastore_cart');
+                window.location.reload();
+              }
+            }}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
+          >
+            <Trash2 className="w-4 h-4" />
+            Clear Cart
+          </button>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">

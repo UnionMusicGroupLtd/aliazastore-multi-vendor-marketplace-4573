@@ -41,7 +41,7 @@ function AppContent() {
     console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
     console.log("🧹 ALIAZASTORE CODE CLEANUP COMPLETE - All old multi-vendor code removed");
     console.log("✅ CLEAN IFUDDA PLATFORM - Single premium adult store with working cart system");
-    console.log("🛒 CART BUG FIXED - Wrong item removal bug solved - Now uses product_id consistently");
+    console.log("🛒 EMERGENCY CART CLEAR ADDED - Red 'Clear Cart' button added to cart page for manual clearing");
     console.log("💷 UK CURRENCY - All prices in British Pounds (£) with proper UK checkout");
     console.log("🔐 AUTHENTICATION - Admin login system with proper redirects working");
     console.log("🎯 ADMIN DASHBOARD - Clean admin panel for single-store management");
