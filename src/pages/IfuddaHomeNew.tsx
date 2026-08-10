@@ -40,6 +40,16 @@ const IfuddaHomeNew = () => {
       setShowVerification(false);
     }
     
+    // Debug admin navigation state
+    console.log("🛡️ HOMEPAGE ADMIN NAVIGATION DEBUG:", {
+      isLoggedIn: !!user,
+      userEmail: user?.email,
+      isAdmin,
+      userRole: user?.role,
+      userMetadataRole: user?.metadata?.role,
+      shouldShowAdminLink: isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin'
+    });
+    
     // Load sample products
     const sampleProducts: Product[] = [
       {
@@ -286,9 +296,12 @@ const IfuddaHomeNew = () => {
               
               {user ? (
                 <>
-                  {/* Enhanced admin detection with multiple fallbacks */}
+                  {/* Enhanced admin detection with multiple fallbacks - MORE PROMINENT */}
                   {(isAdmin || user.role === 'admin' || user.metadata?.role === 'admin') && (
-                    <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold flex items-center gap-1">
+                    <Link 
+                      to="/admin" 
+                      className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:from-red-600 hover:to-pink-700 transition-all shadow-lg shadow-red-500/30"
+                    >
                       <Shield className="w-4 h-4" />
                       Admin Dashboard
                     </Link>
@@ -318,11 +331,14 @@ const IfuddaHomeNew = () => {
             <div className="md:hidden flex items-center space-x-4">
               {user ? (
                 <>
-                  {/* Enhanced admin detection with multiple fallbacks */}
+                  {/* Enhanced admin detection with multiple fallbacks - MORE PROMINENT MOBILE */}
                   {(isAdmin || user.role === 'admin' || user.metadata?.role === 'admin') && (
-                    <Link to="/admin" className="text-red-400 text-xs font-semibold border border-red-500/50 px-2 py-1 rounded bg-red-500/10 flex items-center gap-1">
+                    <Link 
+                      to="/admin" 
+                      className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 shadow-lg shadow-red-500/30"
+                    >
                       <Shield className="w-3 h-3" />
-                      Admin
+                      <span className="text-xs">Admin</span>
                     </Link>
                   )}
                   <button 
@@ -776,6 +792,9 @@ const IfuddaHomeNew = () => {
                 <li><Link to="/products" className="text-gray-400 hover:text-white text-sm">Products</Link></li>
                 <li><Link to="/about" className="text-gray-400 hover:text-white text-sm">About Us</Link></li>
                 <li><Link to="/cart" className="text-gray-400 hover:text-white text-sm">Shopping Cart</Link></li>
+                {(isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') && (
+                  <li><Link to="/admin" className="text-red-400 hover:text-red-300 text-sm font-semibold">Admin Dashboard</Link></li>
+                )}
                 <li><Link to="/login" className="text-gray-400 hover:text-white text-sm">Sign In</Link></li>
               </ul>
             </div>
