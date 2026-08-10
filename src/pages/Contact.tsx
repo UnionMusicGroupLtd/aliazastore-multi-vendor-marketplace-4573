@@ -6,9 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { 
   Mail, Send, MessageCircle, 
-  Clock, ShoppingBag, CheckCircle
+  Clock, ShoppingBag, CheckCircle, AlertCircle
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { sendContactFormNotification } from "@/lib/notifications";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -18,16 +19,33 @@ const Contact = () => {
     message: ""
   });
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log("Form submitted:", formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      setFormData({ name: "", email: "", subject: "", message: "" });
-    }, 3000);
+    setError("");
+    setSubmitting(true);
+    
+    try {
+      // Send notification to admin email
+      const success = await sendContactFormNotification(formData);
+      
+      if (success) {
+        setSubmitted(true);
+        setFormData({ name: "", email: "", subject: "", message: "" });
+        setTimeout(() => {
+          setSubmitted(false);
+        }, 3000);
+      } else {
+        setError("Failed to send message. Please try again or use email directly.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again or use email directly.");
+      console.error("Contact form error:", err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -151,18 +169,35 @@ const Contact = () => {
                   />
                 </div>
 
+                {error && (
+                  <div className="flex items-center space-x-2 text-red-600 mb-4">
+                    <AlertCircle className="w-5 h-5" />
+                    <span>{error}</span>
+                  </div>
+                )}
+                
                 {submitted ? (
-                  <div className="flex items-center space-x-2 text-green-600">
+                  <div className="flex items-center justify-center space-x-2 text-green-600 py-3 bg-green-50 rounded-lg border border-green-200">
                     <CheckCircle className="w-5 h-5" />
-                    <span>Message sent successfully!</span>
+                    <span className="font-medium">Message sent successfully! We'll respond within 24 hours.</span>
                   </div>
                 ) : (
                   <Button 
                     type="submit" 
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                    disabled={submitting}
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    <Send className="w-4 h-4 mr-2" />
-                    Send Message
+                    {submitting ? (
+                      <>
+                        <span className="mr-2">Sending...</span>
+                        <Clock className="w-4 h-4 animate-spin" />
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 mr-2" />
+                        Send Message
+                      </>
+                    )}
                   </Button>
                 )}
               </form>
@@ -259,9 +294,9 @@ const Contact = () => {
                 <h3 className="font-semibold text-slate-900 mb-1">Order Tracking</h3>
                 <p className="text-sm text-slate-600">Learn how to track your orders</p>
               </Link>
-              <Link to="/help" className="p-4 border rounded-lg hover:border-orange-300 transition-colors">
+              <Link to="/returns" className="p-4 border rounded-lg hover:border-orange-300 transition-colors">
                 <h3 className="font-semibold text-slate-900 mb-1">Return Policy</h3>
-                <p className="text-sm text-slate-600">5-day return policy information</p>
+                <p className="text-sm text-slate-600">30-day return policy information</p>
               </Link>
               <Link to="/help" className="p-4 border rounded-lg hover:border-orange-300 transition-colors">
                 <h3 className="font-semibold text-slate-900 mb-1">Shipping Information</h3>

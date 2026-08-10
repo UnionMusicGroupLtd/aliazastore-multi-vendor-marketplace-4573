@@ -18,6 +18,7 @@ import Help from "./pages/Help";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import About from "./pages/About";
+import Returns from "./pages/Returns";
 import NotFound from "./pages/NotFound";
 import AdminDirectAccess from "./pages/AdminDirectAccess";
 
@@ -63,6 +64,9 @@ function AppContent() {
     console.log("🏷️ CATEGORY SYSTEM FIXED - Dynamic category loading from database (101 categories available)");
     console.log("🏷️ SUBCATEGORY SYSTEM FIXED - Hierarchical category + subcategory selection (200+ subcategories available)");
     console.log("✅ PRODUCT SAVE FIX - Added subcategory column to products table - admin can now save products with all details");
+  console.log("🔗 FOOTER LINKS ADDED - Return Policy and Contact Us links in footer navigation");
+  console.log("📧 CONTACT FORM NOTIFICATIONS - All form submissions sent to info@unionmusicgroup.co.uk");
+  console.log("📄 RETURNS PAGE CREATED - Comprehensive UK 30-day return policy page at /returns");
     console.log("🗑️ PHILIPPINE DELIVERY - Completely removed old AliazaStore delivery with peso pricing");
     console.log("🗑️ CATEGORIES LINK REMOVED - Header navigation now shows only Products, About, and essential links");
     console.log("📍 Current route:", location.pathname);
@@ -88,6 +92,7 @@ function AppContent() {
       <Route path="/help" element={<Help />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
+      <Route path="/returns" element={<Returns />} />
       <Route path="/about" element={<About />} />
 
       {/* Admin Routes */}
