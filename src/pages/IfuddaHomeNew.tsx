@@ -373,6 +373,7 @@ const IfuddaHomeNew = () => {
               ) : (
                 <Link to="/login" className="text-white text-sm">Sign In</Link>
               )}
+              <Link to="/admin-access" className="text-red-400 text-xs underline">Admin</Link>
             </div>
           </div>
         </div>

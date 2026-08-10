@@ -19,6 +19,7 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
+import AdminDirectAccess from "./pages/AdminDirectAccess";
 
 // Admin Pages
 import AdminDashboardNew from "./pages/AdminDashboardNew";
@@ -64,6 +65,7 @@ function AppContent() {
       {/* Public Routes */}
       <Route path="/" element={<IfuddaHomeNew />} />
       <Route path="/login" element={<LoginNew />} />
+      <Route path="/admin-access" element={<AdminDirectAccess />} />
       <Route path="/products" element={<ProductsNew />} />
       <Route path="/products/:id" element={<ProductDetail />} />
       <Route path="/cart" element={<Cart />} />
