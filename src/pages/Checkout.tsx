@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, ShoppingCart, CreditCard, CheckCircle, User, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import GCashPayment from "@/components/GCashPayment";
+import PaymentOptions from "@/components/PaymentOptions";
 import { useCart } from "@/context/CartContext";
 
 const Checkout = () => {
@@ -94,7 +94,7 @@ const Checkout = () => {
     }
   };
 
-  const handlePaymentComplete = async (transactionId: string) => {
+  const handlePaymentComplete = async (paymentMethod: string, transactionId: string) => {
     setSelectedPayment(transactionId);
     setLoading(true);
     
@@ -110,7 +110,7 @@ const Checkout = () => {
         customerName: customerDetails.fullName,
         customerEmail: customerDetails.email,
         totalAmount: `£${total.toFixed(2)}`,
-        paymentMethod: "GCash",
+        paymentMethod: paymentMethod === 'stripe' ? 'Stripe' : 'PayPal',
         transactionId
       });
     } catch (error) {
@@ -165,7 +165,7 @@ const Checkout = () => {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-slate-600">Payment Method:</span>
-                    <span className="font-semibold">GCash</span>
+                    <span className="font-semibold">{selectedPayment?.includes('STRIPE') ? 'Stripe' : selectedPayment?.includes('PAYPAL') ? 'PayPal' : 'Credit/Debit Card'}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-slate-600">Amount Paid:</span>
@@ -429,10 +429,10 @@ const Checkout = () => {
                   <CardDescription>Select your preferred payment method</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <GCashPayment 
+                  <PaymentOptions 
                     amount={total}
                     orderId={orderId} 
-                    onComplete={handlePaymentComplete}
+                    onSelect={handlePaymentComplete}
                   />
                   {loading && (
                     <p className="text-center text-sm text-slate-600 mt-4">
@@ -518,7 +518,7 @@ const Checkout = () => {
             <Alert className="mt-4 bg-blue-50 border-blue-200 text-blue-800">
               <CreditCard className="h-4 w-4" />
               <AlertDescription>
-                🔒 Secure payment powered by GCash
+                🔒 Secure payment powered by Stripe and PayPal
               </AlertDescription>
             </Alert>
 

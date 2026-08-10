@@ -28,7 +28,7 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminCustomers from "./pages/AdminCustomers";
 import AdminSettings from "./pages/AdminSettings";
 import AdminDelivery from "./pages/AdminDelivery";
-import PaymentGatewayManagementSimple from "./pages/PaymentGatewayManagementSimple";
+import PaymentGatewayManagement from "./pages/PaymentGatewayManagement";
 
 // Components
 import { Toaster } from "sonner";
@@ -53,7 +53,7 @@ function AppContent() {
     console.log("💷 UK CURRENCY - All prices in British Pounds (£) with proper UK checkout");
     console.log("🔐 AUTHENTICATION - Admin login system with proper redirects working");
     console.log("🎯 ADMIN DASHBOARD - Clean admin panel for single-store management");
-    console.log("💳 PAYMENT GATEWAY - Restored for GCash, Stripe, PayPal, Bank Transfer");
+    console.log("💳 PAYMENT GATEWAY - Stripe and PayPal payment methods available");
     console.log("🗑️ WITHDRAWALS - Removed from admin dashboard (single store doesn't need withdrawals)");
     console.log("🚀 PRODUCTION READY - All old code removed, platform ready for launch");
     console.log("📍 Current route:", location.pathname);
@@ -88,7 +88,7 @@ function AppContent() {
       <Route path="/admin/customers" element={<AdminCustomers />} />
       <Route path="/admin/settings" element={<AdminSettings />} />
       <Route path="/admin/delivery" element={<AdminDelivery />} />
-      <Route path="/admin/payment-gateways" element={<PaymentGatewayManagementSimple />} />
+      <Route path="/admin/payment-gateways" element={<PaymentGatewayManagement />} />
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />

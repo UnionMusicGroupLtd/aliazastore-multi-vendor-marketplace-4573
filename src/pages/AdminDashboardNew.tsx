@@ -139,7 +139,7 @@ const AdminDashboardNew = () => {
     {
       icon: Wallet,
       label: "Payment Gateways",
-      description: "Manage GCash, Stripe, PayPal and Bank Transfer",
+      description: "Manage Stripe and PayPal payment methods",
       href: "/admin/payment-gateways",
       color: "from-emerald-600 to-green-600"
     },
