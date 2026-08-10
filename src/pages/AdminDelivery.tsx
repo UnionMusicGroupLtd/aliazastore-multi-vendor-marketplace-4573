@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Truck, Package, Clock, DollarSign, Plus, Edit, 
-  ArrowLeft, CheckCircle, XCircle, Settings
+  ArrowLeft, CheckCircle, XCircle, Settings, X
 } from "lucide-react";
 
 const AdminDelivery = () => {
@@ -47,10 +47,57 @@ const AdminDelivery = () => {
     }
   ]);
 
+  // Modal states
+  const [editingOption, setEditingOption] = useState<any>(null);
+  const [isAddingNew, setIsAddingNew] = useState(false);
+  const [newOption, setNewOption] = useState({
+    name: "",
+    description: "",
+    price: "",
+    freeThreshold: "",
+    estimatedDays: ""
+  });
+
   const toggleDelivery = (id: string) => {
     setDeliveryOptions(prev => prev.map(option =>
       option.id === id ? { ...option, enabled: !option.enabled } : option
     ));
+  };
+
+  const handleEdit = (option: any) => {
+    setEditingOption({ ...option });
+  };
+
+  const handleSaveEdit = () => {
+    setDeliveryOptions(prev => prev.map(option =>
+      option.id === editingOption.id ? editingOption : option
+    ));
+    setEditingOption(null);
+  };
+
+  const handleAddNew = () => {
+    const newId = `custom-${Date.now()}`;
+    const option = {
+      id: newId,
+      name: newOption.name,
+      description: newOption.description || "Custom delivery option",
+      enabled: true,
+      price: newOption.price,
+      freeThreshold: newOption.freeThreshold || "100",
+      estimatedDays: newOption.estimatedDays || "3-5",
+      icon: Package,
+      color: "from-green-600 to-green-800"
+    };
+    setDeliveryOptions(prev => [...prev, option]);
+    setIsAddingNew(false);
+    setNewOption({ name: "", description: "", price: "", freeThreshold: "", estimatedDays: "" });
+  };
+
+  const handleDelete = (id: string) => {
+    setDeliveryOptions(prev => prev.filter(option => option.id !== id));
+    if (editingOption?.id === id) {
+      setEditingOption(null);
+    }
   };
 
   return (
@@ -181,6 +228,7 @@ const AdminDelivery = () => {
                       size="sm" 
                       variant="outline"
                       className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800"
+                      onClick={() => handleEdit(option)}
                     >
                       <Edit className="mr-2 w-4 h-4" />
                       Edit Options
@@ -189,6 +237,7 @@ const AdminDelivery = () => {
                       size="sm" 
                       variant="outline"
                       className="border-gray-700 text-gray-300 hover:bg-gray-800"
+                      onClick={() => handleEdit(option)}
                     >
                       <Settings className="w-4 h-4" />
                     </Button>
@@ -202,7 +251,10 @@ const AdminDelivery = () => {
           <Card className="border-0 bg-gray-900/50 backdrop-blur-sm border border-gray-800">
             <CardContent className="p-6">
               <div className="text-center">
-                <Button className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white">
+                <Button 
+                  className="bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white"
+                  onClick={() => setIsAddingNew(true)}
+                >
                   <Plus className="mr-2 w-4 h-4" />
                   Add Delivery Option
                 </Button>
@@ -210,6 +262,194 @@ const AdminDelivery = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Edit Delivery Option Modal */}
+        {editingOption && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <Card className="bg-gray-900 border border-gray-700 max-w-md w-full">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white">Edit Delivery Option</CardTitle>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setEditingOption(null)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Option Name</label>
+                  <input
+                    type="text"
+                    value={editingOption.name}
+                    onChange={(e) => setEditingOption({...editingOption, name: e.target.value})}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Description</label>
+                  <input
+                    type="text"
+                    value={editingOption.description}
+                    onChange={(e) => setEditingOption({...editingOption, description: e.target.value})}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-gray-400 mb-1 block">Price (£)</label>
+                    <input
+                      type="text"
+                      value={editingOption.price}
+                      onChange={(e) => setEditingOption({...editingOption, price: e.target.value})}
+                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-400 mb-1 block">Free From (£)</label>
+                    <input
+                      type="text"
+                      value={editingOption.freeThreshold}
+                      onChange={(e) => setEditingOption({...editingOption, freeThreshold: e.target.value})}
+                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Estimated Days</label>
+                  <input
+                    type="text"
+                    value={editingOption.estimatedDays}
+                    onChange={(e) => setEditingOption({...editingOption, estimatedDays: e.target.value})}
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+                <div className="flex gap-2 pt-4">
+                  <Button 
+                    variant="outline" 
+                    className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800"
+                    onClick={() => setEditingOption(null)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white"
+                    onClick={handleSaveEdit}
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+                <div className="flex gap-2">
+                  <Button 
+                    variant="destructive" 
+                    className="w-full bg-red-600 hover:bg-red-700"
+                    onClick={() => handleDelete(editingOption.id)}
+                  >
+                    Delete Delivery Option
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {/* Add New Delivery Option Modal */}
+        {isAddingNew && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+            <Card className="bg-gray-900 border border-gray-700 max-w-md w-full">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white">Add New Delivery Option</CardTitle>
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    onClick={() => setIsAddingNew(false)}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <X className="w-4 h-4" />
+                  </Button>
+                </div>
+                <CardDescription className="text-gray-400">
+                  Create a new custom delivery option for your store
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Option Name *</label>
+                  <input
+                    type="text"
+                    value={newOption.name}
+                    onChange={(e) => setNewOption({...newOption, name: e.target.value})}
+                    placeholder="e.g., Weekend Delivery"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Description</label>
+                  <input
+                    type="text"
+                    value={newOption.description}
+                    onChange={(e) => setNewOption({...newOption, description: e.target.value})}
+                    placeholder="Brief description of the delivery option"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-gray-400 mb-1 block">Price (£) *</label>
+                    <input
+                      type="text"
+                      value={newOption.price}
+                      onChange={(e) => setNewOption({...newOption, price: e.target.value})}
+                      placeholder="4.99"
+                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-gray-400 mb-1 block">Free From (£)</label>
+                    <input
+                      type="text"
+                      value={newOption.freeThreshold}
+                      onChange={(e) => setNewOption({...newOption, freeThreshold: e.target.value})}
+                      placeholder="50"
+                      className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="text-sm text-gray-400 mb-1 block">Estimated Days *</label>
+                  <input
+                    type="text"
+                    value={newOption.estimatedDays}
+                    onChange={(e) => setNewOption({...newOption, estimatedDays: e.target.value})}
+                    placeholder="3-5"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-white"
+                  />
+                </div>
+                <div className="flex gap-2 pt-4">
+                  <Button 
+                    variant="outline" 
+                    className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800"
+                    onClick={() => setIsAddingNew(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    className="flex-1 bg-gradient-to-r from-red-600 to-pink-600 hover:from-red-700 hover:to-pink-700 text-white"
+                    onClick={handleAddNew}
+                    disabled={!newOption.name || !newOption.price || !newOption.estimatedDays}
+                  >
+                    Add Option
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
