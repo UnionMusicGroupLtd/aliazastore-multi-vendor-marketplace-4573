@@ -52,6 +52,7 @@ function AppContent() {
     console.log("💷 UK CURRENCY - All prices in British Pounds (£) with proper UK checkout");
     console.log("🔐 AUTHENTICATION - Admin login system with proper redirects working");
     console.log("🎯 ADMIN DASHBOARD - Clean admin panel for single-store management");
+    console.log("🗑️ PAYMENTS & WITHDRAWALS - Removed from admin dashboard per user request");
     console.log("🚀 PRODUCTION READY - All old code removed, platform ready for launch");
     console.log("📍 Current route:", location.pathname);
     console.log("👤 User status:", user ? "Logged in" : "Not logged in");

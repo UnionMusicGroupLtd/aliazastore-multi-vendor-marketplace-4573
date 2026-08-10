@@ -4,9 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Package, ShoppingCart, Users, TrendingUp, DollarSign,
-  Settings, LogOut, Plus, Truck, CreditCard,
-  Store, Upload, CheckCircle, ChevronRight, Badge,
-  Home, Menu, X, Wallet
+  Settings, LogOut, Plus, Truck, Store, Upload, 
+  CheckCircle, ChevronRight, Badge, Home, Menu, X
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
@@ -21,8 +20,8 @@ const AdminDashboardNew = () => {
   console.log("🔍 AdminDashboardNew: User from AuthContext:", user);
   console.log("🔍 AdminDashboardNew: isAdmin from AuthContext:", isAdmin);
   console.log("🔍 AdminDashboardNew: authLoading:", authLoading);
-  console.log("🔄 FORCED REBUILD - AdminDashboardNew navigation fix applied");
-  console.log("🔄 AdminDashboardNew: Navigation should show: Home | Admin Dashboard | Avatar | Sign Out");
+  console.log("🔄 FORCED REBUILD - Admin Dashboard: Payments & Withdrawals sections removed");
+  console.log("🔍 AdminDashboardNew: Navigation should show: Home | Admin Dashboard | Avatar | Sign Out");
 
   // Authentication guard - redirect if not logged in or not admin
   useEffect(() => {
@@ -138,32 +137,11 @@ const AdminDashboardNew = () => {
       color: "from-green-600 to-emerald-600"
     },
     {
-      icon: CreditCard,
-      label: "Payments",
-      description: "Configure payment methods and withdrawals",
-      href: "/admin/payments",
-      color: "from-amber-600 to-orange-600"
-    },
-    {
-      icon: DollarSign,
-      label: "Withdrawals",
-      description: "Manage seller withdrawal requests",
-      href: "/admin/withdrawals",
-      color: "from-rose-600 to-red-600"
-    },
-    {
       icon: Settings,
       label: "Settings",
       description: "Configure store preferences",
       href: "/admin/settings",
       color: "from-gray-600 to-slate-600"
-    },
-    {
-      icon: Wallet,
-      label: "Payment Gateways",
-      description: "Manage GCash, Stripe, PayPal and Bank Transfer",
-      href: "/admin/payment-gateways",
-      color: "from-green-600 to-emerald-600"
     }
   ];
 
