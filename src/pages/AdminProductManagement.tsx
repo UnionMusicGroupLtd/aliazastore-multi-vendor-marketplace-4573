@@ -41,6 +41,7 @@ interface Product {
 
 const AdminProductManagement = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
@@ -84,11 +85,25 @@ const AdminProductManagement = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
 
-  const categories = ['Vibrators', 'Couples Toys', 'Lingerie', 'Massage', 'Bondage', 'Lubricants', 'Massagers', 'Games'];
-
   useEffect(() => {
     loadProducts();
+    loadCategories();
   }, []);
+
+  const loadCategories = async () => {
+    try {
+      const categoriesData = await db.query("categories_new", { 
+        filter: { is_active: 1 },
+        order: "name.asc" 
+      });
+      const categoryNames = categoriesData.map((cat: any) => cat.name);
+      setCategories(categoryNames);
+    } catch (err) {
+      console.error("Error loading categories:", err);
+      // Fallback to basic categories if database fails
+      setCategories(['Vibrators', 'Couples Toys', 'Lingerie', 'Massage', 'Bondage', 'Lubricants', 'Massagers', 'Games']);
+    }
+  };
 
   const loadProducts = async () => {
     setLoading(true);
