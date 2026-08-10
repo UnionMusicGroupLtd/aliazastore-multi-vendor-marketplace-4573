@@ -118,8 +118,8 @@ const AdminDashboardNew = () => {
     {
       icon: Truck,
       label: "Delivery Setup",
-      description: "Configure shipping and delivery options",
-      href: "/admin/delivery-options",
+      description: "Configure UK shipping and delivery options",
+      href: "/admin/delivery",
       color: "from-purple-600 to-indigo-600"
     },
     {
