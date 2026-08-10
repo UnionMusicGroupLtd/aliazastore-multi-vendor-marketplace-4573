@@ -45,12 +45,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const checkAuth = async () => {
     try {
+      console.log("🔍 AuthContext: Starting auth check...");
       const currentUser = await auth.getUser();
-      console.log("🔍 AuthContext: checkAuth - Current user", currentUser);
+      console.log("🔍 AuthContext: Current user from auth", currentUser);
       
       if (currentUser) {
         console.log("🔍 AuthContext: User metadata", currentUser.metadata);
-        console.log("🔍 AuthContext: User role", currentUser.metadata?.role);
+        console.log("🔍 AuthContext: User role in metadata", currentUser.metadata?.role);
+        console.log("🔍 AuthContext: User direct role", (currentUser as any).role);
         
         const userData: User = {
           userUuid: currentUser.userUuid || '',
@@ -61,15 +63,35 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           metadata: currentUser.metadata
         };
         
+        console.log("🔍 AuthContext: Setting user data:", userData);
         setUser(userData);
         
-        // Enhanced admin detection
+        // Enhanced admin detection - check multiple places
         const adminCheck = 
           currentUser.metadata?.role === 'admin' ||
-          (currentUser as any).role === 'admin';
+          (currentUser as any).role === 'admin' ||
+          userData.role === 'admin' ||
+          userData.metadata?.role === 'admin';
         
-        console.log("🔍 AuthContext: Admin detection result:", adminCheck);
+        console.log("🔍 AuthContext: Admin detection breakdown:", {
+          'currentUser.metadata?.role === "admin"': currentUser.metadata?.role === 'admin',
+          '(currentUser as any).role === "admin"': (currentUser as any).role === 'admin',
+          'userData.role === "admin"': userData.role === 'admin',
+          'userData.metadata?.role === "admin"': userData.metadata?.role === 'admin',
+          'final adminCheck': adminCheck
+        });
+        
+        console.log("🔍 AuthContext: Setting isAdmin to:", adminCheck);
         setIsAdmin(adminCheck);
+        
+        // Force a console message for admin users
+        if (adminCheck) {
+          console.log("🛡️ ADMIN USER DETECTED! Admin features should be enabled.");
+        }
+      } else {
+        console.log("🔍 AuthContext: No user found");
+        setUser(null);
+        setIsAdmin(false);
       }
     } catch (error) {
       console.error("❌ AuthContext: Auth check failed:", error);
@@ -77,6 +99,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setIsAdmin(false);
     } finally {
       setLoading(false);
+      console.log("🔍 AuthContext: Auth check complete. Loading set to false.");
     }
   };
 

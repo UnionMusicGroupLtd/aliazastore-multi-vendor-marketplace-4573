@@ -47,6 +47,22 @@ const IfuddaHomeNew = () => {
     console.log('🔄 IfuddaHomeNew: Navigation should show:', user ? (isAdmin ? 'Admin Dashboard + Sign Out' : 'Sign Out only') : 'Sign In');
     console.log('🧪 ADMIN NAVIGATION DEBUG:', { user: !!user, isAdmin, shouldShowAdminLink: user && isAdmin });
     
+    // Additional admin check
+    if (user) {
+      const directAdminCheck = user.role === 'admin' || user.metadata?.role === 'admin';
+      console.log('🧪 DIRECT ADMIN CHECK:', {
+        'user.role': user.role,
+        'user.metadata?.role': user.metadata?.role,
+        'directAdminCheck': directAdminCheck,
+        'user.email': user.email,
+        'isAdmin state': isAdmin
+      });
+      
+      if (directAdminCheck) {
+        console.log('🛡️ ADMIN USER CONFIRMED! Admin dashboard button should be visible.');
+      }
+    }
+    
     // Load sample products
     const sampleProducts: Product[] = [
       {
@@ -269,7 +285,7 @@ const IfuddaHomeNew = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
       {/* Admin Emergency Access - Shows when admin is logged in */}
-      {user && isAdmin && (
+      {(user && isAdmin) || (user && (user.role === 'admin' || user.metadata?.role === 'admin')) ? (
         <div className="fixed top-4 left-4 z-50">
           <Link 
             to="/admin" 
@@ -278,6 +294,14 @@ const IfuddaHomeNew = () => {
             <Shield className="w-4 h-4" />
             Admin Dashboard
           </Link>
+          {/* Debug info */}
+          <div className="absolute -bottom-8 left-0 bg-blue-900 text-white text-xs px-2 py-1 rounded w-full">
+            Admin: {user.email} | isAdmin: {isAdmin ? 'true' : 'false'}
+          </div>
+        </div>
+      ) : (
+        <div className="fixed top-4 left-4 z-50 text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">
+          Debug: User: {user?.email || 'none'} | isAdmin: {isAdmin ? 'true' : 'false'}
         </div>
       )}
 
