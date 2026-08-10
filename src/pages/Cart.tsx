@@ -88,9 +88,24 @@ const Cart = () => {
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Shopping Cart</h1>
             <p className="text-gray-400">{cartItems.length} items in your cart</p>
+            {/* Debug info */}
+            <div className="mt-2 text-xs text-gray-500">
+              <p>Cart Debug: {cartItems.length > 0 ? `First item _row_id: ${cartItems[0]._row_id}` : 'No items'}</p>
+            </div>
           </div>
           
           <div className="flex gap-2">
+            {/* DEBUG BUTTON - Show cart contents */}
+            <button
+              onClick={() => {
+                console.log('🛒 CURRENT CART CONTENTS:', JSON.stringify(cartItems, null, 2));
+                alert(`Cart Contents Debug:\n\n${JSON.stringify(cartItems, null, 2)}`);
+              }}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-2"
+            >
+              🔍 Debug Cart
+            </button>
+            
             {/* TEST BUTTON - To verify cart functions work */}
             <button
               onClick={() => {
@@ -113,7 +128,7 @@ const Cart = () => {
             {/* EMERGENCY CLEAR CART BUTTON */}
             <button
               onClick={() => {
-                if (confirm('⚠️ EMERGENCY: Clear all items from cart? This cannot be undone!')) {
+                if (confirm('⚠️ EMERGENCY: Clear all items from cart? This will fix any ID issues!')) {
                   localStorage.removeItem('aliazastore_cart');
                   window.location.reload();
                 }
@@ -121,7 +136,7 @@ const Cart = () => {
               className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
             >
               <Trash2 className="w-4 h-4" />
-              Clear Cart
+              Fix Cart
             </button>
           </div>
         </div>

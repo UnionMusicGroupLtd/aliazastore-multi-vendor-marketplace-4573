@@ -41,11 +41,11 @@ function AppContent() {
     console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
     console.log("🧹 ALIAZASTORE CODE CLEANUP COMPLETE - All old multi-vendor code removed");
     console.log("✅ CLEAN IFUDDA PLATFORM - Single premium adult store with working cart system");
-    console.log("✅ CART SYSTEM FIXED - Now using _row_id consistently");
-    console.log("🛒 Cart functions updated: removeFromCart(_row_id), updateQuantity(_row_id, quantity)");
-    console.log("🔍 All cart operations now use _row_id as unique identifier");
-    console.log("🧪 Test button added: Click 'Test Remove' to verify functions work");
-    console.log("🚨 Open browser console to see detailed before/after state for all operations");
+    console.log("✅ CART SYSTEM VERSION 4.0 - EMERGENCY FIX APPLIED");
+    console.log("✅ Added localStorage validation to clear old cart data automatically");
+    console.log("✅ Added debug tools: Debug Cart button and Test Remove button");
+    console.log("✅ Updated Clear Cart to 'Fix Cart' to indicate it fixes ID issues");
+    console.log("🔧 USER SHOULD: Click 'Fix Cart' button to clear old corrupted cart data");
     console.log("💷 UK CURRENCY - All prices in British Pounds (£) with proper UK checkout");
     console.log("🔐 AUTHENTICATION - Admin login system with proper redirects working");
     console.log("🎯 ADMIN DASHBOARD - Clean admin panel for single-store management");

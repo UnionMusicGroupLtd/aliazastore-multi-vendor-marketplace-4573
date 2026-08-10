@@ -41,10 +41,23 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const savedCart = localStorage.getItem('aliazastore_cart');
     if (savedCart) {
       try {
-        setCartItems(JSON.parse(savedCart));
+        const parsedCart = JSON.parse(savedCart);
+        console.log('📦 Loaded cart from localStorage:', parsedCart);
+        
+        // Check if cart items have valid _row_id, if not, clear the cart
+        const hasValidIds = parsedCart.every((item: any) => item._row_id && typeof item._row_id === 'number');
+        
+        if (!hasValidIds) {
+          console.log('⚠️ Cart has invalid IDs, clearing old data...');
+          localStorage.removeItem('aliazastore_cart');
+          setCartItems([]);
+        } else {
+          setCartItems(parsedCart);
+        }
       } catch (error) {
         console.error('Error loading cart from localStorage:', error);
         localStorage.removeItem('aliazastore_cart');
+        setCartItems([]);
       }
     }
   }, []);
