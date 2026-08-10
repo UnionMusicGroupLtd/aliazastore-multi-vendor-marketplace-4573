@@ -41,25 +41,28 @@ const IfuddaHomeNew = () => {
     }
     
     // Force rebuild and log navigation state
-    console.log('🔄 IfuddaHomeNew: Component mounted');
-    console.log('🔄 IfuddaHomeNew: User state:', user);
-    console.log('🔄 IfuddaHomeNew: isAdmin state:', isAdmin);
-    console.log('🔄 IfuddaHomeNew: Navigation should show:', user ? (isAdmin ? 'Admin Dashboard + Sign Out' : 'Sign Out only') : 'Sign In');
-    console.log('🧪 ADMIN NAVIGATION DEBUG:', { user: !!user, isAdmin, shouldShowAdminLink: user && isAdmin });
+    console.log('🔄 ADMIN NAVIGATION FIX - IfuddaHomeNew: Component mounted');
+    console.log('🔄 User state:', user);
+    console.log('🔄 isAdmin state:', isAdmin);
+    console.log('🔄 Enhanced admin check:', user && (isAdmin || user.role === 'admin' || user.metadata?.role === 'admin'));
+    console.log('🔄 Navigation should show:', user ? (isAdmin || user.role === 'admin' || user.metadata?.role === 'admin' ? 'Admin Dashboard + Sign Out' : 'Sign Out only') : 'Sign In');
     
     // Additional admin check
     if (user) {
       const directAdminCheck = user.role === 'admin' || user.metadata?.role === 'admin';
-      console.log('🧪 DIRECT ADMIN CHECK:', {
+      const enhancedAdminCheck = isAdmin || user.role === 'admin' || user.metadata?.role === 'admin';
+      console.log('🧪 ADMIN DETECTION DEBUG:', {
+        'user.email': user.email,
         'user.role': user.role,
         'user.metadata?.role': user.metadata?.role,
+        'isAdmin state': isAdmin,
         'directAdminCheck': directAdminCheck,
-        'user.email': user.email,
-        'isAdmin state': isAdmin
+        'enhancedAdminCheck': enhancedAdminCheck,
+        'shouldShowAdminLink': enhancedAdminCheck
       });
       
-      if (directAdminCheck) {
-        console.log('🛡️ ADMIN USER CONFIRMED! Admin dashboard button should be visible.');
+      if (enhancedAdminCheck) {
+        console.log('🛡️ ADMIN USER CONFIRMED! Admin dashboard button should be visible in header.');
       }
     }
     
@@ -285,11 +288,11 @@ const IfuddaHomeNew = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
       {/* Admin Emergency Access - Shows when admin is logged in */}
-      {(user && isAdmin) || (user && (user.role === 'admin' || user.metadata?.role === 'admin')) ? (
+      {(user && (isAdmin || user.role === 'admin' || user.metadata?.role === 'admin')) ? (
         <div className="fixed top-4 left-4 z-50">
           <Link 
             to="/admin" 
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 text-sm font-semibold"
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 text-sm font-semibold transition-all"
           >
             <Shield className="w-4 h-4" />
             Admin Dashboard
@@ -299,9 +302,13 @@ const IfuddaHomeNew = () => {
             Admin: {user.email} | isAdmin: {isAdmin ? 'true' : 'false'}
           </div>
         </div>
+      ) : user ? (
+        <div className="fixed top-4 left-4 z-50 text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">
+          Logged in: {user.email}
+        </div>
       ) : (
         <div className="fixed top-4 left-4 z-50 text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">
-          Debug: User: {user?.email || 'none'} | isAdmin: {isAdmin ? 'true' : 'false'}
+          Not logged in
         </div>
       )}
 
@@ -330,8 +337,12 @@ const IfuddaHomeNew = () => {
               
               {user ? (
                 <>
-                  {isAdmin && (
-                    <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold">Admin Dashboard</Link>
+                  {/* Enhanced admin detection with multiple fallbacks */}
+                  {(isAdmin || user.role === 'admin' || user.metadata?.role === 'admin') && (
+                    <Link to="/admin" className="text-red-400 hover:text-red-300 transition-colors font-semibold flex items-center gap-1">
+                      <Shield className="w-4 h-4" />
+                      Admin Dashboard
+                    </Link>
                   )}
                   <button 
                     onClick={signOut}
@@ -358,8 +369,12 @@ const IfuddaHomeNew = () => {
             <div className="md:hidden flex items-center space-x-4">
               {user ? (
                 <>
-                  {isAdmin && (
-                    <Link to="/admin" className="text-red-400 text-xs font-semibold border border-red-500/50 px-2 py-1 rounded bg-red-500/10">Admin</Link>
+                  {/* Enhanced admin detection with multiple fallbacks */}
+                  {(isAdmin || user.role === 'admin' || user.metadata?.role === 'admin') && (
+                    <Link to="/admin" className="text-red-400 text-xs font-semibold border border-red-500/50 px-2 py-1 rounded bg-red-500/10 flex items-center gap-1">
+                      <Shield className="w-3 h-3" />
+                      Admin
+                    </Link>
                   )}
                   <button 
                     onClick={signOut}
@@ -372,7 +387,14 @@ const IfuddaHomeNew = () => {
               ) : (
                 <Link to="/login" className="text-white text-sm">Sign In</Link>
               )}
-              <Link to="/admin-access" className="text-red-400 text-xs underline">Admin</Link>
+              <Link to="/cart" className="text-white text-sm">
+                <ShoppingBag className="w-4 h-4" />
+                {getCartCount() > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1">
+                    {getCartCount()}
+                  </span>
+                )}
+              </Link>
             </div>
           </div>
         </div>

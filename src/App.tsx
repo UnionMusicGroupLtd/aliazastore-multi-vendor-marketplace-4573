@@ -46,8 +46,9 @@ function AppContent() {
     console.log("✅ CART SYSTEM VERSION 5.0 - CLEAN INTERFACE");
     console.log("✅ Removed debug buttons - interface now clean with single Clear Cart button");
     console.log("✅ Cart functions working: remove items, reduce quantity to 0, proper _row_id system");
-    console.log("🔧 ADMIN NAVIGATION ENHANCED - Multiple admin detection methods for guaranteed access");
-    console.log("🔧 ROBUST ADMIN BUTTON - Direct role checking + state checking");
+    console.log("🔧 ADMIN NAVIGATION FIX COMPLETE - Enhanced detection with multiple fallback methods");
+    console.log("🔧 ROBUST ADMIN BUTTON - Direct role checking + state checking + Shield icon");
+    console.log("🔧 FIXED: Admin users can now always see Admin Dashboard link even after navigating to home");
     console.log("🔧 DEBUG INFO ADDED - Shows user status and admin state in top-left corner");
     console.log("🔧 Enhanced AuthContext with detailed admin detection logs");
     console.log("💷 UK CURRENCY - All prices in British Pounds (£) with proper UK checkout");
