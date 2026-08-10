@@ -58,6 +58,7 @@ function AppContent() {
     console.log("📦 ADMIN ORDERS VIEW DETAILS FIXED - View Details button now functional with comprehensive modal");
     console.log("🏷️ CATEGORY SYSTEM FIXED - Dynamic category loading from database (101 categories available)");
     console.log("🏷️ SUBCATEGORY SYSTEM FIXED - Hierarchical category + subcategory selection (200+ subcategories available)");
+    console.log("✅ PRODUCT SAVE FIX - Added subcategory column to products table - admin can now save products with all details");
     console.log("🗑️ PHILIPPINE DELIVERY - Completely removed old AliazaStore delivery with peso pricing");
     console.log("🗑️ CATEGORIES LINK REMOVED - Header navigation now shows only Products, About, and essential links");
     console.log("📍 Current route:", location.pathname);
