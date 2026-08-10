@@ -88,57 +88,20 @@ const Cart = () => {
           <div>
             <h1 className="text-3xl font-bold text-white mb-2">Shopping Cart</h1>
             <p className="text-gray-400">{cartItems.length} items in your cart</p>
-            {/* Debug info */}
-            <div className="mt-2 text-xs text-gray-500">
-              <p>Cart Debug: {cartItems.length > 0 ? `First item _row_id: ${cartItems[0]._row_id}` : 'No items'}</p>
-            </div>
           </div>
           
-          <div className="flex gap-2">
-            {/* DEBUG BUTTON - Show cart contents */}
-            <button
-              onClick={() => {
-                console.log('🛒 CURRENT CART CONTENTS:', JSON.stringify(cartItems, null, 2));
-                alert(`Cart Contents Debug:\n\n${JSON.stringify(cartItems, null, 2)}`);
-              }}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-2"
-            >
-              🔍 Debug Cart
-            </button>
-            
-            {/* TEST BUTTON - To verify cart functions work */}
-            <button
-              onClick={() => {
-                console.log('🧪 TESTING CART FUNCTIONS...');
-                console.log('Cart Items:', cartItems);
-                if (cartItems.length > 0) {
-                  const firstItem = cartItems[0];
-                  console.log('Testing removal of:', firstItem.name, '_row_id:', firstItem._row_id);
-                  alert(`Test: Would remove "${firstItem.name}" (_row_id: ${firstItem._row_id})\n\nClick OK to actually remove it.`);
-                  removeFromCart(firstItem._row_id);
-                } else {
-                  alert('No items in cart to test!');
-                }
-              }}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-2"
-            >
-              🧪 Test Remove
-            </button>
-            
-            {/* EMERGENCY CLEAR CART BUTTON */}
-            <button
-              onClick={() => {
-                if (confirm('⚠️ EMERGENCY: Clear all items from cart? This will fix any ID issues!')) {
-                  localStorage.removeItem('aliazastore_cart');
-                  window.location.reload();
-                }
-              }}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
-            >
-              <Trash2 className="w-4 h-4" />
-              Fix Cart
-            </button>
-          </div>
+          <button
+            onClick={() => {
+              if (confirm('Are you sure you want to clear all items from your cart?')) {
+                localStorage.removeItem('aliazastore_cart');
+                window.location.reload();
+              }
+            }}
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
+          >
+            <Trash2 className="w-4 h-4" />
+            Clear Cart
+          </button>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
