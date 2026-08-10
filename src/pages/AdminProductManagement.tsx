@@ -6,9 +6,9 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
-  ShoppingBag, Upload, Ban, Edit, Trash2, Plus, Save, X, 
-  Settings, Package, DollarSign, Percent, Truck, Image as ImageIcon,
-  CheckCircle2, AlertCircle, Eye, EyeOff 
+  Ban, Edit, Trash2, Plus, Save, 
+  Package, DollarSign, Truck, Image as ImageIcon,
+  CheckCircle2, AlertCircle, Eye 
 } from "lucide-react";
 import db from "@/lib/shared/kliv-database.js";
 import { content } from "@/lib/shared/kliv-content.js";
@@ -97,7 +97,7 @@ const AdminProductManagement = () => {
     try {
       // Load main categories (level 0) and subcategories (level 1)
       const allCategories = await db.query("categories_new", { 
-        filter: { is_active: 1 },
+        filter: { is_active: `eq.${1}` },
         order: "name.asc" 
       });
       
@@ -130,9 +130,9 @@ const AdminProductManagement = () => {
       // Load subcategories for this category
       const subcatsData = await db.query("categories_new", {
         filter: { 
-          is_active: 1,
-          parent_id: selectedCategory._row_id,
-          level: 1
+          is_active: `eq.${1}`,
+          parent_id: `eq.${selectedCategory._row_id}`,
+          level: `eq.${1}`
         },
         order: "name.asc"
       });
@@ -303,9 +303,7 @@ const AdminProductManagement = () => {
 
       if (selectedProduct) {
         // Update existing product
-        await db.update("products", { 
-          filter: { _row_id: selectedProduct._row_id }
-        }, productData);
+        await db.update("products", { _row_id: `eq.${selectedProduct._row_id}` }, productData);
         setSuccess('Product updated successfully!');
       } else {
         // Add new product
@@ -326,9 +324,7 @@ const AdminProductManagement = () => {
     if (!selectedProduct) return;
 
     try {
-      await db.update("products", { 
-        filter: { _row_id: selectedProduct._row_id }
-      }, {
+      await db.update("products", { _row_id: `eq.${selectedProduct._row_id}` }, {
         is_banned: 1,
         ban_reason: banForm.ban_reason || 'Violates content guidelines'
       });
@@ -344,9 +340,7 @@ const AdminProductManagement = () => {
 
   const handleUnbanProduct = async (product: Product) => {
     try {
-      await db.update("products", { 
-        filter: { _row_id: product._row_id }
-      }, {
+      await db.update("products", { _row_id: `eq.${product._row_id}` }, {
         is_banned: 0,
         ban_reason: null
       });
@@ -362,11 +356,8 @@ const AdminProductManagement = () => {
   const handleDeleteProduct = async (product: Product) => {
     if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
       try {
-        // Use db.query with delete operation
-        await db.query("products", { 
-          filter: { _row_id: product._row_id },
-          action: 'delete'
-        });
+        // Use the correct database API for deletion
+        await db.delete("products", { _row_id: `eq.${product._row_id}` });
         
         setSuccess(`Product "${product.name}" has been deleted`);
         setTimeout(() => setSuccess(''), 3000);
