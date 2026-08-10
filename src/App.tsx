@@ -57,6 +57,7 @@ function AppContent() {
     console.log("💳 PAYMENT GATEWAY - Stripe and PayPal payment methods available");
     console.log("📦 ADMIN ORDERS VIEW DETAILS FIXED - View Details button now functional with comprehensive modal");
     console.log("🏷️ CATEGORY SYSTEM FIXED - Dynamic category loading from database (101 categories available)");
+    console.log("🏷️ SUBCATEGORY SYSTEM FIXED - Hierarchical category + subcategory selection (200+ subcategories available)");
     console.log("🗑️ PHILIPPINE DELIVERY - Completely removed old AliazaStore delivery with peso pricing");
     console.log("🚀 PRODUCTION READY - All old code removed, platform ready for launch");
     console.log("📍 Current route:", location.pathname);

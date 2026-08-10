@@ -21,6 +21,7 @@ interface Product {
   compare_price?: number;
   image_url: string;
   category: string;
+  subcategory?: string;
   in_stock: number;
   featured: number;
   age_restricted: number;
@@ -41,7 +42,8 @@ interface Product {
 
 const AdminProductManagement = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<any[]>([]); // Full category objects
+  const [subcategories, setSubcategories] = useState<any[]>([]); // Subcategories for selected category
   const [loading, setLoading] = useState(true);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
@@ -59,6 +61,7 @@ const AdminProductManagement = () => {
     price: "",
     compare_price: "",
     category: "",
+    subcategory: "",
     in_stock: "1",
     featured: "0",
     age_restricted: "0",
@@ -92,16 +95,52 @@ const AdminProductManagement = () => {
 
   const loadCategories = async () => {
     try {
-      const categoriesData = await db.query("categories_new", { 
+      // Load main categories (level 0) and subcategories (level 1)
+      const allCategories = await db.query("categories_new", { 
         filter: { is_active: 1 },
         order: "name.asc" 
       });
-      const categoryNames = categoriesData.map((cat: any) => cat.name);
-      setCategories(categoryNames);
+      
+      setCategories(allCategories);
     } catch (err) {
       console.error("Error loading categories:", err);
       // Fallback to basic categories if database fails
-      setCategories(['Vibrators', 'Couples Toys', 'Lingerie', 'Massage', 'Bondage', 'Lubricants', 'Massagers', 'Games']);
+      setCategories([
+        { _row_id: 1, name: 'Vibrators', level: 0 },
+        { _row_id: 2, name: 'Couples Toys', level: 0 },
+        { _row_id: 3, name: 'Lingerie', level: 0 },
+        { _row_id: 4, name: 'Massage', level: 0 },
+        { _row_id: 5, name: 'Bondage', level: 0 },
+        { _row_id: 6, name: 'Lubricants', level: 0 },
+        { _row_id: 7, name: 'Massagers', level: 0 },
+        { _row_id: 8, name: 'Games', level: 0 }
+      ]);
+    }
+  };
+
+  const loadSubcategories = async (categoryId: string) => {
+    try {
+      // Find the selected category to get its _row_id
+      const selectedCategory = categories.find(cat => cat.name === categoryId);
+      if (!selectedCategory) {
+        setSubcategories([]);
+        return;
+      }
+
+      // Load subcategories for this category
+      const subcatsData = await db.query("categories_new", {
+        filter: { 
+          is_active: 1,
+          parent_id: selectedCategory._row_id,
+          level: 1
+        },
+        order: "name.asc"
+      });
+      
+      setSubcategories(subcatsData);
+    } catch (err) {
+      console.error("Error loading subcategories:", err);
+      setSubcategories([]);
     }
   };
 
@@ -161,7 +200,8 @@ const AdminProductManagement = () => {
       description: "",
       price: "",
       compare_price: "",
-      category: "Vibrators",
+      category: "",
+      subcategory: "",
       in_stock: "1",
       featured: "0",
       age_restricted: "0",
@@ -179,10 +219,11 @@ const AdminProductManagement = () => {
       delivery_time: "2-3 business days"
     });
     setImagePreview("");
+    setSubcategories([]);
     setShowAddModal(true);
   };
 
-  const openEditModal = (product: Product) => {
+  const openEditModal = async (product: Product) => {
     setSelectedProduct(product);
     setProductForm({
       name: product.name,
@@ -190,6 +231,7 @@ const AdminProductManagement = () => {
       price: product.price.toString(),
       compare_price: product.compare_price?.toString() || "",
       category: product.category,
+      subcategory: product.subcategory || "",
       in_stock: product.in_stock.toString(),
       featured: product.featured.toString(),
       age_restricted: product.age_restricted.toString(),
@@ -207,6 +249,14 @@ const AdminProductManagement = () => {
       delivery_time: product.delivery_time || "2-3 business days"
     });
     setImagePreview(product.image_url);
+    
+    // Load subcategories for this product's category
+    if (product.category) {
+      await loadSubcategories(product.category);
+    } else {
+      setSubcategories([]);
+    }
+    
     setShowEditModal(true);
   };
 
@@ -233,6 +283,7 @@ const AdminProductManagement = () => {
         compare_price: productForm.compare_price ? parseFloat(productForm.compare_price) : null,
         image_url: productForm.image_url || 'https://images.pexels.com/photos/11482458/pexels-photo-11482458.jpeg?auto=compress&cs=tinysrgb&h=400&w=400',
         category: productForm.category,
+        subcategory: productForm.subcategory || null,
         in_stock: parseInt(productForm.in_stock),
         featured: parseInt(productForm.featured),
         age_restricted: parseInt(productForm.age_restricted),
@@ -559,14 +610,40 @@ const AdminProductManagement = () => {
                     <Label className="text-white">Category *</Label>
                     <select
                       value={productForm.category}
-                      onChange={(e) => setProductForm({ ...productForm, category: e.target.value })}
+                      onChange={(e) => {
+                        const selectedCategory = e.target.value;
+                        setProductForm({ 
+                          ...productForm, 
+                          category: selectedCategory,
+                          subcategory: "" // Reset subcategory when category changes
+                        });
+                        loadSubcategories(selectedCategory);
+                      }}
                       className="w-full bg-gray-800 border border-gray-700 text-white rounded-md px-3 py-2"
                     >
-                      {categories.map(cat => (
-                        <option key={cat} value={cat}>{cat}</option>
-                      ))}
+                      <option value="">Select Category</option>
+                      {categories
+                        .filter(cat => cat.level === 0) // Only show main categories
+                        .map(cat => (
+                          <option key={cat._row_id} value={cat.name}>{cat.name}</option>
+                        ))}
                     </select>
                   </div>
+                  {subcategories.length > 0 && (
+                    <div>
+                      <Label className="text-white">Subcategory *</Label>
+                      <select
+                        value={productForm.subcategory}
+                        onChange={(e) => setProductForm({ ...productForm, subcategory: e.target.value })}
+                        className="w-full bg-gray-800 border border-gray-700 text-white rounded-md px-3 py-2"
+                      >
+                        <option value="">Select Subcategory</option>
+                        {subcategories.map(sub => (
+                          <option key={sub._row_id} value={sub.name}>{sub.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <Label className="text-white">Description *</Label>
@@ -857,14 +934,40 @@ const AdminProductManagement = () => {
                     <Label className="text-white">Category *</Label>
                     <select
                       value={productForm.category}
-                      onChange={(e) => setProductForm({ ...productForm, category: e.target.value })}
+                      onChange={(e) => {
+                        const selectedCategory = e.target.value;
+                        setProductForm({ 
+                          ...productForm, 
+                          category: selectedCategory,
+                          subcategory: "" // Reset subcategory when category changes
+                        });
+                        loadSubcategories(selectedCategory);
+                      }}
                       className="w-full bg-gray-800 border border-gray-700 text-white rounded-md px-3 py-2"
                     >
-                      {categories.map(cat => (
-                        <option key={cat} value={cat}>{cat}</option>
-                      ))}
+                      <option value="">Select Category</option>
+                      {categories
+                        .filter(cat => cat.level === 0) // Only show main categories
+                        .map(cat => (
+                          <option key={cat._row_id} value={cat.name}>{cat.name}</option>
+                        ))}
                     </select>
                   </div>
+                  {subcategories.length > 0 && (
+                    <div>
+                      <Label className="text-white">Subcategory *</Label>
+                      <select
+                        value={productForm.subcategory}
+                        onChange={(e) => setProductForm({ ...productForm, subcategory: e.target.value })}
+                        className="w-full bg-gray-800 border border-gray-700 text-white rounded-md px-3 py-2"
+                      >
+                        <option value="">Select Subcategory</option>
+                        {subcategories.map(sub => (
+                          <option key={sub._row_id} value={sub.name}>{sub.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <Label className="text-white">Description *</Label>
