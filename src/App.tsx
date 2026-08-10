@@ -65,7 +65,7 @@ function AppContent() {
     console.log("🏷️ SUBCATEGORY SYSTEM FIXED - Hierarchical category + subcategory selection (200+ subcategories available)");
     console.log("✅ PRODUCT SAVE FIX - Added subcategory column to products table - admin can now save products with all details");
   console.log("🔗 FOOTER LINKS ADDED - Return Policy and Contact Us links in footer navigation");
-  console.log("📧 CONTACT FORM NOTIFICATIONS - All form submissions sent to info@unionmusicgroup.co.uk");
+  console.log("📧 CONTACT FORM REMOVED - Contact page now shows ifudda branding with direct contact options");
   console.log("📄 RETURNS POLICY UPDATED - 2-5 day return window, 5-10 business day refunds at /returns");
     console.log("🗑️ PHILIPPINE DELIVERY - Completely removed old AliazaStore delivery with peso pricing");
     console.log("🗑️ CATEGORIES LINK REMOVED - Header navigation now shows only Products, About, and essential links");
