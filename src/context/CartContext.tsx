@@ -16,8 +16,8 @@ interface CartItem {
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (item: CartItem) => void;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  removeFromCart: (product_id: number) => void;
+  updateQuantity: (product_id: number, quantity: number) => void;
   clearCart: () => void;
   getCartCount: () => number;
   getCartTotal: () => number;
@@ -55,44 +55,45 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [cartItems]);
 
   const addToCart = (item: CartItem) => {
-    // Ensure id is set for compatibility
+    // Use product_id as the unique identifier - no id field manipulation needed
     const cartItem = { ...item, id: item._row_id };
     setCartItems(prevItems => {
       const existingItem = prevItems.find(i => i.product_id === item.product_id);
       if (existingItem) {
+        // Only update the matching item - don't touch other items' IDs
         return prevItems.map(i =>
           i.product_id === item.product_id
-            ? { ...i, quantity: i.quantity + item.quantity, id: i._row_id }
-            : { ...i, id: i._row_id }
+            ? { ...i, quantity: i.quantity + item.quantity }
+            : i
         );
       }
       return [...prevItems, cartItem];
     });
   };
 
-  const removeFromCart = (id: number) => {
-    console.log('🗑️ REMOVE CART ITEM CALLED - ID:', id);
-    if (!id) {
-      console.error('❌ removeFromCart called with invalid id:', id);
+  const removeFromCart = (product_id: number) => {
+    console.log('🗑️ REMOVE CART ITEM CALLED - PRODUCT_ID:', product_id);
+    if (!product_id) {
+      console.error('❌ removeFromCart called with invalid product_id:', product_id);
       return;
     }
     setCartItems(prevItems => {
-      const filtered = prevItems.filter(item => item._row_id === id || item.id === id);
-      console.log('✅ Removed item with id:', id, 'Remaining items:', filtered.length);
+      const filtered = prevItems.filter(item => item.product_id === product_id);
+      console.log('✅ Removed item with product_id:', product_id, 'Remaining items:', filtered.length);
       return filtered;
     });
   };
 
-  const updateQuantity = (id: number, quantity: number) => {
-    console.log('📦 UPDATE QUANTITY CALLED - ID:', id, 'New Quantity:', quantity);
-    if (!id) {
-      console.error('❌ updateQuantity called with invalid id:', id);
+  const updateQuantity = (product_id: number, quantity: number) => {
+    console.log('📦 UPDATE QUANTITY CALLED - PRODUCT_ID:', product_id, 'New Quantity:', quantity);
+    if (!product_id) {
+      console.error('❌ updateQuantity called with invalid product_id:', product_id);
       return;
     }
     if (quantity < 1) {
-      console.log('🗑️ Quantity less than 1, removing item:', id);
+      console.log('🗑️ Quantity less than 1, removing item:', product_id);
       setCartItems(prevItems => {
-        const filtered = prevItems.filter(item => item._row_id === id || item.id === id);
+        const filtered = prevItems.filter(item => item.product_id === product_id);
         console.log('✅ Item auto-removed due to quantity 0. Remaining items:', filtered.length);
         return filtered;
       });
@@ -100,7 +101,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     setCartItems(prevItems =>
       prevItems.map(item =>
-        (item._row_id === id || item.id === id) ? { ...item, quantity } : item
+        item.product_id === product_id ? { ...item, quantity } : item
       )
     );
   };

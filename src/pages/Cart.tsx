@@ -29,8 +29,8 @@ const Cart = () => {
     previousCartItems.current = cartItems.length;
   }, [cartItems.length]);
 
-  const handleRemoveItem = (id: number, name: string) => {
-    removeFromCart(id);
+  const handleRemoveItem = (product_id: number, name: string) => {
+    removeFromCart(product_id);
     setRemovedMessage(`"${name}" removed from cart`);
     setTimeout(() => setRemovedMessage(null), 3000);
   };
@@ -91,7 +91,7 @@ const Cart = () => {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
-              <div key={item.id || item._row_id} className="bg-gray-900/50 backdrop-blur-lg rounded-xl p-6 border border-gray-800">
+              <div key={item.product_id} className="bg-gray-900/50 backdrop-blur-lg rounded-xl p-6 border border-gray-800">
                 <div className="flex gap-4">
                   <img 
                     src={item.image} 
@@ -107,9 +107,8 @@ const Cart = () => {
                       </div>
                       <button
                         onClick={() => {
-                          const itemId = item._row_id || item.id;
-                          if (itemId) {
-                            handleRemoveItem(itemId, item.name);
+                          if (item.product_id) {
+                            handleRemoveItem(item.product_id, item.name);
                           }
                         }}
                         className="text-red-500 hover:text-red-400 transition-colors p-2 hover:bg-red-500/10 rounded-lg"
@@ -128,9 +127,8 @@ const Cart = () => {
                         <div className="flex items-center space-x-2 bg-gray-800 rounded-lg">
                           <button 
                             onClick={() => {
-                              const itemId = item._row_id || item.id;
-                              if (itemId) {
-                                updateQuantity(itemId, item.quantity - 1);
+                              if (item.product_id) {
+                                updateQuantity(item.product_id, item.quantity - 1);
                               }
                             }}
                             className={`p-2 transition-all ${
@@ -150,9 +148,8 @@ const Cart = () => {
                           </div>
                           <button 
                             onClick={() => {
-                              const itemId = item._row_id || item.id;
-                              if (itemId) {
-                                updateQuantity(itemId, item.quantity + 1);
+                              if (item.product_id) {
+                                updateQuantity(item.product_id, item.quantity + 1);
                               }
                             }}
                             className="p-2 text-gray-400 hover:text-white"
