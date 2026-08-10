@@ -53,7 +53,7 @@ const Returns = () => {
             <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mt-6">
               <p className="text-white font-semibold flex items-center">
                 <CheckCircle className="w-5 h-5 mr-2 text-green-500" />
-                30-Day Return Window for most items
+                2-5 Day Return Window for most items
               </p>
             </div>
           </div>
@@ -71,7 +71,7 @@ const Returns = () => {
                 <div>
                   <h3 className="text-white font-semibold mb-1">Unopened Items</h3>
                   <p className="text-gray-400 text-sm">
-                    Products in original packaging, sealed and unused can be returned within 30 days
+                    Products in original packaging, sealed and unused can be returned within 2-5 days
                   </p>
                 </div>
               </div>
@@ -143,7 +143,7 @@ const Returns = () => {
                 <div>
                   <h3 className="text-white font-semibold mb-2">Contact Us</h3>
                   <p className="text-gray-400 text-sm">
-                    Use our <Link to="/contact" className="text-red-400 hover:text-red-300">contact form</Link> to initiate a return within 30 days of delivery
+                    Use our <Link to="/contact" className="text-red-400 hover:text-red-300">contact form</Link> to initiate a return within 2-5 days of delivery
                   </p>
                 </div>
               </div>
@@ -179,7 +179,7 @@ const Returns = () => {
                 <div>
                   <h3 className="text-white font-semibold mb-2">Refund Processed</h3>
                   <p className="text-gray-400 text-sm">
-                    Once received, refunds are processed within 5-7 business days to original payment method
+                    Once received, refunds are processed within 5-10 business days to original payment method
                   </p>
                 </div>
               </div>
@@ -198,7 +198,7 @@ const Returns = () => {
                 <strong className="text-white">Refund Method:</strong> Refunds are issued to the original payment method used for purchase.
               </p>
               <p>
-                <strong className="text-white">Processing Time:</strong> 5-7 business days after we receive your return.
+                <strong className="text-white">Processing Time:</strong> 5-10 business days after we receive your return.
               </p>
               <p>
                 <strong className="text-white">Shipping Costs:</strong> Original shipping costs are non-refundable unless the item is defective.
@@ -217,7 +217,7 @@ const Returns = () => {
             </h2>
             <p className="text-gray-300 leading-relaxed mb-4">
               This returns policy does not affect your statutory rights. Under UK Consumer Rights Act 2015, 
-              you have the right to return goods within 30 days for a full refund if they're faulty or not as described.
+              you have the right to return goods within 2-5 days for a full refund if they're faulty or not as described.
             </p>
             <p className="text-gray-300 leading-relaxed">
               For additional support or questions about our returns policy, please use our 

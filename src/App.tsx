@@ -66,7 +66,7 @@ function AppContent() {
     console.log("✅ PRODUCT SAVE FIX - Added subcategory column to products table - admin can now save products with all details");
   console.log("🔗 FOOTER LINKS ADDED - Return Policy and Contact Us links in footer navigation");
   console.log("📧 CONTACT FORM NOTIFICATIONS - All form submissions sent to info@unionmusicgroup.co.uk");
-  console.log("📄 RETURNS PAGE CREATED - Comprehensive UK 30-day return policy page at /returns");
+  console.log("📄 RETURNS POLICY UPDATED - 2-5 day return window, 5-10 business day refunds at /returns");
     console.log("🗑️ PHILIPPINE DELIVERY - Completely removed old AliazaStore delivery with peso pricing");
     console.log("🗑️ CATEGORIES LINK REMOVED - Header navigation now shows only Products, About, and essential links");
     console.log("📍 Current route:", location.pathname);
