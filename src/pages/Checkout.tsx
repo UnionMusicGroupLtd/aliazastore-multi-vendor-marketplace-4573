@@ -5,18 +5,15 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, ShoppingCart, CreditCard, CheckCircle, User, MapPin, Phone, Mail } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { ArrowLeft, ShoppingCart, CreditCard, CheckCircle, User, MapPin } from "lucide-react";
+import { Link } from "react-router-dom";
 import GCashPayment from "@/components/GCashPayment";
-import { notifyNewOrder, notifyPaymentReceived } from "@/lib/notifications";
 import { useCart } from "@/context/CartContext";
-import auth from "@/lib/shared/kliv-auth.js";
 
 const Checkout = () => {
   const [checkoutStep, setCheckoutStep] = useState<'details' | 'payment' | 'complete'>('details');
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
   const { cartItems, clearCart, getCartTotal } = useCart();
-  const navigate = useNavigate();
   
   // Customer details form state
   const [customerDetails, setCustomerDetails] = useState({
@@ -102,39 +99,20 @@ const Checkout = () => {
     setLoading(true);
     
     try {
-      // Send order notification with actual customer details
-      await notifyNewOrder({
-        orderId: orderId,
-        customerName: customerDetails.fullName,
-        customerEmail: customerDetails.email,
-        customerPhone: customerDetails.mobile,
-        totalAmount: `£${total.toFixed(2)}`,
-        shippingAddress: `${customerDetails.address}, ${customerDetails.city}, ${customerDetails.province} ${customerDetails.postalCode}`,
-        city: customerDetails.city,
-        postalCode: customerDetails.postalCode,
-        paymentMethod: "GCash",
-        orderItems: cartItems.map(item => 
-          `${item.name} x${item.quantity} - £${(item.price * item.quantity).toFixed(2)}`
-        ).join("\n"),
-        notes: customerDetails.notes
-      });
-      
-      // Send payment notification with actual customer details
-      await notifyPaymentReceived({
-        paymentType: "Order Payment",
-        amount: total.toFixed(2),
-        transactionId: transactionId,
-        paymentMethod: "GCash",
-        customerName: customerDetails.fullName,
-        customerEmail: customerDetails.email,
-        orderId: orderId
-      });
-      
       // Clear the cart after successful payment
       clearCart();
       
       // Move to completion step
       setCheckoutStep('complete');
+      
+      console.log('✅ Order processed successfully:', {
+        orderId,
+        customerName: customerDetails.fullName,
+        customerEmail: customerDetails.email,
+        totalAmount: `£${total.toFixed(2)}`,
+        paymentMethod: "GCash",
+        transactionId
+      });
     } catch (error) {
       console.error('Error processing order:', error);
       alert('There was an error processing your order. Please try again.');
