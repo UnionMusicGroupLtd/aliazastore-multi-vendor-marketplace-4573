@@ -8,9 +8,10 @@ const Cart = () => {
   const [removedMessage, setRemovedMessage] = useState<string | null>(null);
   const previousCartItems = useRef<number>(0);
   
-  console.log('🛒 CART SYSTEM DEBUG - Version 2.0 - ', new Date().toISOString());
+  console.log('🛒 CART SYSTEM DEBUG - Version 3.0 - FIXED EDITION -', new Date().toISOString());
   console.log('🛒 Cart Items:', cartItems.length);
   console.log('🛒 Cart Functions Available:', { removeFromCart: typeof removeFromCart, updateQuantity: typeof updateQuantity });
+  console.log('🛒 Cart Item Details:', cartItems.map(item => ({ _row_id: item._row_id, name: item.name, quantity: item.quantity })));
 
   const subtotal = getCartTotal();
   const deliveryFee = 0; // Free UK delivery
@@ -29,8 +30,9 @@ const Cart = () => {
     previousCartItems.current = cartItems.length;
   }, [cartItems.length]);
 
-  const handleRemoveItem = (product_id: number, name: string) => {
-    removeFromCart(product_id);
+  const handleRemoveItem = (_row_id: number, name: string) => {
+    console.log('🗑️ HANDLE REMOVE ITEM - _row_id:', _row_id, 'Name:', name);
+    removeFromCart(_row_id);
     setRemovedMessage(`"${name}" removed from cart`);
     setTimeout(() => setRemovedMessage(null), 3000);
   };
@@ -88,26 +90,47 @@ const Cart = () => {
             <p className="text-gray-400">{cartItems.length} items in your cart</p>
           </div>
           
-          {/* EMERGENCY CLEAR CART BUTTON */}
-          <button
-            onClick={() => {
-              if (confirm('⚠️ EMERGENCY: Clear all items from cart? This cannot be undone!')) {
-                localStorage.removeItem('aliazastore_cart');
-                window.location.reload();
-              }
-            }}
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
-          >
-            <Trash2 className="w-4 h-4" />
-            Clear Cart
-          </button>
+          <div className="flex gap-2">
+            {/* TEST BUTTON - To verify cart functions work */}
+            <button
+              onClick={() => {
+                console.log('🧪 TESTING CART FUNCTIONS...');
+                console.log('Cart Items:', cartItems);
+                if (cartItems.length > 0) {
+                  const firstItem = cartItems[0];
+                  console.log('Testing removal of:', firstItem.name, '_row_id:', firstItem._row_id);
+                  alert(`Test: Would remove "${firstItem.name}" (_row_id: ${firstItem._row_id})\n\nClick OK to actually remove it.`);
+                  removeFromCart(firstItem._row_id);
+                } else {
+                  alert('No items in cart to test!');
+                }
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-2"
+            >
+              🧪 Test Remove
+            </button>
+            
+            {/* EMERGENCY CLEAR CART BUTTON */}
+            <button
+              onClick={() => {
+                if (confirm('⚠️ EMERGENCY: Clear all items from cart? This cannot be undone!')) {
+                  localStorage.removeItem('aliazastore_cart');
+                  window.location.reload();
+                }
+              }}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2"
+            >
+              <Trash2 className="w-4 h-4" />
+              Clear Cart
+            </button>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {cartItems.map((item) => (
-              <div key={item.product_id} className="bg-gray-900/50 backdrop-blur-lg rounded-xl p-6 border border-gray-800">
+              <div key={item._row_id} className="bg-gray-900/50 backdrop-blur-lg rounded-xl p-6 border border-gray-800">
                 <div className="flex gap-4">
                   <img 
                     src={item.image} 
@@ -123,8 +146,8 @@ const Cart = () => {
                       </div>
                       <button
                         onClick={() => {
-                          if (item.product_id) {
-                            handleRemoveItem(item.product_id, item.name);
+                          if (item._row_id) {
+                            handleRemoveItem(item._row_id, item.name);
                           }
                         }}
                         className="text-red-500 hover:text-red-400 transition-colors p-2 hover:bg-red-500/10 rounded-lg"
@@ -143,8 +166,8 @@ const Cart = () => {
                         <div className="flex items-center space-x-2 bg-gray-800 rounded-lg">
                           <button 
                             onClick={() => {
-                              if (item.product_id) {
-                                updateQuantity(item.product_id, item.quantity - 1);
+                              if (item._row_id) {
+                                updateQuantity(item._row_id, item.quantity - 1);
                               }
                             }}
                             className={`p-2 transition-all ${
@@ -164,8 +187,8 @@ const Cart = () => {
                           </div>
                           <button 
                             onClick={() => {
-                              if (item.product_id) {
-                                updateQuantity(item.product_id, item.quantity + 1);
+                              if (item._row_id) {
+                                updateQuantity(item._row_id, item.quantity + 1);
                               }
                             }}
                             className="p-2 text-gray-400 hover:text-white"
