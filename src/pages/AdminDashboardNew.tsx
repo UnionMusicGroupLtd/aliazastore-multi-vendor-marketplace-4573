@@ -20,7 +20,7 @@ const AdminDashboardNew = () => {
   console.log("🔍 AdminDashboardNew: User from AuthContext:", user);
   console.log("🔍 AdminDashboardNew: isAdmin from AuthContext:", isAdmin);
   console.log("🔍 AdminDashboardNew: authLoading:", authLoading);
-  console.log("🔄 FORCED REBUILD - Admin Dashboard: Payment Gateway restored, Withdrawals removed");
+  console.log("🔄 FORCED REBUILD - Admin Dashboard: Delivery Options Management fix applied");
   console.log("🔍 AdminDashboardNew: Navigation should show: Home | Admin Dashboard | Avatar | Sign Out");
 
   // Authentication guard - redirect if not logged in or not admin
@@ -119,7 +119,7 @@ const AdminDashboardNew = () => {
       icon: Truck,
       label: "Delivery Setup",
       description: "Configure shipping and delivery options",
-      href: "/admin/delivery",
+      href: "/admin/delivery-options",
       color: "from-purple-600 to-indigo-600"
     },
     {

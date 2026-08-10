@@ -28,6 +28,7 @@ import AdminOrders from "./pages/AdminOrders";
 import AdminCustomers from "./pages/AdminCustomers";
 import AdminSettings from "./pages/AdminSettings";
 import AdminDelivery from "./pages/AdminDelivery";
+import DeliveryOptionsManagement from "./pages/DeliveryOptionsManagement";
 import PaymentGatewayManagement from "./pages/PaymentGatewayManagement";
 
 // Components
@@ -88,6 +89,7 @@ function AppContent() {
       <Route path="/admin/customers" element={<AdminCustomers />} />
       <Route path="/admin/settings" element={<AdminSettings />} />
       <Route path="/admin/delivery" element={<AdminDelivery />} />
+      <Route path="/admin/delivery-options" element={<DeliveryOptionsManagement />} />
       <Route path="/admin/payment-gateways" element={<PaymentGatewayManagement />} />
 
       {/* 404 */}
