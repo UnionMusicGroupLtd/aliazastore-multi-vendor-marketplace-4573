@@ -31,6 +31,16 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     console.log("🔄 AuthContext: Current user state:", user);
     console.log("🔄 AuthContext: Current isAdmin state:", isAdmin);
     console.log("🔄 AuthContext: Loading state:", loading);
+    
+    // Additional admin check debugging
+    if (user) {
+      console.log("🔍 ADMIN CHECK DEBUG:", {
+        userRole: user.role,
+        userMetadataRole: user.metadata?.role,
+        computedIsAdmin: isAdmin,
+        shouldShowAdminLink: user.role === 'admin' || user.metadata?.role === 'admin'
+      });
+    }
   }, [user, isAdmin, loading]);
 
   const checkAuth = async () => {

@@ -44,6 +44,9 @@ function AppContent() {
     console.log("✅ CART SYSTEM VERSION 5.0 - CLEAN INTERFACE");
     console.log("✅ Removed debug buttons - interface now clean with single Clear Cart button");
     console.log("✅ Cart functions working: remove items, reduce quantity to 0, proper _row_id system");
+    console.log("🔧 ADMIN NAVIGATION FIX - Ensuring admin users can always access dashboard");
+    console.log("🔧 Added emergency Admin Dashboard button for logged-in admins");
+    console.log("🔧 Enhanced navigation debugging to track admin state preservation");
     console.log("💷 UK CURRENCY - All prices in British Pounds (£) with proper UK checkout");
     console.log("🔐 AUTHENTICATION - Admin login system with proper redirects working");
     console.log("🎯 ADMIN DASHBOARD - Clean admin panel for single-store management");

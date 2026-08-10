@@ -45,6 +45,7 @@ const IfuddaHomeNew = () => {
     console.log('🔄 IfuddaHomeNew: User state:', user);
     console.log('🔄 IfuddaHomeNew: isAdmin state:', isAdmin);
     console.log('🔄 IfuddaHomeNew: Navigation should show:', user ? (isAdmin ? 'Admin Dashboard + Sign Out' : 'Sign Out only') : 'Sign In');
+    console.log('🧪 ADMIN NAVIGATION DEBUG:', { user: !!user, isAdmin, shouldShowAdminLink: user && isAdmin });
     
     // Load sample products
     const sampleProducts: Product[] = [
@@ -267,6 +268,19 @@ const IfuddaHomeNew = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
+      {/* Admin Emergency Access - Shows when admin is logged in */}
+      {user && isAdmin && (
+        <div className="fixed top-4 left-4 z-50">
+          <Link 
+            to="/admin" 
+            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 text-sm font-semibold"
+          >
+            <Shield className="w-4 h-4" />
+            Admin Dashboard
+          </Link>
+        </div>
+      )}
+
       {/* Success Message */}
       {showSuccessMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 animate-fade-in">
@@ -322,7 +336,7 @@ const IfuddaHomeNew = () => {
               {user ? (
                 <>
                   {isAdmin && (
-                    <Link to="/admin" className="text-red-400 text-xs font-semibold">Admin</Link>
+                    <Link to="/admin" className="text-red-400 text-xs font-semibold border border-red-500/50 px-2 py-1 rounded bg-red-500/10">Admin</Link>
                   )}
                   <button 
                     onClick={signOut}
