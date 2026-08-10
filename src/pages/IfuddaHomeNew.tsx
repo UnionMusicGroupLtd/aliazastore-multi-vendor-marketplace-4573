@@ -325,7 +325,6 @@ const IfuddaHomeNew = () => {
             </Link>
             
             <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/categories" className="text-gray-300 hover:text-white transition-colors">Categories</Link>
               <Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
               

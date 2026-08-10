@@ -59,7 +59,7 @@ function AppContent() {
     console.log("🏷️ CATEGORY SYSTEM FIXED - Dynamic category loading from database (101 categories available)");
     console.log("🏷️ SUBCATEGORY SYSTEM FIXED - Hierarchical category + subcategory selection (200+ subcategories available)");
     console.log("🗑️ PHILIPPINE DELIVERY - Completely removed old AliazaStore delivery with peso pricing");
-    console.log("🚀 PRODUCTION READY - All old code removed, platform ready for launch");
+    console.log("🗑️ CATEGORIES LINK REMOVED - Header navigation now shows only Products, About, and essential links");
     console.log("📍 Current route:", location.pathname);
     console.log("👤 User status:", user ? "Logged in" : "Not logged in");
     console.log("🛡️ Admin status:", isAdmin ? "Admin user" : "Regular user");
