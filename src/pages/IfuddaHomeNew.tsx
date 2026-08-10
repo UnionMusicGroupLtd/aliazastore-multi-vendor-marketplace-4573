@@ -40,32 +40,6 @@ const IfuddaHomeNew = () => {
       setShowVerification(false);
     }
     
-    // Force rebuild and log navigation state
-    console.log('🔄 ADMIN NAVIGATION FIX - IfuddaHomeNew: Component mounted');
-    console.log('🔄 User state:', user);
-    console.log('🔄 isAdmin state:', isAdmin);
-    console.log('🔄 Enhanced admin check:', user && (isAdmin || user.role === 'admin' || user.metadata?.role === 'admin'));
-    console.log('🔄 Navigation should show:', user ? (isAdmin || user.role === 'admin' || user.metadata?.role === 'admin' ? 'Admin Dashboard + Sign Out' : 'Sign Out only') : 'Sign In');
-    
-    // Additional admin check
-    if (user) {
-      const directAdminCheck = user.role === 'admin' || user.metadata?.role === 'admin';
-      const enhancedAdminCheck = isAdmin || user.role === 'admin' || user.metadata?.role === 'admin';
-      console.log('🧪 ADMIN DETECTION DEBUG:', {
-        'user.email': user.email,
-        'user.role': user.role,
-        'user.metadata?.role': user.metadata?.role,
-        'isAdmin state': isAdmin,
-        'directAdminCheck': directAdminCheck,
-        'enhancedAdminCheck': enhancedAdminCheck,
-        'shouldShowAdminLink': enhancedAdminCheck
-      });
-      
-      if (enhancedAdminCheck) {
-        console.log('🛡️ ADMIN USER CONFIRMED! Admin dashboard button should be visible in header.');
-      }
-    }
-    
     // Load sample products
     const sampleProducts: Product[] = [
       {
@@ -287,31 +261,6 @@ const IfuddaHomeNew = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
-      {/* Admin Emergency Access - Shows when admin is logged in */}
-      {(user && (isAdmin || user.role === 'admin' || user.metadata?.role === 'admin')) ? (
-        <div className="fixed top-4 left-4 z-50">
-          <Link 
-            to="/admin" 
-            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 text-sm font-semibold transition-all"
-          >
-            <Shield className="w-4 h-4" />
-            Admin Dashboard
-          </Link>
-          {/* Debug info */}
-          <div className="absolute -bottom-8 left-0 bg-blue-900 text-white text-xs px-2 py-1 rounded w-full">
-            Admin: {user.email} | isAdmin: {isAdmin ? 'true' : 'false'}
-          </div>
-        </div>
-      ) : user ? (
-        <div className="fixed top-4 left-4 z-50 text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">
-          Logged in: {user.email}
-        </div>
-      ) : (
-        <div className="fixed top-4 left-4 z-50 text-xs text-gray-400 bg-gray-800 px-2 py-1 rounded">
-          Not logged in
-        </div>
-      )}
-
       {/* Success Message */}
       {showSuccessMessage && (
         <div className="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 flex items-center gap-2 animate-fade-in">

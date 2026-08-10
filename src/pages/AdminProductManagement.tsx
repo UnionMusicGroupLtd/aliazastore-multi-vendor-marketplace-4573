@@ -95,9 +95,9 @@ const AdminProductManagement = () => {
 
   const loadCategories = async () => {
     try {
-      // Load main categories (level 0) and subcategories (level 1)
+      // Load main categories (level 0) from categories_new table
       const allCategories = await db.query("categories_new", { 
-        filter: { is_active: `eq.${1}` },
+        is_active: `eq.${1}`,
         order: "name.asc" 
       });
       
@@ -127,13 +127,11 @@ const AdminProductManagement = () => {
         return;
       }
 
-      // Load subcategories for this category
+      // Load subcategories for this category using correct PostgREST format
       const subcatsData = await db.query("categories_new", {
-        filter: { 
-          is_active: `eq.${1}`,
-          parent_id: `eq.${selectedCategory._row_id}`,
-          level: `eq.${1}`
-        },
+        is_active: `eq.${1}`,
+        parent_id: `eq.${selectedCategory._row_id}`,
+        level: `eq.${1}`,
         order: "name.asc"
       });
       
