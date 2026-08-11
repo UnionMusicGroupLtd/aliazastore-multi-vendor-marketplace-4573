@@ -358,31 +358,83 @@ const AdminProductManagement = () => {
   };
 
   const handleDeleteProduct = async (product: Product) => {
-    // Enhanced delete function with better debugging
-    console.log("🗑️ Attempting to delete product:", product);
+    // Enhanced delete function with comprehensive debugging and fallback
+    console.log("🗑️ DELETE PRODUCT STARTED");
+    console.log("Product details:", { 
+      _row_id: product._row_id, 
+      name: product.name,
+      category: product.category 
+    });
     
     if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
+      console.log("✅ User confirmed deletion");
+      
       try {
-        console.log("✅ User confirmed deletion for product:", product._row_id);
+        // Try multiple delete approaches to ensure one works
+        console.log("🔄 Attempting delete with _row_id filter...");
         
-        // Delete using correct PostgREST syntax
-        const result = await db.delete("products", { _row_id: `eq.${product._row_id}` });
-        console.log("✅ Delete result:", result);
+        let deleteSuccess = false;
+        let deleteError = null;
         
-        setSuccess(`Product "${product.name}" has been deleted`);
-        setTimeout(() => setSuccess(''), 3000);
+        // Method 1: Using eq._row_id format
+        try {
+          console.log("📌 Method 1: db.delete with eq._row_id");
+          const result1 = await db.delete("products", { _row_id: `eq.${product._row_id}` });
+          console.log("✅ Method 1 succeeded:", result1);
+          deleteSuccess = true;
+        } catch (err1: any) {
+          console.log("❌ Method 1 failed:", err1.message);
+          deleteError = err1;
+          
+          // Method 2: Using eq._row_id with string format
+          try {
+            console.log("📌 Method 2: db.delete with string _row_id");
+            const result2 = await db.delete("products", { _row_id: String(product._row_id) });
+            console.log("✅ Method 2 succeeded:", result2);
+            deleteSuccess = true;
+          } catch (err2: any) {
+            console.log("❌ Method 2 failed:", err2.message);
+            
+            // Method 3: Using filter with eq operator
+            try {
+              console.log("📌 Method 3: db.delete with eq filter");
+              const result3 = await db.delete("products", { filter: { _row_id: `eq.${product._row_id}` } } as any);
+              console.log("✅ Method 3 succeeded:", result3);
+              deleteSuccess = true;
+            } catch (err3: any) {
+              console.log("❌ Method 3 failed:", err3.message);
+              deleteError = err3;
+            }
+          }
+        }
         
-        // Reload products to update the UI
-        console.log("🔄 Reloading products after deletion...");
-        loadProducts();
+        if (deleteSuccess) {
+          console.log("🎉 DELETE SUCCESSFUL");
+          setSuccess(`Product "${product.name}" has been deleted`);
+          setTimeout(() => setSuccess(''), 3000);
+          
+          console.log("🔄 Reloading products after successful deletion...");
+          await loadProducts();
+          console.log("✅ Products reloaded successfully");
+        } else {
+          console.error("💥 ALL DELETE METHODS FAILED:", deleteError);
+          throw deleteError;
+        }
         
       } catch (err: any) {
-        console.error("❌ Delete error:", err);
-        setError('Failed to delete product: ' + err.message);
+        console.error("❌ DELETE FAILED:", err);
+        setError(`Failed to delete product: ${err.message}`);
+        console.error("Full error details:", {
+          message: err.message,
+          stack: err.stack,
+          product: product
+        });
       }
     } else {
       console.log("❌ User cancelled deletion");
     }
+    
+    console.log("🗑️ DELETE PRODUCT FUNCTION ENDED");
   };
 
   if (loading) {
@@ -606,12 +658,11 @@ const AdminProductManagement = () => {
                             onClick={() => {
                               if (confirm(`EMERGENCY DELETE: "${product.name}" (ID: ${product._row_id})?`)) {
                                 console.log("🚨 EMERGENCY DELETE for product:", product._row_id);
-                                db.delete("products", { _row_id: `eq.${product._row_id}` })
-                                  .then(() => {
-                                    console.log("✅ Emergency delete successful");
-                                    loadProducts();
-                                  })
-                                  .catch(err => console.error("❌ Emergency delete failed:", err));
+                                
+                                // Use the enhanced delete function
+                                handleDeleteProduct(product).catch(err => {
+                                  console.error("❌ Emergency delete failed:", err);
+                                });
                               }
                             }}
                             className="text-red-500 hover:text-red-400 text-xs"
