@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trash2, Search, Loader2 } from 'lucide-react';
+import { Trash2, Search, Loader2, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -23,6 +23,17 @@ export default function AdminProductManagementSimple() {
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  
+  // Add Product state
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addingProduct, setAddingProduct] = useState(false);
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    price: '',
+    category: '',
+    image_url: '',
+    in_stock: true
+  });
 
   // Load products - simple direct query
   const loadProducts = async () => {
@@ -76,6 +87,54 @@ export default function AdminProductManagementSimple() {
     }
   };
 
+  // Add new product function
+  const addProduct = async () => {
+    if (!newProduct.name || !newProduct.price || !newProduct.category) {
+      setError('Please fill in all required fields');
+      setTimeout(() => setError(null), 2000);
+      return;
+    }
+    
+    try {
+      setAddingProduct(true);
+      console.log("➕ Adding product:", newProduct);
+      
+      const db = (await import('@/lib/shared/kliv-database.js')).default;
+      
+      await db.insert('products', {
+        name: newProduct.name,
+        price: parseFloat(newProduct.price),
+        category: newProduct.category,
+        image_url: newProduct.image_url || 'https://via.placeholder.com/400x300?text=No+Image',
+        in_stock: newProduct.in_stock ? 1 : 0,
+        description: `Premium ${newProduct.name} - ${newProduct.category}`
+      });
+      
+      console.log("✅ Product added successfully");
+      setSuccess(`"${newProduct.name}" added successfully!`);
+      setTimeout(() => setSuccess(null), 2000);
+      
+      // Reset form and close modal
+      setNewProduct({
+        name: '',
+        price: '',
+        category: '',
+        image_url: '',
+        in_stock: true
+      });
+      setShowAddModal(false);
+      
+      await loadProducts(); // Reload products
+      setError(null);
+    } catch (err: any) {
+      console.error("❌ Add failed:", err);
+      setError('Add failed: ' + err.message);
+      setTimeout(() => setError(null), 3000);
+    } finally {
+      setAddingProduct(false);
+    }
+  };
+
   useEffect(() => {
     loadProducts();
   }, []);
@@ -92,15 +151,24 @@ export default function AdminProductManagementSimple() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-white">Product Management</h1>
-            <p className="text-gray-400 mt-1">Delete products instantly - Simple & Direct</p>
+            <p className="text-gray-400 mt-1">Add & Delete products - Simple & Direct</p>
           </div>
-          <Button 
-            onClick={() => navigate('/admin')}
-            variant="outline"
-            className="border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white"
-          >
-            ← Back to Admin
-          </Button>
+          <div className="flex gap-3">
+            <Button 
+              onClick={() => setShowAddModal(true)}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Product
+            </Button>
+            <Button 
+              onClick={() => navigate('/admin')}
+              variant="outline"
+              className="border-pink-500 text-pink-500 hover:bg-pink-500 hover:text-white"
+            >
+              ← Back to Admin
+            </Button>
+          </div>
         </div>
 
         {/* Success/Error Messages */}
@@ -206,14 +274,129 @@ export default function AdminProductManagementSimple() {
           <div className="text-center py-12">
             <p className="text-gray-400 text-lg">No products found</p>
             <Button 
-              onClick={() => navigate('/admin')}
-              className="mt-4 bg-pink-600 hover:bg-pink-700"
+              onClick={() => setShowAddModal(true)}
+              className="mt-4 bg-green-600 hover:bg-green-700"
             >
-              Back to Admin Dashboard
+              <Plus className="w-4 h-4 mr-2" />
+              Add Your First Product
             </Button>
           </div>
         )}
       </div>
+
+      {/* Add Product Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-lg max-w-md w-full p-6 relative">
+            <button
+              onClick={() => setShowAddModal(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+            >
+              <X className="w-6 h-6" />
+            </button>
+            
+            <h2 className="text-2xl font-bold text-white mb-6">Add New Product</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-300 mb-2">Product Name *</label>
+                <Input
+                  type="text"
+                  value={newProduct.name}
+                  onChange={(e) => setNewProduct({...newProduct, name: e.target.value})}
+                  placeholder="Enter product name"
+                  className="bg-gray-700 border-gray-600 text-white"
+                  disabled={addingProduct}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-gray-300 mb-2">Price (£) *</label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={newProduct.price}
+                  onChange={(e) => setNewProduct({...newProduct, price: e.target.value})}
+                  placeholder="29.99"
+                  className="bg-gray-700 border-gray-600 text-white"
+                  disabled={addingProduct}
+                />
+              </div>
+              
+              <div>
+                <label className="block text-gray-300 mb-2">Category *</label>
+                <select
+                  value={newProduct.category}
+                  onChange={(e) => setNewProduct({...newProduct, category: e.target.value})}
+                  className="w-full bg-gray-700 border-gray-600 text-white rounded-md p-2"
+                  disabled={addingProduct}
+                >
+                  <option value="">Select category</option>
+                  <option value="Vibrators">Vibrators</option>
+                  <option value="Lingerie">Lingerie</option>
+                  <option value="Lubricants">Lubricants</option>
+                  <option value="Bondage">Bondage</option>
+                  <option value="Dildos">Dildos</option>
+                  <option value="Anal Toys">Anal Toys</option>
+                  <option value="Sex Games">Sex Games</option>
+                  <option value="Wellness">Wellness</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-gray-300 mb-2">Image URL</label>
+                <Input
+                  type="text"
+                  value={newProduct.image_url}
+                  onChange={(e) => setNewProduct({...newProduct, image_url: e.target.value})}
+                  placeholder="https://example.com/image.jpg"
+                  className="bg-gray-700 border-gray-600 text-white"
+                  disabled={addingProduct}
+                />
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={newProduct.in_stock}
+                  onChange={(e) => setNewProduct({...newProduct, in_stock: e.target.checked})}
+                  className="w-4 h-4"
+                  disabled={addingProduct}
+                />
+                <label className="text-gray-300">In Stock</label>
+              </div>
+              
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={addProduct}
+                  disabled={addingProduct}
+                  className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                >
+                  {addingProduct ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Adding...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4 mr-2" />
+                      Add Product
+                    </>
+                  )}
+                </Button>
+                <Button
+                  onClick={() => setShowAddModal(false)}
+                  variant="outline"
+                  disabled={addingProduct}
+                  className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-700"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
