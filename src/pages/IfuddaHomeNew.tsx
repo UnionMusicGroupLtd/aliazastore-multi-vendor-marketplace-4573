@@ -40,17 +40,7 @@ const IfuddaHomeNew = () => {
       setShowVerification(false);
     }
     
-    // Debug admin navigation state - ANTI-BLINK FIX
-    console.log("🛡️ ANTI-BLINK ADMIN NAVIGATION:", {
-      isLoggedIn: !!user,
-      userEmail: user?.email,
-      isAdmin,
-      userRole: user?.role,
-      userMetadataRole: user?.metadata?.role,
-      adminButtonVisible: !!user,
-      adminAccessType: (isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') ? 'Full Admin' : 'Basic Access',
-      antiBlink: "Redirect loop prevention active"
-    });
+    console.log("✅ SIMPLIFIED ADMIN DASHBOARD - Direct Access Working");
     
     // Load sample products
     const sampleProducts: Product[] = [
@@ -296,16 +286,14 @@ const IfuddaHomeNew = () => {
               <Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
               
-              {/* EMERGENCY ADMIN DASHBOARD BUTTON - Always visible when logged in */}
-              {user && (
-                <Link 
-                  to="/admin" 
-                  className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:from-red-600 hover:to-pink-700 transition-all shadow-lg shadow-red-500/30"
-                >
-                  <Shield className="w-4 h-4" />
-                  {isAdmin || user.role === 'admin' || user.metadata?.role === 'admin' ? 'Admin Dashboard' : 'Admin Access'}
-                </Link>
-              )}
+              {/* Simple Admin Dashboard Button */}
+              <Link 
+                to="/admin" 
+                className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:from-red-600 hover:to-pink-700 transition-all shadow-lg shadow-red-500/30"
+              >
+                <Shield className="w-4 h-4" />
+                Admin Dashboard
+              </Link>
               
               {user ? (
                 <button 
@@ -330,16 +318,14 @@ const IfuddaHomeNew = () => {
             </nav>
 
             <div className="md:hidden flex items-center space-x-4">
-              {/* EMERGENCY ADMIN DASHBOARD BUTTON - Mobile version - Always visible when logged in */}
-              {user && (
-                <Link 
-                  to="/admin" 
-                  className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 shadow-lg shadow-red-500/30"
-                >
-                  <Shield className="w-3 h-3" />
-                  <span className="text-xs">Admin</span>
-                </Link>
-              )}
+              {/* Simple Admin Dashboard Button - Mobile */}
+              <Link 
+                to="/admin" 
+                className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 shadow-lg shadow-red-500/30"
+              >
+                <Shield className="w-3 h-3" />
+                <span className="text-xs">Admin</span>
+              </Link>
               
               {user ? (
                 <button 

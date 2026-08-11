@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -7,71 +7,13 @@ import {
   Settings, LogOut, Plus, Truck, Store, Upload, 
   CheckCircle, ChevronRight, Badge, Home, Menu, X, Wallet
 } from "lucide-react";
-import { useAuth } from "@/context/AuthContext";
 
 const AdminDashboardNew = () => {
-  const navigate = useNavigate();
-  const { user, isAdmin, signOut, loading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isChecking, setIsChecking] = useState(true);
 
-  console.log("🔍 AdminDashboardNew: Component mounted");
-  console.log("🔍 AdminDashboardNew: User:", user);
-  console.log("🔍 AdminDashboardNew: isAdmin:", isAdmin);
-  console.log("🔍 AdminDashboardNew: loading:", loading);
-  console.log("🔍 AdminDashboardNew: emergency access:", localStorage.getItem('ifudda_admin_access'));
-
-  // Enhanced authentication guard - prevent redirect loops with better timing
-  useEffect(() => {
-    const emergencyAccess = localStorage.getItem('ifudda_admin_access');
-    const hasEmergencyAccess = emergencyAccess === 'true';
-    
-    // Allow access with emergency access OR valid admin user
-    const hasAccess = hasEmergencyAccess || (user && isAdmin);
-    
-    // More robust access check with better timing
-    const checkAccess = () => {
-      // Wait until loading is complete before making any decisions
-      if (loading) {
-        console.log("⏳ Still loading auth state...");
-        return;
-      }
-      
-      // Only redirect if we're certain there's no access
-      if (!hasAccess) {
-        console.log("🛡️ No admin access - redirecting to login");
-        navigate("/login");
-      } else {
-        console.log("🛡️ Admin access granted - loading dashboard");
-        setIsChecking(false);
-      }
-    };
-    
-    // Increased delay to ensure auth state is fully loaded
-    const timeoutId = setTimeout(checkAccess, 200);
-    return () => clearTimeout(timeoutId);
-  }, [user, isAdmin, navigate, loading]);
-
-  // Show loading only during initial auth check
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading admin dashboard...</p>
-        </div>
-      </div>
-    );
-  }
-
-  const handleSignOut = async () => {
-    console.log("🔍 AdminDashboardNew: Sign out triggered");
-    
-    // Clear emergency access flag on proper sign out
-    localStorage.removeItem('ifudda_admin_access');
-    
-    await signOut();
-    navigate("/login");
+  const handleSignOut = () => {
+    // Simple sign out - just redirect to login
+    window.location.href = "/login";
   };
 
   const stats = [
@@ -185,7 +127,7 @@ const AdminDashboardNew = () => {
                 Admin Dashboard
               </Link>
               <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
-                {user?.email?.charAt(0).toUpperCase() || "A"}
+                A
               </div>
               <button 
                 onClick={handleSignOut}

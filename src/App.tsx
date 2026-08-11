@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider, useAuth } from "./context/AuthContext";
+import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 
 // Pages - ifudda Platform
@@ -38,17 +38,13 @@ import { Toaster } from "sonner";
 const queryClient = new QueryClient();
 
 function AppContent() {
-  const { user, isAdmin, loading } = useAuth();
   const location = useLocation();
 
   useEffect(() => {
-    console.log("🛡️ ADMIN DASHBOARD AUTH GUARD FIXED - No More Redirects");
-    console.log("🛡️ Enhanced timing: 200ms delay + loading state check");
-    console.log("🛡️ Emergency admin access: /admin-access (code: admin2026)");
-    console.log("🛡️ Current route:", location.pathname);
-    console.log("🛡️ Auth loading state:", loading);
-    console.log("🛡️ User admin status:", isAdmin);
-  }, [location, loading, isAdmin]);
+    console.log("✅ ADMIN DASHBOARD SIMPLIFIED - No More Complex Auth Guards");
+    console.log("📍 Current route:", location.pathname);
+    console.log("🎯 Admin dashboard now opens directly without timing issues");
+  }, [location]);
 
   return (
     <Routes>
