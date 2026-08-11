@@ -35,12 +35,12 @@ const Categories = () => {
       console.error("Error loading categories:", error);
       // Fallback to static categories if database fails
       setCategories([
-        { _row_id: 1, name: 'Vibrators', slug: 'vibrators' },
-        { _row_id: 2, name: 'Couples Toys', slug: 'couples-toys' },
-        { _row_id: 3, name: 'Lingerie', slug: 'lingerie' },
-        { _row_id: 4, name: 'Massage', slug: 'massage' },
-        { _row_id: 5, name: 'Bondage', slug: 'bondage' },
-        { _row_id: 6, name: 'Lubricants', slug: 'lubricants' }
+        { _row_id: 1, name: 'Vibrators' },
+        { _row_id: 2, name: 'Couples Toys' },
+        { _row_id: 3, name: 'Lingerie' },
+        { _row_id: 4, name: 'Massage' },
+        { _row_id: 5, name: 'Bondage' },
+        { _row_id: 6, name: 'Lubricants' }
       ]);
     } finally {
       setLoading(false);
@@ -92,7 +92,7 @@ const Categories = () => {
                 <ShoppingBag className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-orange-600 to-blue-600 bg-clip-text text-transparent whitespace-nowrap">
-                AliazaStore
+                ifudda
               </span>
             </div>
 
@@ -208,7 +208,7 @@ const Categories = () => {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredCategories.map((category) => (
-              <Link key={category._row_id} to={`/categories/${category.slug}`}>
+              <Link key={category._row_id} to={`/categories/${category.name.toLowerCase().replace(/\s+/g, '-')}`}>
                 <Card className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm overflow-hidden">
                   <CardContent className="p-6 text-center">
                     <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${getColorForCategory(category.name)} rounded-2xl flex items-center justify-center text-3xl transform group-hover:scale-110 transition-transform`}>

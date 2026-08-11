@@ -44,8 +44,48 @@ const CategoryPageNew = () => {
   const [expandedCategories, setExpandedCategories] = useState<Set<number>>(new Set());
 
   useEffect(() => {
-    // Load categories - for now using sample data structure
-    const sampleCategories: Category[] = [
+    const loadCategoryData = async () => {
+      try {
+        // Load main categories from database
+        const db = (await import('@/lib/shared/kliv-database.js')).default;
+        
+        // Convert slug back to category name
+        const categoryNameFromSlug = slug?.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        
+        const result = await db.query('categories_new', {
+          is_active: 'eq.1',
+          level: 'eq.0',
+          order: 'display_order.asc'
+        }) as { data?: Category[] };
+        
+        if (result?.data && result.data.length > 0) {
+          setCategories(result.data);
+          
+          // Find the category that matches the slug
+          const matchingCategory = result.data.find((cat: Category) => 
+            cat.name.toLowerCase().replace(/\s+/g, '-') === slug
+          );
+          
+          if (matchingCategory) {
+            setSelectedCategory(matchingCategory._row_id);
+          }
+          
+          // Load products for the matching category
+          if (categoryNameFromSlug) {
+            const productsResult = await db.query('products', {
+              is_banned: 'eq.0',
+              category: `eq.${categoryNameFromSlug}`
+            }) as { data?: Product[] };
+            
+            if (productsResult?.data) {
+              setProducts(productsResult.data);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading categories:', error);
+        // Fallback to sample data
+        const sampleCategories: Category[] = [
       // Main Categories
       { _row_id: 1, name: 'Vibrators', parent_id: null, level: 0, description: 'Premium vibrators and personal massagers', icon: 'Vibrate', display_order: 1 },
       { _row_id: 2, name: 'Dildos', parent_id: null, level: 0, description: 'Realistic and fantasy dildos', icon: 'Zap', display_order: 2 },
@@ -63,38 +103,54 @@ const CategoryPageNew = () => {
       { _row_id: 14, name: 'Health & Wellness', parent_id: null, level: 0, description: 'Sexual health and wellness products', icon: 'Heart', display_order: 14 },
       { _row_id: 15, name: 'Accessories', parent_id: null, level: 0, description: 'Toy accessories and essentials', icon: 'Settings', display_order: 15 },
       
-      // Vibrators Subcategories
-      { _row_id: 16, name: 'Bullet Vibrators', parent_id: 1, level: 1, description: 'Compact and powerful bullet vibrators', icon: 'Zap', display_order: 1 },
-      { _row_id: 17, name: 'Rabbit Vibrators', parent_id: 1, level: 1, description: 'Dual-action rabbit style vibrators', icon: 'Zap', display_order: 2 },
-      { _row_id: 18, name: 'Wand Vibrators', parent_id: 1, level: 1, description: 'Powerful wand massagers', icon: 'Zap', display_order: 3 },
-      { _row_id: 19, name: 'G-Spot Vibrators', parent_id: 1, level: 1, description: 'Curved for G-spot stimulation', icon: 'Zap', display_order: 4 },
-      { _row_id: 20, name: 'Clitoral Vibrators', parent_id: 1, level: 1, description: 'Focused clitoral stimulation', icon: 'Zap', display_order: 5 },
+        { _row_id: 1, name: 'Vibrators', parent_id: null, level: 0, description: 'Premium vibrators and personal massagers', icon: 'Vibrate', display_order: 1 },
+        { _row_id: 2, name: 'Dildos', parent_id: null, level: 0, description: 'Realistic and fantasy dildos', icon: 'Zap', display_order: 2 },
+        { _row_id: 3, name: 'Couples Toys', parent_id: null, level: 0, description: 'Toys for couples and partner play', icon: 'Heart', display_order: 3 },
+        { _row_id: 4, name: 'Lingerie', parent_id: null, level: 0, description: 'Sexy lingerie and intimate apparel', icon: 'ShoppingBag', display_order: 4 },
+        { _row_id: 5, name: 'Bondage', parent_id: null, level: 0, description: 'BDSM gear and bondage equipment', icon: 'Lock', display_order: 5 },
+        { _row_id: 6, name: 'Lubricants', parent_id: null, level: 0, description: 'Personal lubricants and enhancement products', icon: 'Droplets', display_order: 6 },
+        { _row_id: 7, name: 'Massage', parent_id: null, level: 0, description: 'Massage oils and intimacy products', icon: 'Sparkles', display_order: 7 },
+        { _row_id: 8, name: 'Contraceptives', parent_id: null, level: 0, description: 'Protection and sexual health products', icon: 'Shield', display_order: 8 },
+        { _row_id: 9, name: 'Adult Games', parent_id: null, level: 0, description: 'Games and novelty items for adults', icon: 'Gamepad2', display_order: 9 },
+        { _row_id: 10, name: 'Anal Toys', parent_id: null, level: 0, description: 'Anal toys and beads', icon: 'Target', display_order: 10 },
+        { _row_id: 11, name: 'Male Toys', parent_id: null, level: 0, description: 'Masturbators and pleasure sleeves', icon: 'Zap', display_order: 11 },
+        { _row_id: 12, name: 'Kegel & Fitness', parent_id: null, level: 0, description: 'Kegel exercisers and fitness products', icon: 'Activity', display_order: 12 },
+        { _row_id: 13, name: 'Sex Furniture', parent_id: null, level: 0, description: 'Furniture and positioning equipment', icon: 'Armchair', display_order: 13 },
+        { _row_id: 14, name: 'Health & Wellness', parent_id: null, level: 0, description: 'Sexual health and wellness products', icon: 'Heart', display_order: 14 },
+        { _row_id: 15, name: 'Accessories', parent_id: null, level: 0, description: 'Toy accessories and essentials', icon: 'Settings', display_order: 15 },
+        
+        // Vibrators Subcategories
+        { _row_id: 16, name: 'Bullet Vibrators', parent_id: 1, level: 1, description: 'Compact and powerful bullet vibrators', icon: 'Zap', display_order: 1 },
+        { _row_id: 17, name: 'Rabbit Vibrators', parent_id: 1, level: 1, description: 'Dual-action rabbit style vibrators', icon: 'Zap', display_order: 2 },
+        { _row_id: 18, name: 'Wand Vibrators', parent_id: 1, level: 1, description: 'Powerful wand massagers', icon: 'Zap', display_order: 3 },
+        { _row_id: 19, name: 'G-Spot Vibrators', parent_id: 1, level: 1, description: 'Curved for G-spot stimulation', icon: 'Zap', display_order: 4 },
+        { _row_id: 20, name: 'Clitoral Vibrators', parent_id: 1, level: 1, description: 'Focused clitoral stimulation', icon: 'Zap', display_order: 5 },
+        
+        // Dildos Subcategories
+        { _row_id: 21, name: 'Realistic Dildos', parent_id: 2, level: 1, description: 'Life-like realistic dildos', icon: 'Zap', display_order: 1 },
+        { _row_id: 22, name: 'Glass Dildos', parent_id: 2, level: 1, description: 'Tempered glass pleasure wands', icon: 'Sparkles', display_order: 2 },
+        { _row_id: 23, name: 'Silicone Dildos', parent_id: 2, level: 1, description: 'Body-safe silicone dildos', icon: 'Zap', display_order: 3 },
+        { _row_id: 24, name: 'Double-Ended', parent_id: 2, level: 1, description: 'Double-ended for shared pleasure', icon: 'Heart', display_order: 4 },
+        
+        // Lingerie Subcategories
+        { _row_id: 25, name: 'Bra & Panty Sets', parent_id: 4, level: 1, description: 'Matching bra and panty sets', icon: 'ShoppingBag', display_order: 1 },
+        { _row_id: 26, name: 'Babydolls', parent_id: 4, level: 1, description: 'Flowy babydoll lingerie', icon: 'ShoppingBag', display_order: 2 },
+        { _row_id: 27, name: 'Chemises', parent_id: 4, level: 1, description: 'Elegant slip-style lingerie', icon: 'ShoppingBag', display_order: 3 },
+        { _row_id: 28, name: 'Corsets', parent_id: 4, level: 1, description: 'Waist-cinching corsets', icon: 'ShoppingBag', display_order: 4 },
+        { _row_id: 29, name: 'Stockings', parent_id: 4, level: 1, description: 'Sexy stockings and hosiery', icon: 'ShoppingBag', display_order: 5 },
+        
+        // Bondage Subcategories
+        { _row_id: 30, name: 'Handcuffs', parent_id: 5, level: 1, description: 'Restraint handcuffs', icon: 'Lock', display_order: 1 },
+        { _row_id: 31, name: 'Ropes', parent_id: 5, level: 1, description: 'Bondage ropes and accessories', icon: 'Zap', display_order: 2 },
+        { _row_id: 32, name: 'Blindfolds', parent_id: 5, level: 1, description: 'Sensory deprivation blindfolds', icon: 'Eye', display_order: 3 },
+        { _row_id: 33, name: 'Gags', parent_id: 5, level: 1, description: 'Speech restraint gags', icon: 'Zap', display_order: 4 },
+        { _row_id: 34, name: 'Collars', parent_id: 5, level: 1, description: 'BDSM collars and leads', icon: 'Circle', display_order: 5 },
+      ];
       
-      // Dildos Subcategories
-      { _row_id: 21, name: 'Realistic Dildos', parent_id: 2, level: 1, description: 'Life-like realistic dildos', icon: 'Zap', display_order: 1 },
-      { _row_id: 22, name: 'Glass Dildos', parent_id: 2, level: 1, description: 'Tempered glass pleasure wands', icon: 'Sparkles', display_order: 2 },
-      { _row_id: 23, name: 'Silicone Dildos', parent_id: 2, level: 1, description: 'Body-safe silicone dildos', icon: 'Zap', display_order: 3 },
-      { _row_id: 24, name: 'Double-Ended', parent_id: 2, level: 1, description: 'Double-ended for shared pleasure', icon: 'Heart', display_order: 4 },
+      setCategories(sampleCategories);
       
-      // Lingerie Subcategories
-      { _row_id: 25, name: 'Bra & Panty Sets', parent_id: 4, level: 1, description: 'Matching bra and panty sets', icon: 'ShoppingBag', display_order: 1 },
-      { _row_id: 26, name: 'Babydolls', parent_id: 4, level: 1, description: 'Flowy babydoll lingerie', icon: 'ShoppingBag', display_order: 2 },
-      { _row_id: 27, name: 'Chemises', parent_id: 4, level: 1, description: 'Elegant slip-style lingerie', icon: 'ShoppingBag', display_order: 3 },
-      { _row_id: 28, name: 'Corsets', parent_id: 4, level: 1, description: 'Waist-cinching corsets', icon: 'ShoppingBag', display_order: 4 },
-      { _row_id: 29, name: 'Stockings', parent_id: 4, level: 1, description: 'Sexy stockings and hosiery', icon: 'ShoppingBag', display_order: 5 },
-      
-      // Bondage Subcategories
-      { _row_id: 30, name: 'Handcuffs', parent_id: 5, level: 1, description: 'Restraint handcuffs', icon: 'Lock', display_order: 1 },
-      { _row_id: 31, name: 'Ropes', parent_id: 5, level: 1, description: 'Bondage ropes and accessories', icon: 'Zap', display_order: 2 },
-      { _row_id: 32, name: 'Blindfolds', parent_id: 5, level: 1, description: 'Sensory deprivation blindfolds', icon: 'Eye', display_order: 3 },
-      { _row_id: 33, name: 'Gags', parent_id: 5, level: 1, description: 'Speech restraint gags', icon: 'Zap', display_order: 4 },
-      { _row_id: 34, name: 'Collars', parent_id: 5, level: 1, description: 'BDSM collars and leads', icon: 'Circle', display_order: 5 },
-    ];
-    
-    setCategories(sampleCategories);
-    
-    // Load sample products
-    const sampleProducts: Product[] = [
+      // Load sample products
+      const sampleProducts: Product[] = [
       {
         _row_id: 1,
         name: 'Premium Luxury Vibrator',
@@ -167,7 +223,9 @@ const CategoryPageNew = () => {
     ];
     
     setProducts(sampleProducts);
-  }, [slug]);
+  }
+};
+    }, [slug]);
 
   const mainCategories = categories.filter(cat => cat.level === 0);
   const subCategories = categories.filter(cat => cat.level === 1);
