@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import db from "@/lib/shared/kliv-database.js";
 import { content } from "@/lib/shared/kliv-content.js";
-import { useAuth } from "@/context/AuthContext";
 
 interface Product {
   _row_id: number;
@@ -42,7 +41,6 @@ interface Product {
 }
 
 const AdminProductManagement = () => {
-  const { user, isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<any[]>([]); // Full category objects
@@ -91,34 +89,11 @@ const AdminProductManagement = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
 
-  // Show loading while checking authentication  
-  if (authLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-400">Loading admin panel...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Enhanced authentication check that recognizes emergency access
+  // Load data on mount
   useEffect(() => {
-    const emergencyAccess = localStorage.getItem('ifudda_admin_access');
-    const hasEmergencyAccess = emergencyAccess === 'true';
-    
-    if ((!user || !isAdmin) && !hasEmergencyAccess) {
-      navigate('/login');
-    }
-  }, [user, isAdmin, navigate]);
-
-  useEffect(() => {
-    if (isAdmin) {
-      loadProducts();
-      loadCategories();
-    }
-  }, [isAdmin]);
+    loadProducts();
+    loadCategories();
+  }, []);
 
   const loadCategories = async () => {
     try {

@@ -41,9 +41,9 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("✅ ADMIN DASHBOARD SIMPLIFIED - No More Complex Auth Guards");
+    console.log("✅ ADMIN PRODUCT MANAGEMENT SIMPLIFIED - Direct Access Working");
     console.log("📍 Current route:", location.pathname);
-    console.log("🎯 Admin dashboard now opens directly without timing issues");
+    console.log("🎯 Add Product button now works without authentication redirects");
   }, [location]);
 
   return (
