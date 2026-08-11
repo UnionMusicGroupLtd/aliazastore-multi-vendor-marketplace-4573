@@ -98,7 +98,7 @@ const LoginNew = () => {
       
       setSuccess("✅ Login successful! Redirecting to dashboard...");
       
-      // Multiple redirect strategies for reliability
+      // IMMEDIATE redirect to prevent authentication loops
       setTimeout(async () => {
         try {
           console.log("🔍 Post-login redirect check");
@@ -110,27 +110,24 @@ const LoginNew = () => {
           const savedRedirect = localStorage.getItem('postLoginRedirect');
           console.log("🔍 Saved redirect destination:", savedRedirect);
           
-          // STRATEGY 1: Check admin email directly
+          // IMMEDIATE admin check to prevent loops
           const isAdminUser = ADMIN_EMAILS.some(adminEmail => 
             loginForm.email.toLowerCase().trim() === adminEmail.toLowerCase()
           );
           
           console.log("🔍 Admin email check result:", isAdminUser);
-          
-          // STRATEGY 2: Check AuthContext state
-          const isAdminByContext = isAdmin;
-          console.log("🔍 Admin context check result:", isAdminByContext);
+          console.log("🔍 Admin context check result:", isAdmin);
           
           // Determine redirect destination
           let redirectDestination = "/";
           
-          // First priority: saved redirect destination
-          if (savedRedirect) {
+          // First priority: saved redirect destination (protected page they tried to access)
+          if (savedRedirect && savedRedirect !== '/login' && savedRedirect !== '/admin') {
             redirectDestination = savedRedirect;
             console.log("🎯 Using saved redirect:", savedRedirect);
-            // Clear the saved redirect
+            // Clear the saved redirect to prevent loops
             localStorage.removeItem('postLoginRedirect');
-          } else if (isAdminUser || isAdminByContext) {
+          } else if (isAdminUser || isAdmin) {
             // Second priority: admin dashboard
             redirectDestination = "/admin";
             console.log("🎯 Redirecting to admin dashboard");
@@ -140,13 +137,17 @@ const LoginNew = () => {
           }
           
           console.log("✅ Final redirect destination:", redirectDestination);
+          console.log("🚀 Using DIRECT navigation to prevent React Router loops");
+          
+          // Use direct window.location instead of React Router to prevent loop issues
           window.location.href = redirectDestination;
+          
         } catch (err) {
           console.error("❌ Error in redirect check:", err);
           console.log("🔄 Fallback: Redirecting to home due to error");
-          navigate("/");
+          window.location.href = "/";
         }
-      }, 1500);
+      }, 500); // Reduced from 1500ms to 500ms for faster response
       
     } catch (err: any) {
       console.error("Login error:", err);

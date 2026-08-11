@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -9,7 +10,56 @@ import {
 
 const AdminCustomers = () => {
   const navigate = useNavigate();
+  const { user, isAdmin, authLoading } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null);
+
+  // Authentication guard - redirect if not admin
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user) {
+        setAuthError("You must be logged in to access this page.");
+        const currentPath = window.location.pathname;
+        if (currentPath !== '/login' && currentPath !== '/admin') {
+          localStorage.setItem('postLoginRedirect', currentPath);
+        }
+        setTimeout(() => navigate('/login'), 2000);
+      } else if (!isAdmin) {
+        setAuthError("You need admin privileges to access this page.");
+        setTimeout(() => {
+          if (!isAdmin) {
+            navigate('/');
+          }
+        }, 2000);
+      } else {
+        console.log("✅ AdminCustomers: User authenticated as admin");
+      }
+    }
+  }, [user, isAdmin, authLoading, navigate]);
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500 mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (authError) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <Card className="bg-red-900/20 border border-red-800 max-w-md">
+          <CardContent className="p-6">
+            <p className="text-red-400 text-center">{authError}</p>
+            <p className="text-gray-400 text-sm text-center mt-2">Redirecting...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   // Sample customers data
   const customers = [

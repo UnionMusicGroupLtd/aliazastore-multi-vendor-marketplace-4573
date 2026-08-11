@@ -81,6 +81,8 @@ function AppContent() {
     console.log("✅ Protected pages now save destination before redirecting to login");
     console.log("✅ Login component checks for saved destination and redirects accordingly");
     console.log("✅ Users trying to access admin pages will be returned to intended page after login");
+    console.log("🔧 AUTHENTICATION LOOP FIX ACTIVE - Enhanced AuthContext + lenient guards");
+    console.log("✅ Immediate admin status setting + fast redirects (500ms) to prevent loops");
     console.log("📍 Current route:", location.pathname);
     console.log("👤 User status:", user ? "Logged in" : "Not logged in");
     console.log("🛡️ Admin status:", isAdmin ? "Admin user" : "Regular user");

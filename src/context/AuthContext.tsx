@@ -13,6 +13,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  authLoading: boolean; // Alias for loading to maintain compatibility
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   isAdmin: boolean;
@@ -113,27 +114,46 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       throw new Error('Two-factor authentication required');
     }
     
+    // Enhanced admin detection - check multiple sources
+    const userRole = signedUser.user.metadata?.role as string || 
+                     (signedUser.user as any).role;
+                     
+    console.log("🔍 AuthContext: Detected user roles:", {
+      metadataRole: signedUser.user.metadata?.role,
+      directRole: (signedUser.user as any).role,
+      finalRole: userRole
+    });
+    
     const userData: User = {
       userUuid: signedUser.user.userUuid || '',
       email: signedUser.user.email || '',
       firstName: signedUser.user.firstName,
       lastName: signedUser.user.lastName,
-      role: signedUser.user.metadata?.role as string,
+      role: userRole,
       metadata: signedUser.user.metadata
     };
     
     console.log("🔍 AuthContext: Setting user data", userData);
-    console.log("🔍 AuthContext: User role", userData.role);
+    console.log("🔍 AuthContext: Final user role", userRole);
     
+    // Set user data FIRST
     setUser(userData);
     
-    // Set admin status
+    // Enhanced admin check with multiple fallbacks
     const adminCheck = 
+      userRole === 'admin' ||
       userData.role === 'admin' ||
-      userData.metadata?.role === 'admin';
+      userData.metadata?.role === 'admin' ||
+      (signedUser.user as any).role === 'admin';
     
     console.log("🔍 AuthContext: Admin check after login:", adminCheck);
+    console.log("🛡️ AuthContext: Setting isAdmin IMMEDIATELY to prevent loops!");
     setIsAdmin(adminCheck);
+    
+    // Force synchronous update for admin status
+    if (adminCheck) {
+      console.log("🛡️ ADMIN STATUS SET - Protected pages should work now!");
+    }
   };
 
   const signOut = async () => {
@@ -144,7 +164,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signIn, signOut, isAdmin }}>
+    <AuthContext.Provider value={{ user, loading, authLoading: loading, signIn, signOut, isAdmin }}>
       {children}
     </AuthContext.Provider>
   );

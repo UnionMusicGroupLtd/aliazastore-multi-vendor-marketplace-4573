@@ -91,14 +91,31 @@ const AdminProductManagement = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
 
-  // Authentication check - redirect if not admin
+  // Authentication check - redirect if not admin (with loop prevention)
   useEffect(() => {
     if (!authLoading) {
-      if (!user || !isAdmin) {
-        setError("You must be logged in as an admin to access this page.");
+      // More lenient check: only redirect if clearly not authenticated
+      if (!user) {
+        setError("You must be logged in to access this page.");
         // Save the intended destination for post-login redirect
-        localStorage.setItem('postLoginRedirect', window.location.pathname);
-        setTimeout(() => navigate('/login'), 3000);
+        const currentPath = window.location.pathname;
+        // Don't save if we're already on login page to prevent loops
+        if (currentPath !== '/login' && currentPath !== '/admin') {
+          localStorage.setItem('postLoginRedirect', currentPath);
+        }
+        setTimeout(() => navigate('/login'), 2000);
+      } else if (!isAdmin) {
+        // User is logged in but not admin - give more time for AuthContext
+        console.log("⏳ User logged in but admin status not yet confirmed, waiting...");
+        // Only redirect after extended delay to allow AuthContext to update
+        setTimeout(() => {
+          if (!isAdmin) {
+            console.log("❌ Still not admin after delay, redirecting to home");
+            navigate('/');
+          }
+        }, 3000);
+      } else {
+        console.log("✅ User authenticated as admin, access granted");
       }
     }
   }, [user, isAdmin, authLoading, navigate]);
