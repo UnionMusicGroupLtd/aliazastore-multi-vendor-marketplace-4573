@@ -91,17 +91,27 @@ const AdminProductManagement = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
 
+  // Show loading while checking authentication  
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading admin panel...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Enhanced authentication check that recognizes emergency access
   useEffect(() => {
-    if (!authLoading) {
-      const emergencyAccess = localStorage.getItem('ifudda_admin_access');
-      const hasEmergencyAccess = emergencyAccess === 'true';
-      
-      if ((!user || !isAdmin) && !hasEmergencyAccess) {
-        navigate('/login');
-      }
+    const emergencyAccess = localStorage.getItem('ifudda_admin_access');
+    const hasEmergencyAccess = emergencyAccess === 'true';
+    
+    if ((!user || !isAdmin) && !hasEmergencyAccess) {
+      navigate('/login');
     }
-  }, [user, isAdmin, authLoading, navigate]);
+  }, [user, isAdmin, navigate]);
 
   useEffect(() => {
     if (isAdmin) {

@@ -42,11 +42,13 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("ifudda Admin System - Routes loaded:", location.pathname);
-    console.log("🔧 EMERGENCY ADMIN ACCESS SYSTEM ACTIVE - /admin-access route available");
-    console.log("🔧 AUTHENTICATION GUARDS UPDATED - Admin pages now recognize emergency access flag");
-    console.log("✅ ADMIN ACCESS BLINK ISSUE FIXED - Emergency access now works properly");
-  }, [location]);
+    console.log("🔧 APP INIT - AUTH LOOP FIX APPLIED");
+    console.log("🔧 APP INIT - Loading states now prevent authentication redirects");
+    console.log("🔧 APP INIT - Emergency admin access: /admin-access");
+    console.log("🔧 Current route:", location.pathname);
+    console.log("🔧 Auth loading state:", loading);
+    console.log("🔧 User admin status:", isAdmin);
+  }, [location, loading, isAdmin]);
 
   return (
     <Routes>

@@ -11,15 +11,23 @@ import { useAuth } from "@/context/AuthContext";
 
 const AdminDashboardNew = () => {
   const navigate = useNavigate();
-  const { user, isAdmin, signOut } = useAuth();
+  const { user, isAdmin, signOut, loading } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
 
   console.log("🔍 AdminDashboardNew: Component mounted");
   console.log("🔍 AdminDashboardNew: User:", user);
   console.log("🔍 AdminDashboardNew: isAdmin:", isAdmin);
+  console.log("🔍 AdminDashboardNew: loading:", loading);
 
   // Enhanced authentication guard that recognizes emergency access
   useEffect(() => {
+    // Don't do anything while auth is loading
+    if (loading) {
+      console.log("🔍 AdminDashboardNew: Auth loading, waiting...");
+      return;
+    }
+
     const emergencyAccess = localStorage.getItem('ifudda_admin_access');
     const hasEmergencyAccess = emergencyAccess === 'true';
     
@@ -31,8 +39,21 @@ const AdminDashboardNew = () => {
       navigate("/login");
     } else {
       console.log("🔍 AdminDashboardNew: Access granted - normal auth or emergency access");
+      setIsChecking(false);
     }
-  }, [user, isAdmin, navigate]);
+  }, [user, isAdmin, navigate, loading]);
+
+  // Show loading while checking authentication
+  if (loading || isChecking) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading admin dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
   const handleSignOut = async () => {
     console.log("🔍 AdminDashboardNew: Sign out triggered");
