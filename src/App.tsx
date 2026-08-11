@@ -15,6 +15,7 @@ import CategoryPageNew from "./pages/CategoryPageNew";
 import Categories from "./pages/Categories";
 import Contact from "./pages/Contact";
 import Help from "./pages/Help";
+import HelpTopic from "./pages/HelpTopic";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import About from "./pages/About";
@@ -65,10 +66,14 @@ function AppContent() {
     console.log("🏷️ SUBCATEGORY SYSTEM FIXED - Hierarchical category + subcategory selection (200+ subcategories available)");
     console.log("✅ PRODUCT SAVE FIX - Added subcategory column to products table - admin can now save products with all details");
   console.log("🔗 FOOTER LINKS ADDED - Return Policy and Contact Us links in footer navigation");
-  console.log("📧 CONTACT FORM RESTORED - Contact form added back, email support removed, live chat only");
+  console.log("🎨 HELP PAGE BRANDED TO IFUDDA - Removed all AliazaStore references, email support, multi-vendor categories");
   console.log("📄 RETURNS POLICY UPDATED - 2-5 day return window, 5-10 business day refunds at /returns");
     console.log("🗑️ PHILIPPINE DELIVERY - Completely removed old AliazaStore delivery with peso pricing");
     console.log("🗑️ CATEGORIES LINK REMOVED - Header navigation now shows only Products, About, and essential links");
+  console.log("🆘 HELP CENTER TOPICS FIXED - All topics now clickable with comprehensive content pages");
+  console.log("🔗 HELP TOPIC ROUTES ADDED - Dynamic help topic pages at /help/topic/:slug");
+  console.log("✅ POPULAR TOPICS NOW CLICKABLE - Navigate to detailed help content from homepage");
+  console.log("✅ ALL HELP TOPICS ACCESSIBLE - 23 detailed help topic pages with full content");
     console.log("📍 Current route:", location.pathname);
     console.log("👤 User status:", user ? "Logged in" : "Not logged in");
     console.log("🛡️ Admin status:", isAdmin ? "Admin user" : "Regular user");
@@ -90,6 +95,7 @@ function AppContent() {
       <Route path="/categories/:slug" element={<CategoryPageNew />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/help" element={<Help />} />
+      <Route path="/help/topic/:slug" element={<HelpTopic />} />
       <Route path="/privacy" element={<Privacy />} />
       <Route path="/terms" element={<Terms />} />
       <Route path="/returns" element={<Returns />} />

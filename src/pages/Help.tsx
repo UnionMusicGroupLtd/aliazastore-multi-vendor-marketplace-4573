@@ -7,9 +7,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { 
-  HelpCircle, MessageCircle, Mail, Search, ChevronRight,
-  ShoppingBag, Store, CreditCard, Package, User, Shield,
-  Settings, AlertCircle, Send
+  HelpCircle, MessageCircle, Search, ChevronRight,
+  ShoppingBag, Package, User, Shield, AlertCircle, Send
 } from "lucide-react";
 
 const Help = () => {
@@ -28,19 +27,6 @@ const Help = () => {
       ]
     },
     {
-      icon: Store,
-      title: "Selling Help",
-      description: "Store setup, listings, subscriptions, and seller tools",
-      topics: [
-        "Start selling guide",
-        "Subscription & billing",
-        "Product listing help",
-        "Store customization",
-        "Shipping settings",
-        "Seller analytics"
-      ]
-    },
-    {
       icon: User,
       title: "Account Management",
       description: "Login, registration, profile, and account settings",
@@ -54,42 +40,29 @@ const Help = () => {
       ]
     },
     {
-      icon: CreditCard,
-      title: "Payments & Billing",
-      description: "Payment methods, invoices, and transaction issues",
+      icon: Package,
+      title: "Product Information",
+      description: "Product details, specifications, and availability",
       topics: [
-        "Add payment method",
-        "View invoices",
-        "Payment declined",
-        "Refund status",
-        "Billing questions",
-        "Subscription management"
+        "Product information",
+        "Stock availability",
+        "Product quality",
+        "Age verification",
+        "Discreet packaging",
+        "Product safety"
       ]
     },
     {
       icon: Shield,
       title: "Trust & Safety",
-      description: "Report issues, policy violations, and security concerns",
+      description: "Privacy, security, and policy information",
       topics: [
-        "Report fraud",
-        "Policy violation",
-        "Account hacked",
-        "Suspicious activity",
+        "Privacy policy",
+        "Data protection",
+        "Secure payments",
+        "Age verification",
         "Safety tips",
-        "Report seller/buyer"
-      ]
-    },
-    {
-      icon: Settings,
-      title: "Technical Support",
-      description: "Platform issues, bugs, and technical assistance",
-      topics: [
-        "Platform errors",
-        "Mobile app issues",
-        "Website problems",
-        "Performance issues",
-        "Feature requests",
-        "API support"
+        "Report concerns"
       ]
     }
   ];
@@ -105,31 +78,12 @@ const Help = () => {
   const [filteredCategories, setFilteredCategories] = useState(categories);
 
   const popularTopics = [
-    { icon: Package, title: "How to track my order", category: "Buying & Orders" },
-    { icon: Store, title: "Start selling guide", category: "Selling Help" },
-    { icon: CreditCard, title: "Subscription & billing", category: "Payments & Billing" },
-    { icon: User, title: "Password reset help", category: "Account Management" },
-    { icon: Shield, title: "Report fraud or scam", category: "Trust & Safety" },
-    { icon: Settings, title: "Platform not working", category: "Technical Support" }
-  ];
-
-  const contactMethods = [
-    {
-      icon: MessageCircle,
-      title: "Live Chat",
-      description: "Chat with our support team in real-time",
-      availability: "Available 24/7",
-      action: "Start Chat",
-      color: "from-green-500 to-green-600"
-    },
-    {
-      icon: Mail,
-      title: "Email Support",
-      description: "Send us a detailed message",
-      availability: "Response within 24 hours",
-      action: "Send Email",
-      color: "from-blue-500 to-blue-600"
-    }
+    { icon: Package, title: "How to track my order", category: "Buying & Orders", slug: "track-my-order" },
+    { icon: Package, title: "Return or refund request", category: "Buying & Orders", slug: "return-or-refund-request" },
+    { icon: Shield, title: "Privacy & data protection", category: "Trust & Safety", slug: "privacy-policy" },
+    { icon: User, title: "Password reset help", category: "Account Management", slug: "password-reset" },
+    { icon: ShoppingBag, title: "Product information", category: "Product Information", slug: "product-information" },
+    { icon: Shield, title: "Age verification process", category: "Trust & Safety", slug: "age-verification" }
   ];
 
   const handleSubmitContact = async (e: React.FormEvent) => {
@@ -173,25 +127,25 @@ const Help = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-red-50">
       {/* Header */}
       <nav className="bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-pink-600 rounded-lg flex items-center justify-center">
                 <ShoppingBag className="w-6 h-6 text-white" />
               </div>
-              <span className="text-xl font-bold">AliazaStore</span>
+              <span className="text-xl font-bold">ifudda</span>
             </Link>
             <div className="flex items-center space-x-4">
+              <Link to="/cart">
+                <Button variant="ghost" size="icon">
+                  <ShoppingBag className="w-6 h-6" />
+                </Button>
+              </Link>
               <Link to="/login">
                 <Button variant="ghost">Sign In</Button>
-              </Link>
-              <Link to="/register">
-                <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700">
-                  Start Selling
-                </Button>
               </Link>
             </div>
           </div>
@@ -199,7 +153,7 @@ const Help = () => {
       </nav>
 
       {/* Hero */}
-      <section className="py-16 px-4 bg-gradient-to-br from-purple-500 to-purple-600 text-white">
+      <section className="py-16 px-4 bg-gradient-to-br from-red-500 to-pink-600 text-white">
         <div className="max-w-4xl mx-auto text-center">
           <HelpCircle className="w-16 h-16 mx-auto mb-6 opacity-50" />
           <h1 className="text-4xl lg:text-5xl font-bold mb-4">Help Center</h1>
@@ -227,20 +181,22 @@ const Help = () => {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {popularTopics.map((topic, index) => (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm cursor-pointer">
-                <CardContent className="p-6">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <topic.icon className="w-6 h-6 text-white" />
+              <Link key={index} to={`/help/topic/${topic.slug}`} className="group">
+                <Card className="hover:shadow-lg transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm cursor-pointer h-full">
+                  <CardContent className="p-6">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-pink-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <topic.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-slate-900 mb-1">{topic.title}</h3>
+                        <Badge className="bg-slate-100 text-slate-600 text-xs">{topic.category}</Badge>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-orange-600 transition-colors" />
                     </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-slate-900 mb-1">{topic.title}</h3>
-                      <Badge className="bg-slate-100 text-slate-600 text-xs">{topic.category}</Badge>
-                    </div>
-                    <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-orange-600 transition-colors" />
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
@@ -258,7 +214,7 @@ const Help = () => {
               filteredCategories.map((category, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0 bg-white/80 backdrop-blur-sm">
                 <CardHeader>
-                  <div className={`w-14 h-14 bg-gradient-to-br ${category.icon === Store ? "from-blue-500 to-blue-600" : category.icon === Shield ? "from-red-500 to-red-600" : category.icon === User ? "from-green-500 to-green-600" : category.icon === CreditCard ? "from-purple-500 to-purple-600" : category.icon === Settings ? "from-slate-500 to-slate-600" : "from-orange-500 to-orange-600"} rounded-xl flex items-center justify-center mb-4`}>
+                  <div className={`w-14 h-14 bg-gradient-to-br ${category.icon === ShoppingBag ? "from-red-500 to-pink-600" : category.icon === User ? "from-blue-500 to-blue-600" : category.icon === Package ? "from-green-500 to-green-600" : category.icon === Shield ? "from-purple-500 to-purple-600" : "from-orange-500 to-orange-600"} rounded-xl flex items-center justify-center mb-4`}>
                     <category.icon className="w-7 h-7 text-white" />
                   </div>
                   <CardTitle className="text-xl">{category.title}</CardTitle>
@@ -266,7 +222,7 @@ const Help = () => {
                 <CardContent>
                   <p className="text-slate-600 mb-4">{category.description}</p>
                   <div className="space-y-2">
-                    {category.topics.slice(0, 3).map((topic, topicIndex) => (
+                    {category.topics.map((topic, topicIndex) => (
                       <Link 
                         key={topicIndex} 
                         to={`/help/topic/${topic.toLowerCase().replace(/\s+/g, '-')}`}
@@ -277,14 +233,6 @@ const Help = () => {
                       </Link>
                     ))}
                   </div>
-                  <Button 
-                    variant="ghost" 
-                    className="w-full mt-4 text-orange-600 hover:text-orange-700"
-                    size="sm"
-                    onClick={() => alert(`All ${category.title} topics coming soon!`)}
-                  >
-                    View All Topics <ChevronRight className="w-4 h-4 ml-1" />
-                  </Button>
                 </CardContent>
               </Card>
             ))
@@ -315,7 +263,7 @@ const Help = () => {
             <h2 className="text-3xl font-bold mb-4">Still Need Help?</h2>
             <p className="text-xl text-slate-600">Contact our support team through your preferred channel</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-1 gap-8">
             {/* Live Chat */}
             <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
               <CardHeader>
@@ -337,27 +285,6 @@ const Help = () => {
                 </a>
               </CardContent>
             </Card>
-
-            {/* Email Support */}
-            <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-              <CardHeader>
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <Mail className="w-8 h-8 text-white" />
-                </div>
-                <CardTitle className="text-xl text-center">Email Support</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <p className="text-slate-600 mb-2">Send us a detailed message</p>
-                <p className="text-sm font-medium text-purple-600 mb-1">info@aliazastore.com</p>
-                <p className="text-sm text-slate-500 mb-4">Response within 24 hours</p>
-                <a 
-                  href="mailto:info@aliazastore.com" 
-                  className="inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium transition-all duration-200"
-                >
-                  Send Email
-                </a>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>
@@ -366,7 +293,7 @@ const Help = () => {
       <section className="py-16 px-4 bg-white/50 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <Mail className="w-16 h-16 mx-auto mb-4 text-orange-600" />
+            <Send className="w-16 h-16 mx-auto mb-4 text-red-600" />
             <h2 className="text-3xl font-bold mb-4">Send Us a Message</h2>
             <p className="text-xl text-slate-600">
               Fill out the form below and we'll get back to you within 24 hours.
@@ -411,7 +338,6 @@ const Help = () => {
                     >
                       <option value="general">General Inquiry</option>
                       <option value="orders">Orders & Delivery</option>
-                      <option value="selling">Selling Help</option>
                       <option value="billing">Billing & Payments</option>
                       <option value="account">Account Issues</option>
                       <option value="technical">Technical Support</option>
@@ -457,7 +383,7 @@ const Help = () => {
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700"
+                  className="w-full bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700"
                   size="lg"
                 >
                   <Send className="w-5 h-5 mr-2" />
@@ -476,7 +402,7 @@ const Help = () => {
             <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
               <ShoppingBag className="w-6 h-6 text-white" />
             </div>
-            <span className="text-xl font-bold">AliazaStore</span>
+            <span className="text-xl font-bold">ifudda</span>
           </div>
           <p className="text-slate-400 mb-4">
             We're here to help 24/7. Your satisfaction is our priority.
@@ -487,7 +413,7 @@ const Help = () => {
             <Link to="/help" className="text-slate-400 hover:text-white transition-colors">Help Center</Link>
           </div>
           <p className="text-slate-500 text-sm">
-            © 2026 AliazaStore. All rights reserved.
+            © 2026 ifudda. All rights reserved.
           </p>
         </div>
       </footer>
