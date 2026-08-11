@@ -40,16 +40,16 @@ const IfuddaHomeNew = () => {
       setShowVerification(false);
     }
     
-    // Debug admin navigation state - EMERGENCY ADMIN NAVIGATION FIX
-    console.log("🛡️ EMERGENCY ADMIN NAVIGATION FIX:", {
+    // Debug admin navigation state - ANTI-BLINK FIX
+    console.log("🛡️ ANTI-BLINK ADMIN NAVIGATION:", {
       isLoggedIn: !!user,
       userEmail: user?.email,
       isAdmin,
       userRole: user?.role,
       userMetadataRole: user?.metadata?.role,
-      adminDashboardAlwaysVisible: !!user,
-      adminLinkText: (isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') ? 'Admin Dashboard' : 'Admin Access',
-      message: "Admin Dashboard button is now ALWAYS visible when logged in!"
+      adminButtonVisible: !!user,
+      adminAccessType: (isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') ? 'Full Admin' : 'Basic Access',
+      antiBlink: "Redirect loop prevention active"
     });
     
     // Load sample products

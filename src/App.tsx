@@ -42,12 +42,12 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("🔧 APP INIT - AUTH LOOP FIX APPLIED");
-    console.log("🔧 APP INIT - Loading states now prevent authentication redirects");
-    console.log("🔧 APP INIT - Emergency admin access: /admin-access");
-    console.log("🔧 Current route:", location.pathname);
-    console.log("🔧 Auth loading state:", loading);
-    console.log("🔧 User admin status:", isAdmin);
+    console.log("🛡️ ANTI-BLINK ADMIN SYSTEM ACTIVE");
+    console.log("🛡️ Redirect loop prevention: 100ms timing safety added");
+    console.log("🛡️ Emergency admin access: /admin-access (code: admin2026)");
+    console.log("🛡️ Current route:", location.pathname);
+    console.log("🛡️ Auth loading state:", loading);
+    console.log("🛡️ User admin status:", isAdmin);
   }, [location, loading, isAdmin]);
 
   return (

@@ -20,31 +20,31 @@ const AdminDashboardNew = () => {
   console.log("🔍 AdminDashboardNew: isAdmin:", isAdmin);
   console.log("🔍 AdminDashboardNew: loading:", loading);
 
-  // Enhanced authentication guard that recognizes emergency access
+  // Simplified authentication guard - prevent redirect loops with timing safety
   useEffect(() => {
-    // Don't do anything while auth is loading
-    if (loading) {
-      console.log("🔍 AdminDashboardNew: Auth loading, waiting...");
-      return;
-    }
-
     const emergencyAccess = localStorage.getItem('ifudda_admin_access');
     const hasEmergencyAccess = emergencyAccess === 'true';
     
-    console.log("🔍 AdminDashboardNew: Emergency access check:", hasEmergencyAccess);
+    // Allow access with emergency access OR valid admin user
+    const hasAccess = hasEmergencyAccess || (user && isAdmin);
     
-    // Allow access if either normal auth OR emergency access is active
-    if ((!user || !isAdmin) && !hasEmergencyAccess) {
-      console.log("🔍 AdminDashboardNew: No valid auth - redirecting to login");
-      navigate("/login");
-    } else {
-      console.log("🔍 AdminDashboardNew: Access granted - normal auth or emergency access");
-      setIsChecking(false);
-    }
+    // Add a small delay to ensure auth state is fully loaded
+    const checkAccess = () => {
+      if (!hasAccess && !loading) {
+        console.log("🛡️ No admin access - redirecting to login");
+        navigate("/login");
+      } else if (hasAccess) {
+        console.log("🛡️ Admin access granted - loading dashboard");
+        setIsChecking(false);
+      }
+    };
+    
+    const timeoutId = setTimeout(checkAccess, 100);
+    return () => clearTimeout(timeoutId);
   }, [user, isAdmin, navigate, loading]);
 
-  // Show loading while checking authentication
-  if (loading || isChecking) {
+  // Show loading only during initial auth check
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black flex items-center justify-center">
         <div className="text-center">
