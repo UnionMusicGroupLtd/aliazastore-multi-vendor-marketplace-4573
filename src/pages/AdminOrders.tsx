@@ -17,25 +17,28 @@ const AdminOrders = () => {
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [authError, setAuthError] = useState<string | null>(null);
 
-  // Authentication guard - redirect if not admin
+  // Authentication guard - redirect if not admin (with emergency access support)
   useEffect(() => {
     if (!authLoading) {
-      if (!user) {
+      const emergencyAccess = localStorage.getItem('ifudda_admin_access');
+      const hasEmergencyAccess = emergencyAccess === 'true';
+      
+      if (!user && !hasEmergencyAccess) {
         setAuthError("You must be logged in to access this page.");
         const currentPath = window.location.pathname;
         if (currentPath !== '/login' && currentPath !== '/admin') {
           localStorage.setItem('postLoginRedirect', currentPath);
         }
         setTimeout(() => navigate('/login'), 2000);
-      } else if (!isAdmin) {
+      } else if (!isAdmin && !hasEmergencyAccess) {
         setAuthError("You need admin privileges to access this page.");
         setTimeout(() => {
-          if (!isAdmin) {
+          if (!isAdmin && !hasEmergencyAccess) {
             navigate('/');
           }
         }, 2000);
       } else {
-        console.log("✅ AdminOrders: User authenticated as admin");
+        console.log("✅ AdminOrders: User authenticated as admin or using emergency access");
       }
     }
   }, [user, isAdmin, authLoading, navigate]);

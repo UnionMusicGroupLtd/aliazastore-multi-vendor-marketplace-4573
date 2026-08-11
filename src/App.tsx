@@ -43,6 +43,9 @@ function AppContent() {
 
   useEffect(() => {
     console.log("ifudda Admin System - Routes loaded:", location.pathname);
+    console.log("🔧 EMERGENCY ADMIN ACCESS SYSTEM ACTIVE - /admin-access route available");
+    console.log("🔧 AUTHENTICATION GUARDS UPDATED - Admin pages now recognize emergency access flag");
+    console.log("✅ ADMIN ACCESS BLINK ISSUE FIXED - Emergency access now works properly");
   }, [location]);
 
   return (

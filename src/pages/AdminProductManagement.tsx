@@ -91,10 +91,13 @@ const AdminProductManagement = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
 
-  // Simple authentication check
+  // Enhanced authentication check that recognizes emergency access
   useEffect(() => {
     if (!authLoading) {
-      if (!user || !isAdmin) {
+      const emergencyAccess = localStorage.getItem('ifudda_admin_access');
+      const hasEmergencyAccess = emergencyAccess === 'true';
+      
+      if ((!user || !isAdmin) && !hasEmergencyAccess) {
         navigate('/login');
       }
     }

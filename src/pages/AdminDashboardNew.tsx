@@ -18,15 +18,28 @@ const AdminDashboardNew = () => {
   console.log("🔍 AdminDashboardNew: User:", user);
   console.log("🔍 AdminDashboardNew: isAdmin:", isAdmin);
 
-  // Simple authentication guard
+  // Enhanced authentication guard that recognizes emergency access
   useEffect(() => {
-    if (!user || !isAdmin) {
+    const emergencyAccess = localStorage.getItem('ifudda_admin_access');
+    const hasEmergencyAccess = emergencyAccess === 'true';
+    
+    console.log("🔍 AdminDashboardNew: Emergency access check:", hasEmergencyAccess);
+    
+    // Allow access if either normal auth OR emergency access is active
+    if ((!user || !isAdmin) && !hasEmergencyAccess) {
+      console.log("🔍 AdminDashboardNew: No valid auth - redirecting to login");
       navigate("/login");
+    } else {
+      console.log("🔍 AdminDashboardNew: Access granted - normal auth or emergency access");
     }
   }, [user, isAdmin, navigate]);
 
   const handleSignOut = async () => {
     console.log("🔍 AdminDashboardNew: Sign out triggered");
+    
+    // Clear emergency access flag on proper sign out
+    localStorage.removeItem('ifudda_admin_access');
+    
     await signOut();
     navigate("/login");
   };
