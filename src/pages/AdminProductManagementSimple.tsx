@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trash2, Search, Loader2, Plus, X } from 'lucide-react';
+import { Trash2, Search, Loader2, Plus, X, Tag, Calendar, Percent } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
+import { useAuth } from '@/context/AuthContext';
 
 // Simple, direct product types
 interface SimpleProduct {
@@ -13,9 +14,18 @@ interface SimpleProduct {
   category: string;
   image_url: string;
   in_stock: boolean;
+  // Sale & discount fields
+  on_sale?: boolean;
+  sale_price?: number;
+  discount_percentage?: number;
+  sale_start_date?: string;
+  sale_end_date?: string;
+  offer_badge?: string;
+  offer_description?: string;
 }
 
 export default function AdminProductManagementSimple() {
+  const { user, isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [products, setProducts] = useState<SimpleProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +42,15 @@ export default function AdminProductManagementSimple() {
     price: '',
     category: '',
     image_url: '',
-    in_stock: true
+    in_stock: true,
+    // Sale & discount fields
+    on_sale: false,
+    sale_price: '',
+    discount_percentage: '',
+    sale_start_date: '',
+    sale_end_date: '',
+    offer_badge: '',
+    offer_description: ''
   });
 
   // Load products - simple direct query
@@ -58,8 +76,16 @@ export default function AdminProductManagementSimple() {
     }
   };
 
-  // Simple, direct delete function using edge function
+  // Simple, direct delete function with authentication check
   const deleteProductDirect = async (productId: number, productName: string) => {
+    // Authentication check
+    if (!user || !isAdmin) {
+      console.error("❌ PERMISSION ERROR: User is not admin:", { user: user?.email, isAdmin });
+      setError('⛔ You must be logged in as admin to delete products');
+      setTimeout(() => navigate('/login'), 2000);
+      return;
+    }
+    
     if (!confirm(`Delete "${productName}"?`)) return;
     
     try {
@@ -80,17 +106,23 @@ export default function AdminProductManagementSimple() {
       setError(null);
     } catch (err: any) {
       console.error("❌ Delete failed:", err);
-      setError('Delete failed: ' + err.message);
+      setError('❌ Delete failed: ' + err.message);
       setTimeout(() => setError(null), 3000);
     } finally {
       setDeleting(null);
     }
   };
 
-  // Add new product function
+  // Add new product function with sale/discount support
   const addProduct = async () => {
+    if (!user || !isAdmin) {
+      setError('⛔ You must be logged in as admin to add products');
+      setTimeout(() => navigate('/login'), 2000);
+      return;
+    }
+    
     if (!newProduct.name || !newProduct.price || !newProduct.category) {
-      setError('Please fill in all required fields');
+      setError('⚠️ Please fill in all required fields');
       setTimeout(() => setError(null), 2000);
       return;
     }
@@ -101,14 +133,45 @@ export default function AdminProductManagementSimple() {
       
       const db = (await import('@/lib/shared/kliv-database.js')).default;
       
-      await db.insert('products', {
+      // Build product data with sale/discount fields
+      const productData: any = {
         name: newProduct.name,
         price: parseFloat(newProduct.price),
         category: newProduct.category,
         image_url: newProduct.image_url || 'https://via.placeholder.com/400x300?text=No+Image',
         in_stock: newProduct.in_stock ? 1 : 0,
         description: `Premium ${newProduct.name} - ${newProduct.category}`
-      });
+      };
+      
+      // Add sale/discount fields only if sale is enabled
+      if (newProduct.on_sale && newProduct.sale_price) {
+        productData.on_sale = 1;
+        productData.sale_price = parseFloat(newProduct.sale_price);
+        
+        if (newProduct.discount_percentage) {
+          productData.discount_percentage = parseFloat(newProduct.discount_percentage);
+        }
+        
+        if (newProduct.sale_start_date) {
+          productData.sale_start_date = newProduct.sale_start_date;
+        }
+        
+        if (newProduct.sale_end_date) {
+          productData.sale_end_date = newProduct.sale_end_date;
+        }
+        
+        if (newProduct.offer_badge) {
+          productData.offer_badge = newProduct.offer_badge;
+        }
+        
+        if (newProduct.offer_description) {
+          productData.offer_description = newProduct.offer_description;
+        }
+      } else {
+        productData.on_sale = 0;
+      }
+      
+      await db.insert('products', productData);
       
       console.log("✅ Product added successfully");
       setSuccess(`"${newProduct.name}" added successfully!`);
@@ -120,7 +183,14 @@ export default function AdminProductManagementSimple() {
         price: '',
         category: '',
         image_url: '',
-        in_stock: true
+        in_stock: true,
+        on_sale: false,
+        sale_price: '',
+        discount_percentage: '',
+        sale_start_date: '',
+        sale_end_date: '',
+        offer_badge: '',
+        offer_description: ''
       });
       setShowAddModal(false);
       
@@ -128,7 +198,7 @@ export default function AdminProductManagementSimple() {
       setError(null);
     } catch (err: any) {
       console.error("❌ Add failed:", err);
-      setError('Add failed: ' + err.message);
+      setError('❌ Add failed: ' + err.message);
       setTimeout(() => setError(null), 3000);
     } finally {
       setAddingProduct(false);
@@ -138,6 +208,16 @@ export default function AdminProductManagementSimple() {
   useEffect(() => {
     loadProducts();
   }, []);
+
+  // Authentication guard - redirect if not admin
+  useEffect(() => {
+    if (!authLoading) {
+      if (!user || !isAdmin) {
+        setError("⛔ You must be logged in as admin to access this page");
+        setTimeout(() => navigate('/login'), 3000);
+      }
+    }
+  }, [user, isAdmin, authLoading, navigate]);
 
   const filteredProducts = products.filter(p => 
     p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -234,10 +314,43 @@ export default function AdminProductManagementSimple() {
                       <span>Category:</span>
                       <span className="text-pink-400">{product.category}</span>
                     </div>
-                    <div className="flex justify-between text-gray-400">
-                      <span>Price:</span>
-                      <span className="text-green-400 font-bold">£{product.price}</span>
+                    
+                    {/* Price Display with Sale Info */}
+                    <div className="bg-gray-700/50 p-3 rounded-lg">
+                      {product.on_sale && product.sale_price ? (
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-400 line-through text-sm">£{product.price.toFixed(2)}</span>
+                            <span className="text-2xl font-bold text-green-400">£{product.sale_price.toFixed(2)}</span>
+                          </div>
+                          
+                          {product.offer_badge && (
+                            <div className="bg-red-600 text-white text-xs px-2 py-1 rounded-full inline-block font-bold">
+                              {product.offer_badge}
+                            </div>
+                          )}
+                          
+                          {product.discount_percentage && (
+                            <div className="text-green-400 text-xs font-semibold">
+                              <Percent className="w-3 h-3 inline mr-1" />
+                              {product.discount_percentage}% OFF
+                            </div>
+                          )}
+                          
+                          {product.sale_start_date && product.sale_end_date && (
+                            <div className="text-gray-400 text-xs">
+                              <Calendar className="w-3 h-3 inline mr-1" />
+                              {new Date(product.sale_start_date).toLocaleDateString()} - {new Date(product.sale_end_date).toLocaleDateString()}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-2xl font-bold text-green-400">
+                          £{product.price.toFixed(2)}
+                        </div>
+                      )}
                     </div>
+                    
                     <div className="flex justify-between text-gray-400">
                       <span>Status:</span>
                       <span className={product.in_stock ? "text-green-400" : "text-red-400"}>
@@ -341,6 +454,102 @@ export default function AdminProductManagementSimple() {
                   <option value="Sex Games">Sex Games</option>
                   <option value="Wellness">Wellness</option>
                 </select>
+              </div>
+              
+              {/* Sale & Discount Section */}
+              <div className="border-t border-gray-700 pt-4 mt-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <input
+                    type="checkbox"
+                    checked={newProduct.on_sale}
+                    onChange={(e) => setNewProduct({...newProduct, on_sale: e.target.checked})}
+                    className="w-4 h-4"
+                    disabled={addingProduct}
+                    id="on_sale"
+                  />
+                  <label htmlFor="on_sale" className="text-pink-400 font-semibold flex items-center gap-2">
+                    <Tag className="w-4 h-4" />
+                    Enable Sale & Offer
+                  </label>
+                </div>
+                
+                {newProduct.on_sale && (
+                  <div className="space-y-4 bg-gray-700/30 p-4 rounded-lg">
+                    <div>
+                      <label className="block text-gray-300 mb-2">Sale Price (£) *</label>
+                      <Input
+                        type="number"
+                        step="0.01"
+                        value={newProduct.sale_price}
+                        onChange={(e) => setNewProduct({...newProduct, sale_price: e.target.value})}
+                        placeholder="19.99"
+                        className="bg-gray-700 border-gray-600 text-white"
+                        disabled={addingProduct}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-gray-300 mb-2">Discount Percentage (%)</label>
+                      <Input
+                        type="number"
+                        step="0.1"
+                        value={newProduct.discount_percentage}
+                        onChange={(e) => setNewProduct({...newProduct, discount_percentage: e.target.value})}
+                        placeholder="20"
+                        className="bg-gray-700 border-gray-600 text-white"
+                        disabled={addingProduct}
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-gray-300 mb-2">Offer Badge</label>
+                      <Input
+                        type="text"
+                        value={newProduct.offer_badge}
+                        onChange={(e) => setNewProduct({...newProduct, offer_badge: e.target.value})}
+                        placeholder="50% OFF, Special Offer, etc."
+                        className="bg-gray-700 border-gray-600 text-white"
+                        disabled={addingProduct}
+                      />
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-gray-300 mb-2">Sale Start Date</label>
+                        <Input
+                          type="date"
+                          value={newProduct.sale_start_date}
+                          onChange={(e) => setNewProduct({...newProduct, sale_start_date: e.target.value})}
+                          className="bg-gray-700 border-gray-600 text-white"
+                          disabled={addingProduct}
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-gray-300 mb-2">Sale End Date</label>
+                        <Input
+                          type="date"
+                          value={newProduct.sale_end_date}
+                          onChange={(e) => setNewProduct({...newProduct, sale_end_date: e.target.value})}
+                          className="bg-gray-700 border-gray-600 text-white"
+                          disabled={addingProduct}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-gray-300 mb-2">Offer Description</label>
+                      <textarea
+                        value={newProduct.offer_description}
+                        onChange={(e) => setNewProduct({...newProduct, offer_description: e.target.value})}
+                        placeholder="Describe your offer..."
+                        rows={2}
+                        className="w-full bg-gray-700 border-gray-600 text-white rounded-md p-2"
+                        disabled={addingProduct}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
               
               <div>
