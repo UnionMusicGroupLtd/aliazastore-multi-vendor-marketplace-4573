@@ -50,10 +50,18 @@ const LoginNew = () => {
         
         if (user && isAdmin) {
           console.log("✅ Admin user already logged in, redirecting to /admin");
-          navigate("/admin");
+          window.location.href = "/admin";
         } else if (user && !isAdmin) {
-          console.log("✅ Normal user already logged in, redirecting to home");
-          navigate("/");
+          // Check for saved redirect destination
+          const savedRedirect = localStorage.getItem('postLoginRedirect');
+          if (savedRedirect) {
+            console.log("✅ User logged in, redirecting to saved destination:", savedRedirect);
+            localStorage.removeItem('postLoginRedirect');
+            window.location.href = savedRedirect;
+          } else {
+            console.log("✅ Normal user already logged in, redirecting to home");
+            navigate("/");
+          }
         }
       } catch (err) {
         console.error("❌ Error checking auth status:", err);
@@ -98,6 +106,10 @@ const LoginNew = () => {
           console.log("🔍 User from context:", user);
           console.log("🔍 isAdmin from context:", isAdmin);
           
+          // Check for saved redirect destination
+          const savedRedirect = localStorage.getItem('postLoginRedirect');
+          console.log("🔍 Saved redirect destination:", savedRedirect);
+          
           // STRATEGY 1: Check admin email directly
           const isAdminUser = ADMIN_EMAILS.some(adminEmail => 
             loginForm.email.toLowerCase().trim() === adminEmail.toLowerCase()
@@ -109,14 +121,26 @@ const LoginNew = () => {
           const isAdminByContext = isAdmin;
           console.log("🔍 Admin context check result:", isAdminByContext);
           
-          // Use either check to determine admin access
-          if (isAdminUser || isAdminByContext) {
-            console.log("✅✅✅ ADMIN ACCESS CONFIRMED - Redirecting to /admin");
-            window.location.href = "/admin";
+          // Determine redirect destination
+          let redirectDestination = "/";
+          
+          // First priority: saved redirect destination
+          if (savedRedirect) {
+            redirectDestination = savedRedirect;
+            console.log("🎯 Using saved redirect:", savedRedirect);
+            // Clear the saved redirect
+            localStorage.removeItem('postLoginRedirect');
+          } else if (isAdminUser || isAdminByContext) {
+            // Second priority: admin dashboard
+            redirectDestination = "/admin";
+            console.log("🎯 Redirecting to admin dashboard");
           } else {
-            console.log("✅ Normal user - Redirecting to home");
-            navigate("/");
+            // Default: home page
+            console.log("🎯 Redirecting to home page");
           }
+          
+          console.log("✅ Final redirect destination:", redirectDestination);
+          window.location.href = redirectDestination;
         } catch (err) {
           console.error("❌ Error in redirect check:", err);
           console.log("🔄 Fallback: Redirecting to home due to error");

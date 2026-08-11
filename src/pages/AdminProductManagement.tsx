@@ -96,6 +96,8 @@ const AdminProductManagement = () => {
     if (!authLoading) {
       if (!user || !isAdmin) {
         setError("You must be logged in as an admin to access this page.");
+        // Save the intended destination for post-login redirect
+        localStorage.setItem('postLoginRedirect', window.location.pathname);
         setTimeout(() => navigate('/login'), 3000);
       }
     }
