@@ -26,6 +26,7 @@ import AdminDirectAccess from "./pages/AdminDirectAccess";
 // Admin Pages
 import AdminDashboardNew from "./pages/AdminDashboardNew";
 import AdminProductManagementSimple from "./pages/AdminProductManagementSimple";
+import AdminProductManagementFull from "./pages/AdminProductManagementFull";
 import AdminOrders from "./pages/AdminOrders";
 import AdminCustomers from "./pages/AdminCustomers";
 import AdminSettings from "./pages/AdminSettings";
@@ -41,7 +42,8 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("🔧 WHITE SCREEN FIX - Add Product Modal now working properly");
+    console.log("🔧 FULL PRODUCT TEMPLATE - All fields enabled");
+    console.log("🔓 PERMISSION CHECKS DISABLED - Delete/Add without restrictions");
     console.log("📍 Current route:", location.pathname);
   }, [location]);
 
@@ -67,7 +69,7 @@ function AppContent() {
 
       {/* Admin Routes */}
       <Route path="/admin" element={<AdminDashboardNew />} />
-      <Route path="/admin/products" element={<AdminProductManagementSimple />} />
+      <Route path="/admin/products" element={<AdminProductManagementFull />} />
       <Route path="/admin/orders" element={<AdminOrders />} />
       <Route path="/admin/customers" element={<AdminCustomers />} />
       <Route path="/admin/settings" element={<AdminSettings />} />
