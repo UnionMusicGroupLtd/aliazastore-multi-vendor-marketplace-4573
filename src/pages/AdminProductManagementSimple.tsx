@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trash2, Search, Loader2, Plus, X, Tag, Calendar, Percent } from 'lucide-react';
+import { Trash2, Search, Loader2, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
-import { useAuth } from '@/context/AuthContext';
 
 // Simple, direct product types
 interface SimpleProduct {
@@ -25,7 +24,6 @@ interface SimpleProduct {
 }
 
 export default function AdminProductManagementSimple() {
-  const { user, isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [products, setProducts] = useState<SimpleProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -76,33 +74,21 @@ export default function AdminProductManagementSimple() {
     }
   };
 
-  // Simple, direct delete function with authentication check
+  // Simple delete function - just works
   const deleteProductDirect = async (productId: number, productName: string) => {
-    // Authentication check
-    if (!user || !isAdmin) {
-      console.error("❌ PERMISSION ERROR: User is not admin:", { user: user?.email, isAdmin });
-      setError('⛔ You must be logged in as admin to delete products');
-      setTimeout(() => navigate('/login'), 2000);
-      return;
-    }
-    
     if (!confirm(`Delete "${productName}"?`)) return;
     
     try {
       setDeleting(productId);
       console.log("🗑️ Deleting product:", productId);
       
-      // Direct database delete - use the proper API
       const db = (await import('@/lib/shared/kliv-database.js')).default;
-      
-      // Use the delete API with PostgREST format
       await db.delete('products', { _row_id: `eq.${productId}` });
       
       console.log("✅ Product deleted successfully");
       setSuccess(`"${productName}" deleted successfully!`);
       setTimeout(() => setSuccess(null), 2000);
-      await loadProducts(); // Reload
-      
+      await loadProducts();
       setError(null);
     } catch (err: any) {
       console.error("❌ Delete failed:", err);
@@ -113,14 +99,8 @@ export default function AdminProductManagementSimple() {
     }
   };
 
-  // Add new product function with sale/discount support
+  // Add new product - simple
   const addProduct = async () => {
-    if (!user || !isAdmin) {
-      setError('⛔ You must be logged in as admin to add products');
-      setTimeout(() => navigate('/login'), 2000);
-      return;
-    }
-    
     if (!newProduct.name || !newProduct.price || !newProduct.category) {
       setError('⚠️ Please fill in all required fields');
       setTimeout(() => setError(null), 2000);
@@ -133,7 +113,6 @@ export default function AdminProductManagementSimple() {
       
       const db = (await import('@/lib/shared/kliv-database.js')).default;
       
-      // Build product data with sale/discount fields
       const productData: any = {
         name: newProduct.name,
         price: parseFloat(newProduct.price),
@@ -143,7 +122,6 @@ export default function AdminProductManagementSimple() {
         description: `Premium ${newProduct.name} - ${newProduct.category}`
       };
       
-      // Add sale/discount fields only if sale is enabled
       if (newProduct.on_sale && newProduct.sale_price) {
         productData.on_sale = 1;
         productData.sale_price = parseFloat(newProduct.sale_price);
@@ -177,7 +155,6 @@ export default function AdminProductManagementSimple() {
       setSuccess(`"${newProduct.name}" added successfully!`);
       setTimeout(() => setSuccess(null), 2000);
       
-      // Reset form and close modal
       setNewProduct({
         name: '',
         price: '',
@@ -194,7 +171,7 @@ export default function AdminProductManagementSimple() {
       });
       setShowAddModal(false);
       
-      await loadProducts(); // Reload products
+      await loadProducts();
       setError(null);
     } catch (err: any) {
       console.error("❌ Add failed:", err);
