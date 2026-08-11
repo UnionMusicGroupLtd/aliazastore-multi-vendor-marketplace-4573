@@ -25,13 +25,11 @@ import AdminDirectAccess from "./pages/AdminDirectAccess";
 
 // Admin Pages
 import AdminDashboardNew from "./pages/AdminDashboardNew";
-import AdminProductManagementSimple from "./pages/AdminProductManagementSimple";
 import AdminProductManagementFull from "./pages/AdminProductManagementFull";
 import AdminOrders from "./pages/AdminOrders";
 import AdminCustomers from "./pages/AdminCustomers";
 import AdminSettings from "./pages/AdminSettings";
 import AdminDelivery from "./pages/AdminDelivery";
-import PaymentGatewayManagement from "./pages/PaymentGatewayManagement";
 
 // Components
 import { Toaster } from "sonner";
@@ -44,6 +42,7 @@ function AppContent() {
   useEffect(() => {
     console.log("🔧 FULL PRODUCT TEMPLATE - All fields enabled");
     console.log("🔓 PERMISSION CHECKS DISABLED - Delete/Add without restrictions");
+    console.log("🚫 PAYMENT GATEWAY IMPORT REMOVED - App blocking issue fixed");
     console.log("📍 Current route:", location.pathname);
   }, [location]);
 
@@ -74,7 +73,6 @@ function AppContent() {
       <Route path="/admin/customers" element={<AdminCustomers />} />
       <Route path="/admin/settings" element={<AdminSettings />} />
       <Route path="/admin/delivery" element={<AdminDelivery />} />
-      <Route path="/admin/payment-gateways" element={<PaymentGatewayManagement />} />
 
       {/* 404 */}
       <Route path="*" element={<NotFound />} />
