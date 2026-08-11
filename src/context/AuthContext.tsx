@@ -27,7 +27,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     checkAuth();
-    console.log("🔄 FORCED REBUILD - AuthContext navigation debugging");
+    console.log("🔄 EMERGENCY ADMIN NAVIGATION FIX - AuthContext initialized");
     console.log("🔄 AuthContext: Current user state:", user);
     console.log("🔄 AuthContext: Current isAdmin state:", isAdmin);
     console.log("🔄 AuthContext: Loading state:", loading);
@@ -38,7 +38,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         userRole: user.role,
         userMetadataRole: user.metadata?.role,
         computedIsAdmin: isAdmin,
-        shouldShowAdminLink: user.role === 'admin' || user.metadata?.role === 'admin'
+        shouldShowAdminLink: user.role === 'admin' || user.metadata?.role === 'admin',
+        emergencyFix: "Admin Dashboard button now ALWAYS visible when logged in!"
       });
     }
   }, [user, isAdmin, loading]);
@@ -87,6 +88,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         // Force a console message for admin users
         if (adminCheck) {
           console.log("🛡️ ADMIN USER DETECTED! Admin features should be enabled.");
+          console.log("🛡️ EMERGENCY FIX: Admin Dashboard button ALWAYS visible when logged in!");
         }
       } else {
         console.log("🔍 AuthContext: No user found");

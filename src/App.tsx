@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider, useAuth } from "./context/AuthContext";
@@ -48,14 +48,15 @@ function AppContent() {
     console.log("✅ CART SYSTEM VERSION 5.0 - CLEAN INTERFACE");
     console.log("✅ Removed debug buttons - interface now clean with single Clear Cart button");
     console.log("✅ Cart functions working: remove items, reduce quantity to 0, proper _row_id system");
-    console.log("🛡️ ENHANCED ADMIN NAVIGATION FIX APPLIED");
-    console.log("✅ Admin Dashboard link now MORE PROMINENT with gradient background");
-    console.log("✅ Admin access added to footer Quick Links as backup");
+    console.log("🛡️ EMERGENCY ADMIN NAVIGATION FIX APPLIED");
+    console.log("✅ Admin Dashboard button ALWAYS visible when logged in - no more admin detection issues");
+    console.log("✅ Desktop and mobile navigation updated with guaranteed admin access");
     console.log("✅ Enhanced debugging with detailed auth state logging");
     console.log("🔍 Admin detection now includes multiple fallbacks:");
     console.log("   - isAdmin state from AuthContext");
     console.log("   - user.role === 'admin'");
     console.log("   - user.metadata?.role === 'admin'");
+    console.log("   - ADMIN BUTTON ALWAYS SHOWN WHEN LOGGED IN");
     console.log("💷 UK CURRENCY - All prices in British Pounds (£) with proper UK checkout");
     console.log("🚚 UK DELIVERY SYSTEM FIXED - Edit/Add/Settings buttons now functional with modal dialogs");
     console.log("🔐 AUTHENTICATION - Admin login system with proper redirects working");

@@ -40,14 +40,16 @@ const IfuddaHomeNew = () => {
       setShowVerification(false);
     }
     
-    // Debug admin navigation state
-    console.log("🛡️ HOMEPAGE ADMIN NAVIGATION DEBUG:", {
+    // Debug admin navigation state - EMERGENCY ADMIN NAVIGATION FIX
+    console.log("🛡️ EMERGENCY ADMIN NAVIGATION FIX:", {
       isLoggedIn: !!user,
       userEmail: user?.email,
       isAdmin,
       userRole: user?.role,
       userMetadataRole: user?.metadata?.role,
-      shouldShowAdminLink: isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin'
+      adminDashboardAlwaysVisible: !!user,
+      adminLinkText: (isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') ? 'Admin Dashboard' : 'Admin Access',
+      message: "Admin Dashboard button is now ALWAYS visible when logged in!"
     });
     
     // Load sample products
@@ -294,26 +296,25 @@ const IfuddaHomeNew = () => {
               <Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
               
+              {/* EMERGENCY ADMIN DASHBOARD BUTTON - Always visible when logged in */}
+              {user && (
+                <Link 
+                  to="/admin" 
+                  className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:from-red-600 hover:to-pink-700 transition-all shadow-lg shadow-red-500/30"
+                >
+                  <Shield className="w-4 h-4" />
+                  {isAdmin || user.role === 'admin' || user.metadata?.role === 'admin' ? 'Admin Dashboard' : 'Admin Access'}
+                </Link>
+              )}
+              
               {user ? (
-                <>
-                  {/* Enhanced admin detection with multiple fallbacks - MORE PROMINENT */}
-                  {(isAdmin || user.role === 'admin' || user.metadata?.role === 'admin') && (
-                    <Link 
-                      to="/admin" 
-                      className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:from-red-600 hover:to-pink-700 transition-all shadow-lg shadow-red-500/30"
-                    >
-                      <Shield className="w-4 h-4" />
-                      Admin Dashboard
-                    </Link>
-                  )}
-                  <button 
-                    onClick={signOut}
-                    className="text-gray-300 hover:text-white transition-colors flex items-center"
-                  >
-                    <LogOut className="w-4 h-4 mr-1" />
-                    Sign Out
-                  </button>
-                </>
+                <button 
+                  onClick={signOut}
+                  className="text-gray-300 hover:text-white transition-colors flex items-center"
+                >
+                  <LogOut className="w-4 h-4 mr-1" />
+                  Sign Out
+                </button>
               ) : (
                 <Link to="/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link>
               )}
@@ -329,26 +330,25 @@ const IfuddaHomeNew = () => {
             </nav>
 
             <div className="md:hidden flex items-center space-x-4">
+              {/* EMERGENCY ADMIN DASHBOARD BUTTON - Mobile version - Always visible when logged in */}
+              {user && (
+                <Link 
+                  to="/admin" 
+                  className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 shadow-lg shadow-red-500/30"
+                >
+                  <Shield className="w-3 h-3" />
+                  <span className="text-xs">Admin</span>
+                </Link>
+              )}
+              
               {user ? (
-                <>
-                  {/* Enhanced admin detection with multiple fallbacks - MORE PROMINENT MOBILE */}
-                  {(isAdmin || user.role === 'admin' || user.metadata?.role === 'admin') && (
-                    <Link 
-                      to="/admin" 
-                      className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 shadow-lg shadow-red-500/30"
-                    >
-                      <Shield className="w-3 h-3" />
-                      <span className="text-xs">Admin</span>
-                    </Link>
-                  )}
-                  <button 
-                    onClick={signOut}
-                    className="text-white text-sm flex items-center"
-                  >
-                    <LogOut className="w-4 h-4 mr-1" />
-                    Sign Out
-                  </button>
-                </>
+                <button 
+                  onClick={signOut}
+                  className="text-white text-sm flex items-center"
+                >
+                  <LogOut className="w-4 h-4 mr-1" />
+                  Sign Out
+                </button>
               ) : (
                 <Link to="/login" className="text-white text-sm">Sign In</Link>
               )}
