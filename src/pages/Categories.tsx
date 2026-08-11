@@ -24,10 +24,24 @@ const Categories = () => {
 
   const loadCategories = async () => {
     try {
-      const data = await db.query("categories", { status: "eq.active" });
+      // Use categories_new table with correct filters
+      const data = await db.query("categories_new", { 
+        is_active: `eq.${1}`,
+        level: `eq.${0}`,
+        order: "name.asc" 
+      });
       setCategories(data);
     } catch (error) {
       console.error("Error loading categories:", error);
+      // Fallback to static categories if database fails
+      setCategories([
+        { _row_id: 1, name: 'Vibrators', slug: 'vibrators' },
+        { _row_id: 2, name: 'Couples Toys', slug: 'couples-toys' },
+        { _row_id: 3, name: 'Lingerie', slug: 'lingerie' },
+        { _row_id: 4, name: 'Massage', slug: 'massage' },
+        { _row_id: 5, name: 'Bondage', slug: 'bondage' },
+        { _row_id: 6, name: 'Lubricants', slug: 'lubricants' }
+      ]);
     } finally {
       setLoading(false);
     }
