@@ -91,6 +91,7 @@ const AdminProductManagement = () => {
 
   // Load data on mount
   useEffect(() => {
+    console.log("🚀 AdminProductManagement component mounted");
     loadProducts();
     loadCategories();
   }, []);
@@ -147,7 +148,10 @@ const AdminProductManagement = () => {
   const loadProducts = async () => {
     setLoading(true);
     try {
+      console.log("📦 Loading products...");
       const productsData = await db.query("products", { order: "_created_at.desc" });
+      console.log("✅ Products loaded:", productsData.length, "products");
+      console.log("📋 Product details:", productsData.map(p => ({ id: p._row_id, name: p.name })));
       setProducts(productsData as unknown as Product[]);
     } catch (err) {
       console.error("Error loading products:", err);
@@ -354,17 +358,30 @@ const AdminProductManagement = () => {
   };
 
   const handleDeleteProduct = async (product: Product) => {
-    // Simplified deletion without auth checks for emergency access
+    // Enhanced delete function with better debugging
+    console.log("🗑️ Attempting to delete product:", product);
+    
     if (confirm(`Are you sure you want to delete "${product.name}"?`)) {
       try {
-        await db.delete("products", { _row_id: `eq.${product._row_id}` });
+        console.log("✅ User confirmed deletion for product:", product._row_id);
+        
+        // Delete using correct PostgREST syntax
+        const result = await db.delete("products", { _row_id: `eq.${product._row_id}` });
+        console.log("✅ Delete result:", result);
+        
         setSuccess(`Product "${product.name}" has been deleted`);
         setTimeout(() => setSuccess(''), 3000);
+        
+        // Reload products to update the UI
+        console.log("🔄 Reloading products after deletion...");
         loadProducts();
+        
       } catch (err: any) {
-        console.error("Delete error:", err);
+        console.error("❌ Delete error:", err);
         setError('Failed to delete product: ' + err.message);
       }
+    } else {
+      console.log("❌ User cancelled deletion");
     }
   };
 
@@ -474,6 +491,31 @@ const AdminProductManagement = () => {
           </Card>
         </div>
 
+        {/* DEBUG SECTION - Product Delete Testing */}
+        <Card className="mb-8 bg-yellow-900/10 border-yellow-600/30">
+          <CardContent className="p-4">
+            <h3 className="text-yellow-400 font-semibold mb-2">🔍 DEBUG: Product Delete Testing</h3>
+            <div className="text-gray-300 text-sm space-y-2">
+              <p>Current Products (IDs): {products.map(p => `${p.name} (ID: ${p._row_id})`).join(', ')}</p>
+              <div className="flex space-x-2">
+                {products.slice(0, 3).map(product => (
+                  <button
+                    key={product._row_id}
+                    onClick={() => {
+                      console.log("🧪 TEST DELETE for:", product);
+                      handleDeleteProduct(product);
+                    }}
+                    className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs rounded"
+                  >
+                    Test Delete: {product.name}
+                  </button>
+                ))}
+              </div>
+              <p className="text-yellow-300 text-xs">Try clicking these test buttons to see console logs</p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Products Table */}
         <Card className="bg-gray-900/50 border-gray-800">
           <CardHeader>
@@ -549,10 +591,32 @@ const AdminProductManagement = () => {
                           <Button
                             size="sm"
                             variant="outline"
-                            onClick={() => handleDeleteProduct(product)}
-                            className="border-gray-700 text-white hover:bg-gray-800"
+                            onClick={() => {
+                              console.log("🗑️ Delete button clicked for:", product);
+                              handleDeleteProduct(product);
+                            }}
+                            className="border-red-700 text-red-400 hover:bg-red-900/20"
                           >
                             <Trash2 className="w-4 h-4" />
+                          </Button>
+                          {/* Emergency Delete - Text button for easier debugging */}
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              if (confirm(`EMERGENCY DELETE: "${product.name}" (ID: ${product._row_id})?`)) {
+                                console.log("🚨 EMERGENCY DELETE for product:", product._row_id);
+                                db.delete("products", { _row_id: `eq.${product._row_id}` })
+                                  .then(() => {
+                                    console.log("✅ Emergency delete successful");
+                                    loadProducts();
+                                  })
+                                  .catch(err => console.error("❌ Emergency delete failed:", err));
+                              }
+                            }}
+                            className="text-red-500 hover:text-red-400 text-xs"
+                          >
+                            Del
                           </Button>
                         </>
                       ) : (

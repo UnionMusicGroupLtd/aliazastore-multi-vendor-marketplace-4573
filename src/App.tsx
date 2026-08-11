@@ -41,12 +41,11 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("✅ WHITE SCREEN ISSUE COMPLETELY RESOLVED");
+    console.log("🔍 PRODUCT DELETE DEBUGGING ENHANCED");
     console.log("📍 Current route:", location.pathname);
-    console.log("🎯 All authentication-related crashes fixed");
-    console.log("🛠️ Categories component now queries correct database table");
-    console.log("🚀 AdminProductManagement simplified without auth checks");
-    console.log("✨ App should now load without white screen");
+    console.log("🛠️ Product delete function now has extensive debugging");
+    console.log("🧪 Test delete buttons added to admin product page");
+    console.log("📋 All products will be logged with IDs for verification");
   }, [location]);
 
   return (
