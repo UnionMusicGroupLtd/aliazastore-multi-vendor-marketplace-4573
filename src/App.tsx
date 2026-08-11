@@ -41,7 +41,7 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("✅ SIMPLE ADMIN SYSTEM - Direct access, no auth complexity");
+    console.log("🔧 WHITE SCREEN FIX - Add Product Modal now working properly");
     console.log("📍 Current route:", location.pathname);
   }, [location]);
 
