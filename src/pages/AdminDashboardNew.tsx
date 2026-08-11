@@ -19,8 +19,9 @@ const AdminDashboardNew = () => {
   console.log("🔍 AdminDashboardNew: User:", user);
   console.log("🔍 AdminDashboardNew: isAdmin:", isAdmin);
   console.log("🔍 AdminDashboardNew: loading:", loading);
+  console.log("🔍 AdminDashboardNew: emergency access:", localStorage.getItem('ifudda_admin_access'));
 
-  // Simplified authentication guard - prevent redirect loops with timing safety
+  // Enhanced authentication guard - prevent redirect loops with better timing
   useEffect(() => {
     const emergencyAccess = localStorage.getItem('ifudda_admin_access');
     const hasEmergencyAccess = emergencyAccess === 'true';
@@ -28,18 +29,26 @@ const AdminDashboardNew = () => {
     // Allow access with emergency access OR valid admin user
     const hasAccess = hasEmergencyAccess || (user && isAdmin);
     
-    // Add a small delay to ensure auth state is fully loaded
+    // More robust access check with better timing
     const checkAccess = () => {
-      if (!hasAccess && !loading) {
+      // Wait until loading is complete before making any decisions
+      if (loading) {
+        console.log("⏳ Still loading auth state...");
+        return;
+      }
+      
+      // Only redirect if we're certain there's no access
+      if (!hasAccess) {
         console.log("🛡️ No admin access - redirecting to login");
         navigate("/login");
-      } else if (hasAccess) {
+      } else {
         console.log("🛡️ Admin access granted - loading dashboard");
         setIsChecking(false);
       }
     };
     
-    const timeoutId = setTimeout(checkAccess, 100);
+    // Increased delay to ensure auth state is fully loaded
+    const timeoutId = setTimeout(checkAccess, 200);
     return () => clearTimeout(timeoutId);
   }, [user, isAdmin, navigate, loading]);
 

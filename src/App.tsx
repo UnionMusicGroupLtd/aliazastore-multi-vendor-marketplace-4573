@@ -42,8 +42,8 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("🛡️ ANTI-BLINK ADMIN SYSTEM ACTIVE");
-    console.log("🛡️ Redirect loop prevention: 100ms timing safety added");
+    console.log("🛡️ ADMIN DASHBOARD AUTH GUARD FIXED - No More Redirects");
+    console.log("🛡️ Enhanced timing: 200ms delay + loading state check");
     console.log("🛡️ Emergency admin access: /admin-access (code: admin2026)");
     console.log("🛡️ Current route:", location.pathname);
     console.log("🛡️ Auth loading state:", loading);

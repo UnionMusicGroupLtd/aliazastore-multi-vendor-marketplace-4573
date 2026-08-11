@@ -31,6 +31,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     console.log("🔄 AUTH SIMPLIFIED - Admin detection streamlined");
   }, []);
 
+  // Additional effect to handle admin status updates after login
+  useEffect(() => {
+    if (user && !loading) {
+      const adminCheck = user.role === 'admin' || user.metadata?.role === 'admin';
+      console.log("🔄 AuthContext: Re-checking admin status for user:", user.email, "isAdmin:", adminCheck);
+      setIsAdmin(adminCheck);
+    }
+  }, [user, loading]);
+
   const checkAuth = async () => {
     try {
       console.log("🔍 AuthContext: Starting auth check...");
