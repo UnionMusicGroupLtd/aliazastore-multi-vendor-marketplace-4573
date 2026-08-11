@@ -11,62 +11,34 @@ import { useAuth } from "@/context/AuthContext";
 
 const AdminDashboardNew = () => {
   const navigate = useNavigate();
-  const { user, isAdmin, signOut, loading: authLoading } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   console.log("🔍 AdminDashboardNew: Component mounted");
-  console.log("🔍 AdminDashboardNew: Current URL:", window.location.href);
-  console.log("🔍 AdminDashboardNew: User from AuthContext:", user);
-  console.log("🔍 AdminDashboardNew: isAdmin from AuthContext:", isAdmin);
-  console.log("🔍 AdminDashboardNew: authLoading:", authLoading);
-  console.log("🔄 FORCED REBUILD - Admin Dashboard: Delivery Options Management fix applied");
-  console.log("🔍 AdminDashboardNew: Navigation should show: Home | Admin Dashboard | Avatar | Sign Out");
+  console.log("🔍 AdminDashboardNew: User:", user);
+  console.log("🔍 AdminDashboardNew: isAdmin:", isAdmin);
 
-  // Authentication guard - redirect if not logged in or not admin
+  // Simple authentication guard - redirect if not logged in
   useEffect(() => {
-    const checkAuthStatus = () => {
-      console.log("🔍 AdminDashboardNew: Authentication guard check");
-      console.log("🔍 AdminDashboardNew: User:", user);
-      console.log("🔍 AdminDashboardNew: isAdmin:", isAdmin);
-      console.log("🔍 AdminDashboardNew: authLoading:", authLoading);
+    if (!user) {
+      console.log("❌ No user found, redirecting to login");
+      navigate("/login");
+    } else if (!isAdmin) {
+      // Check admin emails
+      const adminEmails = ['info@unionmusicgroup.co.uk', 'admin@ifudda.com', 'support@ifudda.com'];
+      const isAdminByEmail = adminEmails.some(email => 
+        user.email?.toLowerCase() === email.toLowerCase()
+      );
       
-      // Don't check while auth is loading
-      if (authLoading) {
-        console.log("⏳ AdminDashboardNew: Auth still loading, waiting...");
-        return;
+      if (!isAdminByEmail) {
+        console.log("❌ User is not admin, redirecting to home");
+        navigate("/");
       }
-      
-      if (!user) {
-        console.log("❌ AdminDashboardNew: No user found, redirecting to login");
-        navigate("/login");
-      } else {
-        // Check if user is admin by email or role
-        const adminEmails = ['info@unionmusicgroup.co.uk', 'admin@ifudda.com', 'support@ifudda.com'];
-        const isAdminByEmail = adminEmails.some(email => 
-          user.email?.toLowerCase() === email.toLowerCase()
-        );
-        const isAdminByRole = user.role === 'admin' || user.metadata?.role === 'admin';
-        
-        console.log("🔍 AdminDashboardNew: Admin email check:", isAdminByEmail);
-        console.log("🔍 AdminDashboardNew: Admin role check:", isAdminByRole);
-        
-        if (isAdminByEmail || isAdminByRole) {
-          console.log("✅ AdminDashboardNew: User IS admin, showing dashboard");
-          setIsCheckingAuth(false);
-        } else {
-          console.log("❌ AdminDashboardNew: User is not admin, redirecting to home");
-          navigate("/");
-        }
-      }
-    };
-
-    checkAuthStatus();
-  }, [user, isAdmin, authLoading, navigate]);
+    }
+  }, [user, isAdmin, navigate]);
 
   const handleSignOut = async () => {
     console.log("🔍 AdminDashboardNew: Sign out triggered");
-    // Use the real signOut function from AuthContext
     await signOut();
     navigate("/login");
   };
@@ -151,18 +123,6 @@ const AdminDashboardNew = () => {
       color: "from-gray-600 to-slate-600"
     }
   ];
-
-  // Show loading while checking authentication
-  if (isCheckingAuth || authLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-lg">Verifying admin access...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">

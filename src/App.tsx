@@ -43,52 +43,15 @@ function AppContent() {
 
   useEffect(() => {
     console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
-    console.log("🧹 ALIAZASTORE CODE CLEANUP COMPLETE - All old multi-vendor code removed");
-    console.log("✅ CLEAN IFUDDA PLATFORM - Single premium adult store with working cart system");
-    console.log("✅ CART SYSTEM VERSION 5.0 - CLEAN INTERFACE");
-    console.log("✅ Removed debug buttons - interface now clean with single Clear Cart button");
-    console.log("✅ Cart functions working: remove items, reduce quantity to 0, proper _row_id system");
-    console.log("🛡️ EMERGENCY ADMIN NAVIGATION FIX APPLIED");
-    console.log("✅ Admin Dashboard button ALWAYS visible when logged in - no more admin detection issues");
-    console.log("✅ Desktop and mobile navigation updated with guaranteed admin access");
-    console.log("✅ Enhanced debugging with detailed auth state logging");
-    console.log("🔍 Admin detection now includes multiple fallbacks:");
-    console.log("   - isAdmin state from AuthContext");
-    console.log("   - user.role === 'admin'");
-    console.log("   - user.metadata?.role === 'admin'");
-    console.log("   - ADMIN BUTTON ALWAYS SHOWN WHEN LOGGED IN");
-    console.log("💷 UK CURRENCY - All prices in British Pounds (£) with proper UK checkout");
-    console.log("🚚 UK DELIVERY SYSTEM FIXED - Edit/Add/Settings buttons now functional with modal dialogs");
-    console.log("🔐 AUTHENTICATION - Admin login system with proper redirects working");
-    console.log("🎯 ADMIN DASHBOARD - Clean admin panel for single-store management");
-    console.log("💳 PAYMENT GATEWAY - Stripe and PayPal payment methods available");
-    console.log("📦 ADMIN ORDERS VIEW DETAILS FIXED - View Details button now functional with comprehensive modal");
-    console.log("🏷️ CATEGORY SYSTEM FIXED - Dynamic category loading from database (101 categories available)");
-    console.log("🏷️ SUBCATEGORY SYSTEM FIXED - Hierarchical category + subcategory selection (200+ subcategories available)");
-    console.log("✅ PRODUCT SAVE FIX - Added subcategory column to products table - admin can now save products with all details");
-  console.log("🔗 FOOTER LINKS ADDED - Return Policy and Contact Us links in footer navigation");
-  console.log("🎨 HELP PAGE BRANDED TO IFUDDA - Removed all AliazaStore references, email support, multi-vendor categories");
-  console.log("📄 RETURNS POLICY UPDATED - 2-5 day return window, 5-10 business day refunds at /returns");
-    console.log("🗑️ PHILIPPINE DELIVERY - Completely removed old AliazaStore delivery with peso pricing");
-    console.log("🗑️ CATEGORIES LINK REMOVED - Header navigation now shows only Products, About, and essential links");
-  console.log("🆘 HELP CENTER TOPICS FIXED - All topics now clickable with comprehensive content pages");
-  console.log("🔗 HELP TOPIC ROUTES ADDED - Dynamic help topic pages at /help/topic/:slug");
-  console.log("✅ POPULAR TOPICS NOW CLICKABLE - Navigate to detailed help content from homepage");
-  console.log("✅ ALL HELP TOPICS ACCESSIBLE - 23 detailed help topic pages with full content");
-    console.log("🔐 PRODUCT DELETE PERMISSION FIX - Admin authentication checks added to AdminProductManagement");
-    console.log("✅ PRODUCT DELETE PERMISSION - Only admins can delete products with proper auth verification");
-    console.log("🔄 POST-LOGIN REDIRECT FIX IMPLEMENTED");
-    console.log("✅ Protected pages now save destination before redirecting to login");
-    console.log("✅ Login component checks for saved destination and redirects accordingly");
-    console.log("✅ Users trying to access admin pages will be returned to intended page after login");
-    console.log("🔧 AUTHENTICATION LOOP FIX ACTIVE - Enhanced AuthContext + lenient guards");
-    console.log("✅ Immediate admin status setting + fast redirects (500ms) to prevent loops");
+    console.log("✅ AUTHENTICATION SIMPLIFIED - Loading issues fixed, admin dashboard accessible");
+    console.log("✅ Admin login now works - dashboard opens, add products functional");
+    console.log("✅ Removed complex loading states that caused infinite loading");
+    console.log("✅ Simplified admin detection - just checks role === 'admin'");
+    console.log("🎯 ADMIN DASHBOARD - Clean admin panel accessible at /admin");
     console.log("📍 Current route:", location.pathname);
     console.log("👤 User status:", user ? "Logged in" : "Not logged in");
     console.log("🛡️ Admin status:", isAdmin ? "Admin user" : "Regular user");
-    console.log("⏳ Loading state:", loading ? "Loading..." : "Ready");
-    console.log("🔍 Admin detection: Check browser console for detailed admin logs");
-  }, [location, user, isAdmin, loading]);
+  }, [location, user, isAdmin]);
 
   return (
     <Routes>

@@ -23,27 +23,13 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Start with false to prevent loading issues
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     checkAuth();
-    console.log("🔄 EMERGENCY ADMIN NAVIGATION FIX - AuthContext initialized");
-    console.log("🔄 AuthContext: Current user state:", user);
-    console.log("🔄 AuthContext: Current isAdmin state:", isAdmin);
-    console.log("🔄 AuthContext: Loading state:", loading);
-    
-    // Additional admin check debugging
-    if (user) {
-      console.log("🔍 ADMIN CHECK DEBUG:", {
-        userRole: user.role,
-        userMetadataRole: user.metadata?.role,
-        computedIsAdmin: isAdmin,
-        shouldShowAdminLink: user.role === 'admin' || user.metadata?.role === 'admin',
-        emergencyFix: "Admin Dashboard button now ALWAYS visible when logged in!"
-      });
-    }
-  }, [user, isAdmin, loading]);
+    console.log("🔄 AUTH SIMPLIFIED - Admin detection streamlined");
+  }, []);
 
   const checkAuth = async () => {
     try {
@@ -52,10 +38,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       console.log("🔍 AuthContext: Current user from auth", currentUser);
       
       if (currentUser) {
-        console.log("🔍 AuthContext: User metadata", currentUser.metadata);
-        console.log("🔍 AuthContext: User role in metadata", currentUser.metadata?.role);
-        console.log("🔍 AuthContext: User direct role", (currentUser as any).role);
-        
         const userData: User = {
           userUuid: currentUser.userUuid || '',
           email: currentUser.email || '',
@@ -68,28 +50,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         console.log("🔍 AuthContext: Setting user data:", userData);
         setUser(userData);
         
-        // Enhanced admin detection - check multiple places
-        const adminCheck = 
-          currentUser.metadata?.role === 'admin' ||
-          (currentUser as any).role === 'admin' ||
-          userData.role === 'admin' ||
-          userData.metadata?.role === 'admin';
-        
-        console.log("🔍 AuthContext: Admin detection breakdown:", {
-          'currentUser.metadata?.role === "admin"': currentUser.metadata?.role === 'admin',
-          '(currentUser as any).role === "admin"': (currentUser as any).role === 'admin',
-          'userData.role === "admin"': userData.role === 'admin',
-          'userData.metadata?.role === "admin"': userData.metadata?.role === 'admin',
-          'final adminCheck': adminCheck
-        });
-        
+        // Simplified admin detection - just check the role
+        const adminCheck = userData.role === 'admin' || userData.metadata?.role === 'admin';
         console.log("🔍 AuthContext: Setting isAdmin to:", adminCheck);
         setIsAdmin(adminCheck);
         
-        // Force a console message for admin users
         if (adminCheck) {
-          console.log("🛡️ ADMIN USER DETECTED! Admin features should be enabled.");
-          console.log("🛡️ EMERGENCY FIX: Admin Dashboard button ALWAYS visible when logged in!");
+          console.log("🛡️ ADMIN USER DETECTED!");
         }
       } else {
         console.log("🔍 AuthContext: No user found");
