@@ -42,16 +42,8 @@ function AppContent() {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("🔞 ifudda - Premium Adult Wellness | UK Since 2000 - Age Verification Required");
-    console.log("✅ AUTHENTICATION SIMPLIFIED - Loading issues fixed, admin dashboard accessible");
-    console.log("✅ Admin login now works - dashboard opens, add products functional");
-    console.log("✅ Removed complex loading states that caused infinite loading");
-    console.log("✅ Simplified admin detection - just checks role === 'admin'");
-    console.log("🎯 ADMIN DASHBOARD - Clean admin panel accessible at /admin");
-    console.log("📍 Current route:", location.pathname);
-    console.log("👤 User status:", user ? "Logged in" : "Not logged in");
-    console.log("🛡️ Admin status:", isAdmin ? "Admin user" : "Regular user");
-  }, [location, user, isAdmin]);
+    console.log("ifudda Admin System - Routes loaded:", location.pathname);
+  }, [location]);
 
   return (
     <Routes>

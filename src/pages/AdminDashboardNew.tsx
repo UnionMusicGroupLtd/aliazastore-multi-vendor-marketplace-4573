@@ -18,22 +18,10 @@ const AdminDashboardNew = () => {
   console.log("🔍 AdminDashboardNew: User:", user);
   console.log("🔍 AdminDashboardNew: isAdmin:", isAdmin);
 
-  // Simple authentication guard - redirect if not logged in
+  // Simple authentication guard
   useEffect(() => {
-    if (!user) {
-      console.log("❌ No user found, redirecting to login");
+    if (!user || !isAdmin) {
       navigate("/login");
-    } else if (!isAdmin) {
-      // Check admin emails
-      const adminEmails = ['info@unionmusicgroup.co.uk', 'admin@ifudda.com', 'support@ifudda.com'];
-      const isAdminByEmail = adminEmails.some(email => 
-        user.email?.toLowerCase() === email.toLowerCase()
-      );
-      
-      if (!isAdminByEmail) {
-        console.log("❌ User is not admin, redirecting to home");
-        navigate("/");
-      }
     }
   }, [user, isAdmin, navigate]);
 
