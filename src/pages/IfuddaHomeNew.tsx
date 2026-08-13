@@ -293,17 +293,7 @@ const IfuddaHomeNew = () => {
                       <Shield className="w-4 h-4 mr-2" />
                       Admin Dashboard
                     </Link>
-                  ) : (
-                    <Link to="/cart" className="text-gray-300 hover:text-white transition-colors flex items-center">
-                      <ShoppingBag className="w-5 h-5 mr-1" />
-                      Cart
-                      {getCartCount() > 0 && (
-                        <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 ml-1">
-                          {getCartCount()}
-                        </span>
-                      )}
-                    </Link>
-                  )}
+                  ) : null}
                   <button 
                     onClick={signOut}
                     className="text-gray-300 hover:text-white transition-colors flex items-center"
@@ -318,6 +308,7 @@ const IfuddaHomeNew = () => {
               
               <Link to="/cart" className="text-gray-300 hover:text-white transition-colors flex items-center">
                 <ShoppingBag className="w-5 h-5 mr-1" />
+                Cart
                 {getCartCount() > 0 && (
                   <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 ml-1">
                     {getCartCount()}
@@ -334,16 +325,7 @@ const IfuddaHomeNew = () => {
                       <Shield className="w-4 h-4 mr-1" />
                       Admin
                     </Link>
-                  ) : (
-                    <Link to="/cart" className="text-white text-sm">
-                      <ShoppingBag className="w-4 h-4" />
-                      {getCartCount() > 0 && (
-                        <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1">
-                          {getCartCount()}
-                        </span>
-                      )}
-                    </Link>
-                  )}
+                  ) : null}
                   <button 
                     onClick={signOut}
                     className="text-white text-sm flex items-center"
@@ -355,16 +337,14 @@ const IfuddaHomeNew = () => {
               ) : (
                 <Link to="/login" className="text-white text-sm">Sign In</Link>
               )}
-              {!isAdmin && (
-                <Link to="/cart" className="text-white text-sm">
-                  <ShoppingBag className="w-4 h-4" />
-                  {getCartCount() > 0 && (
-                    <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1">
-                      {getCartCount()}
-                    </span>
-                  )}
-                </Link>
-              )}
+              <Link to="/cart" className="text-white text-sm">
+                <ShoppingBag className="w-4 h-4" />
+                {getCartCount() > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1">
+                    {getCartCount()}
+                  </span>
+                )}
+              </Link>
             </div>
           </div>
         </div>
