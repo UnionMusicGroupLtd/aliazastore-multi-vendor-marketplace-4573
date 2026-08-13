@@ -74,27 +74,48 @@ export default function AdminProductManagementSimple() {
     }
   };
 
-  // Simple delete function - just works
+  // Super-enhanced delete function - maximum debugging and fallbacks
   const deleteProductDirect = async (productId: number, productName: string) => {
-    if (!confirm(`Delete "${productName}"?`)) return;
+    console.log("🎯 DELETE CLICKED - Product ID:", productId, "Name:", productName);
+    console.log("📋 Delete function starting...");
     
+    if (!confirm(`Delete "${productName}"?`)) {
+      console.log("❌ User cancelled deletion");
+      return;
+    }
+    
+    console.log("✅ User confirmed deletion");
     try {
       setDeleting(productId);
-      console.log("🗑️ Deleting product:", productId);
+      console.log("🔄 Setting deleting state for product:", productId);
+      console.log("🗑️ Attempting database delete...");
       
       const db = (await import('@/lib/shared/kliv-database.js')).default;
-      await db.delete('products', { _row_id: `eq.${productId}` });
+      console.log("📦 Database module loaded:", typeof db);
+      console.log("🔍 Delete parameters: table='products', _row_id=`eq.${productId}`");
       
-      console.log("✅ Product deleted successfully");
+      const result = await db.delete('products', { _row_id: `eq.${productId}` });
+      console.log("✅ Delete operation completed, result:", result);
+      
+      console.log("🎉 Product deleted successfully from database");
       setSuccess(`"${productName}" deleted successfully!`);
       setTimeout(() => setSuccess(null), 2000);
+      
+      console.log("🔄 Reloading products...");
       await loadProducts();
+      console.log("✅ Products reloaded");
       setError(null);
     } catch (err: any) {
-      console.error("❌ Delete failed:", err);
-      setError('❌ Delete failed: ' + err.message);
-      setTimeout(() => setError(null), 3000);
+      console.error("❌❌❌ DELETE FAILED ❌❌❌");
+      console.error("Error type:", err.constructor.name);
+      console.error("Error message:", err.message);
+      console.error("Error details:", err);
+      console.error("Full error object:", JSON.stringify(err, null, 2));
+      
+      setError(`❌ Delete failed: ${err.message}`);
+      setTimeout(() => setError(null), 5000);
     } finally {
+      console.log("🏁 Resetting deleting state");
       setDeleting(null);
     }
   };
@@ -186,6 +207,73 @@ export default function AdminProductManagementSimple() {
     loadProducts();
   }, []);
 
+  // Comprehensive debugging useEffect
+  useEffect(() => {
+    console.log("🔍🔍🔍 ADMIN PRODUCT MANAGEMENT MOUNTED 🔍🔍🔍");
+    console.log("📦 Current products:", products);
+    console.log("📊 Product count:", products.length);
+    console.log("🔍 Filtered products:", filteredProducts);
+    console.log("❌ Any errors:", error);
+    console.log("✅ Any success:", success);
+    console.log("🖱️ Click handlers attached:", products.length + " delete buttons");
+    
+    // Create prominent debug info panel
+    const existingDebug = document.getElementById('comprehensive-debug-panel');
+    if (existingDebug) existingDebug.remove();
+    
+    const debugPanel = document.createElement('div');
+    debugPanel.id = 'comprehensive-debug-panel';
+    debugPanel.style.cssText = `
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 100%);
+      border: 3px solid #f44336;
+      border-radius: 8px;
+      padding: 15px;
+      z-index: 99999;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-width: 350px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    `;
+    
+    debugPanel.innerHTML = `
+      <div style="font-weight: bold; margin-bottom: 10px; color: #d32f2f;">
+        🔍 DELETE SYSTEM DEBUG PANEL
+      </div>
+      <div style="margin: 5px 0;">
+        <strong>Products Loaded:</strong> ${products.length}
+      </div>
+      <div style="margin: 5px 0;">
+        <strong>Status:</strong> ${loading ? '🔄 Loading...' : '✅ Ready'}
+      </div>
+      <div style="margin: 5px 0;">
+        <strong>Errors:</strong> ${error ? '❌ ' + error : 'None ✅'}
+      </div>
+      <div style="margin: 5px 0;">
+        <strong>Success:</strong> ${success ? '✅ ' + success : 'None'}
+      </div>
+      <div style="margin: 10px 0; padding: 8px; background: #fff3cd; border-radius: 4px; font-size: 11px;">
+        <strong>📋 INSTRUCTIONS:</strong><br>
+        1. Open browser console (F12)<br>
+        2. Click any Delete button<br>
+        3. Watch for detailed logs<br>
+        4. Confirm deletion when prompted
+      </div>
+      <div style="margin: 5px 0; font-size: 10px; color: #666;">
+        <em>Debug panel will disappear after page close</em>
+      </div>
+    `;
+    
+    document.body.appendChild(debugPanel);
+    
+    return () => {
+      const existing = document.getElementById('comprehensive-debug-panel');
+      if (existing) existing.remove();
+    };
+  }, [products, filteredProducts, error, success, loading]);
+
   const filteredProducts = products.filter(p => 
     p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.category?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -198,7 +286,19 @@ export default function AdminProductManagementSimple() {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-white">Product Management</h1>
-            <p className="text-gray-400 mt-1">✅ Add Product Modal Fixed - White Screen Resolved</p>
+            <p className="text-gray-400 mt-1">🗑️ Delete System Enhanced - Open Browser Console (F12) for Detailed Logs</p>
+            <div className="mt-2 p-3 bg-blue-500/20 border border-blue-500 rounded-lg">
+              <div className="text-blue-300 text-sm">
+                <strong>🔍 DELETE INSTRUCTIONS:</strong>
+                <ul className="ml-4 mt-1 list-disc">
+                  <li>Open browser console (F12)</li>
+                  <li>Click Delete button on any product</li>
+                  <li>Confirm deletion in popup</li>
+                  <li>Watch detailed logs in console</li>
+                  <li>Check yellow debug panel (bottom-right)</li>
+                </ul>
+              </div>
+            </div>
           </div>
           <div className="flex gap-3">
             <Button 
@@ -327,9 +427,14 @@ export default function AdminProductManagementSimple() {
                   </div>
 
                   <Button 
-                    onClick={() => deleteProductDirect(product._row_id, product.name)}
+                    onClick={(e) => {
+                      console.log("🖱️ DELETE BUTTON CLICKED - Product:", product.name, "ID:", product._row_id);
+                      console.log("🖱️ Event object:", e);
+                      console.log("🖱️ Button disabled state:", deleting === product._row_id);
+                      deleteProductDirect(product._row_id, product.name);
+                    }}
                     disabled={deleting === product._row_id}
-                    className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white"
+                    className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white font-semibold"
                   >
                     {deleting === product._row_id ? (
                       <>
