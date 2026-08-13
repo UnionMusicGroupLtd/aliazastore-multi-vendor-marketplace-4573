@@ -207,6 +207,12 @@ export default function AdminProductManagementSimple() {
     loadProducts();
   }, []);
 
+  // Filter products for search - MUST be before useEffect that uses it
+  const filteredProducts = products.filter(p => 
+    p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    p.category?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   // Comprehensive debugging useEffect
   useEffect(() => {
     console.log("🔍🔍🔍 ADMIN PRODUCT MANAGEMENT MOUNTED 🔍🔍🔍");
@@ -273,11 +279,6 @@ export default function AdminProductManagementSimple() {
       if (existing) existing.remove();
     };
   }, [products, filteredProducts, error, success, loading]);
-
-  const filteredProducts = products.filter(p => 
-    p.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.category?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 p-6">
