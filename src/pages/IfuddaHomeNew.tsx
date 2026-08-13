@@ -286,15 +286,6 @@ const IfuddaHomeNew = () => {
               <Link to="/products" className="text-gray-300 hover:text-white transition-colors">Products</Link>
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
               
-              {/* Simple Admin Dashboard Button */}
-              <Link 
-                to="/admin" 
-                className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 hover:from-red-600 hover:to-pink-700 transition-all shadow-lg shadow-red-500/30"
-              >
-                <Shield className="w-4 h-4" />
-                Admin Dashboard
-              </Link>
-              
               {user ? (
                 <button 
                   onClick={signOut}
@@ -318,15 +309,6 @@ const IfuddaHomeNew = () => {
             </nav>
 
             <div className="md:hidden flex items-center space-x-4">
-              {/* Simple Admin Dashboard Button - Mobile */}
-              <Link 
-                to="/admin" 
-                className="bg-gradient-to-r from-red-500 to-pink-600 text-white px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1.5 shadow-lg shadow-red-500/30"
-              >
-                <Shield className="w-3 h-3" />
-                <span className="text-xs">Admin</span>
-              </Link>
-              
               {user ? (
                 <button 
                   onClick={signOut}
