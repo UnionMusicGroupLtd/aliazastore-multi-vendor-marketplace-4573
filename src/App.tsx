@@ -25,7 +25,8 @@ import AdminDirectAccess from "./pages/AdminDirectAccess";
 
 // Admin Pages
 import AdminDashboardNew from "./pages/AdminDashboardNew";
-import AdminProductManagementFull from "./pages/AdminProductManagementFull";
+import AdminProductManagementSimple from "./pages/AdminProductManagementSimple";
+import DeleteTestPage from "./pages/DeleteTestPage";
 import AdminOrders from "./pages/AdminOrders";
 import AdminCustomers from "./pages/AdminCustomers";
 import AdminSettings from "./pages/AdminSettings";
@@ -69,7 +70,8 @@ function AppContent() {
 
       {/* Admin Routes */}
       <Route path="/admin" element={<AdminDashboardNew />} />
-      <Route path="/admin/products" element={<AdminProductManagementFull />} />
+      <Route path="/admin/products" element={<AdminProductManagementSimple />} />
+      <Route path="/delete-test" element={<DeleteTestPage />} />
       <Route path="/admin/orders" element={<AdminOrders />} />
       <Route path="/admin/customers" element={<AdminCustomers />} />
       <Route path="/admin/settings" element={<AdminSettings />} />
