@@ -287,13 +287,31 @@ const IfuddaHomeNew = () => {
               <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
               
               {user ? (
-                <button 
-                  onClick={signOut}
-                  className="text-gray-300 hover:text-white transition-colors flex items-center"
-                >
-                  <LogOut className="w-4 h-4 mr-1" />
-                  Sign Out
-                </button>
+                <>
+                  {isAdmin ? (
+                    <Link to="/admin" className="bg-gradient-to-r from-red-600 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:from-red-700 hover:to-pink-700">
+                      <Shield className="w-4 h-4 mr-2" />
+                      Admin Dashboard
+                    </Link>
+                  ) : (
+                    <Link to="/cart" className="text-gray-300 hover:text-white transition-colors flex items-center">
+                      <ShoppingBag className="w-5 h-5 mr-1" />
+                      Cart
+                      {getCartCount() > 0 && (
+                        <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 ml-1">
+                          {getCartCount()}
+                        </span>
+                      )}
+                    </Link>
+                  )}
+                  <button 
+                    onClick={signOut}
+                    className="text-gray-300 hover:text-white transition-colors flex items-center"
+                  >
+                    <LogOut className="w-4 h-4 mr-1" />
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <Link to="/login" className="text-gray-300 hover:text-white transition-colors">Sign In</Link>
               )}
@@ -310,24 +328,43 @@ const IfuddaHomeNew = () => {
 
             <div className="md:hidden flex items-center space-x-4">
               {user ? (
-                <button 
-                  onClick={signOut}
-                  className="text-white text-sm flex items-center"
-                >
-                  <LogOut className="w-4 h-4 mr-1" />
-                  Sign Out
-                </button>
+                <>
+                  {isAdmin ? (
+                    <Link to="/admin" className="text-white text-sm flex items-center bg-gradient-to-r from-red-600 to-pink-600 px-3 py-1 rounded-lg">
+                      <Shield className="w-4 h-4 mr-1" />
+                      Admin
+                    </Link>
+                  ) : (
+                    <Link to="/cart" className="text-white text-sm">
+                      <ShoppingBag className="w-4 h-4" />
+                      {getCartCount() > 0 && (
+                        <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1">
+                          {getCartCount()}
+                        </span>
+                      )}
+                    </Link>
+                  )}
+                  <button 
+                    onClick={signOut}
+                    className="text-white text-sm flex items-center"
+                  >
+                    <LogOut className="w-4 h-4 mr-1" />
+                    Sign Out
+                  </button>
+                </>
               ) : (
                 <Link to="/login" className="text-white text-sm">Sign In</Link>
               )}
-              <Link to="/cart" className="text-white text-sm">
-                <ShoppingBag className="w-4 h-4" />
-                {getCartCount() > 0 && (
-                  <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1">
-                    {getCartCount()}
-                  </span>
-                )}
-              </Link>
+              {!isAdmin && (
+                <Link to="/cart" className="text-white text-sm">
+                  <ShoppingBag className="w-4 h-4" />
+                  {getCartCount() > 0 && (
+                    <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 ml-1">
+                      {getCartCount()}
+                    </span>
+                  )}
+                </Link>
+              )}
             </div>
           </div>
         </div>
