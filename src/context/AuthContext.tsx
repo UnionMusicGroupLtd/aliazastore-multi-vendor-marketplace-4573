@@ -28,7 +28,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   useEffect(() => {
     checkAuth();
-    console.log("🔄 AUTH SIMPLIFIED - Admin detection streamlined");
+    console.log("🔄 AUTH SIMPLIFIED - Admin detection with localStorage fallback");
+    
+    // Additional localStorage check as backup
+    const localAdmin = localStorage.getItem('ifudda_admin_access');
+    if (localAdmin === 'true' && !isAdmin && user) {
+      console.log("🛡️ LOCALSTORAGE BACKUP: Setting admin status from localStorage");
+      setIsAdmin(true);
+    }
   }, []);
 
   // Additional effect to handle admin status updates after login
@@ -59,8 +66,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         console.log("🔍 AuthContext: Setting user data:", userData);
         setUser(userData);
         
-        // Simplified admin detection - just check the role
-        const adminCheck = userData.role === 'admin' || userData.metadata?.role === 'admin';
+        // Enhanced admin detection with multiple fallbacks and localStorage backup
+        const adminCheck = 
+          userData.role === 'admin' ||
+          userData.metadata?.role === 'admin' ||
+          (currentUser as any).role === 'admin' ||
+          (currentUser as any).metadata?.role === 'admin';
+        
+        // Store admin status in localStorage as backup
+        if (adminCheck) {
+          localStorage.setItem('ifudda_admin_access', 'true');
+          console.log("🛡️ ADMIN ACCESS STORED IN LOCALSTORAGE");
+        }
+        
         console.log("🔍 AuthContext: Setting isAdmin to:", adminCheck);
         setIsAdmin(adminCheck);
         

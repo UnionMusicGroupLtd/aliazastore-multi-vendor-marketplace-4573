@@ -44,8 +44,10 @@ function AppContent() {
     console.log("📝 COMPLETE PRODUCT MANAGEMENT - ADD + EDIT + DELETE");
     console.log("✅ Full product template with edit mode enabled");
     console.log("🔓 PERMISSION CHECKS DISABLED - Add/Edit/Delete without restrictions");
+    console.log("🛡️ ENHANCED ADMIN NAVIGATION - Multiple fallback detection methods");
+    console.log("🛡️ ADMIN LINKS - Desktop: Gradient Button | Mobile: Gradient Button | Footer: Quick Link");
     console.log("📍 Current route:", location.pathname);
-    console.log("🚀 FRESH REBUILD " + new Date().toISOString() + " - Edit functionality added");
+    console.log("🚀 FRESH REBUILD " + new Date().toISOString() + " - Enhanced admin navigation active");
   }, [location]);
 
   return (
@@ -102,6 +104,10 @@ function App() {
 console.log("🛒 DUPLICATE CART FIX - " + new Date().toISOString());
 console.log("✅ Cart: Single cart icon visible for all users");
 console.log("✅ Navigation: Clean, no duplicate buttons");
-console.log("✅ Admin Dashboard: Accessible via direct URL only - /admin");
+console.log("🛡️ ADMIN NAVIGATION - Multiple detection methods + localStorage backup");
+console.log("✅ Admin Desktop: Gradient button with Shield icon");
+console.log("✅ Admin Mobile: Gradient button with Shield icon");
+console.log("✅ Admin Footer: Quick Links backup access");
+console.log("✅ Admin Detection: isAdmin || user.role || user.metadata?.role || localStorage");
 
 export default App;

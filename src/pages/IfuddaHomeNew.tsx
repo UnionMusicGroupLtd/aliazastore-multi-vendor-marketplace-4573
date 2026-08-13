@@ -40,7 +40,24 @@ const IfuddaHomeNew = () => {
       setShowVerification(false);
     }
     
-    console.log("✅ SIMPLIFIED ADMIN DASHBOARD - Direct Access Working");
+    // Enhanced admin detection debugging
+    if (user) {
+      console.log("🛡️ ADMIN DETECTION DEBUG:", {
+        isLoggedIn: !!user,
+        userEmail: user?.email,
+        isAdmin,
+        userRole: user?.role,
+        userMetadataRole: user?.metadata?.role,
+        shouldShowAdminLink: isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin',
+        allChecks: {
+          isAdminCheck: isAdmin,
+          roleCheck: user?.role === 'admin',
+          metadataCheck: user?.metadata?.role === 'admin'
+        }
+      });
+    }
+    
+    console.log("🛡️ ENHANCED ADMIN NAVIGATION - Multiple fallback checks enabled");
     
     // Load sample products
     const sampleProducts: Product[] = [
@@ -288,8 +305,8 @@ const IfuddaHomeNew = () => {
               
               {user ? (
                 <>
-                  {isAdmin ? (
-                    <Link to="/admin" className="bg-gradient-to-r from-red-600 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:from-red-700 hover:to-pink-700">
+                  {(isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') ? (
+                    <Link to="/admin" className="bg-gradient-to-r from-red-600 to-pink-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center hover:from-red-700 hover:to-pink-700 shadow-lg shadow-red-500/30">
                       <Shield className="w-4 h-4 mr-2" />
                       Admin Dashboard
                     </Link>
@@ -320,8 +337,8 @@ const IfuddaHomeNew = () => {
             <div className="md:hidden flex items-center space-x-4">
               {user ? (
                 <>
-                  {isAdmin ? (
-                    <Link to="/admin" className="text-white text-sm flex items-center bg-gradient-to-r from-red-600 to-pink-600 px-3 py-1 rounded-lg">
+                  {(isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') ? (
+                    <Link to="/admin" className="text-white text-sm flex items-center bg-gradient-to-r from-red-600 to-pink-600 px-3 py-1 rounded-lg shadow-lg shadow-red-500/30">
                       <Shield className="w-4 h-4 mr-1" />
                       Admin
                     </Link>
@@ -806,6 +823,19 @@ const IfuddaHomeNew = () => {
           </div>
         </div>
       </footer>
+                  {/* Quick Links */}
+                  <div>
+                    <h4 className="text-white font-semibold mb-4">Quick Links</h4>
+                    <ul className="space-y-2">
+                      <li><Link to="/products" className="text-gray-400 hover:text-white transition-colors">Products</Link></li>
+                      <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">About</Link></li>
+                      <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
+                      <li><Link to="/help" className="text-gray-400 hover:text-white transition-colors">Help Center</Link></li>
+                      {(isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') && (
+                        <li><Link to="/admin" className="text-red-400 hover:text-red-300 font-semibold">Admin Dashboard</Link></li>
+                      )}
+                    </ul>
+                  </div>
     </div>
   );
 };
