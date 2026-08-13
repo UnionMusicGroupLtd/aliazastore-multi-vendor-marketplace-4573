@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trash2, Search, Loader2, Plus, X, Package, DollarSign, Box, Image as ImageIcon, Percent, Calendar, Tag, Check, AlertCircle } from 'lucide-react';
+import { Trash2, Search, Loader2, Plus, X, Package, DollarSign, Box, Image as ImageIcon, Percent, Calendar, Tag, Check, AlertCircle, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -60,6 +60,8 @@ export default function AdminProductManagementFull() {
   // Add Product state with comprehensive fields
   const [showAddModal, setShowAddModal] = useState(false);
   const [addingProduct, setAddingProduct] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<FullProduct | null>(null);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [formSection, setFormSection] = useState<'basic' | 'pricing' | 'inventory' | 'images' | 'seo' | 'shipping'>('basic');
   
   const [newProduct, setNewProduct] = useState({
@@ -167,8 +169,90 @@ export default function AdminProductManagementFull() {
     }
   };
 
-  // Add comprehensive product
-  const addProduct = async () => {
+  // Open edit modal and populate form with existing product data
+  const openEditModal = (product: FullProduct) => {
+    console.log("📝 Opening edit modal for product:", product.name);
+    setEditingProduct(product);
+    setIsEditMode(true);
+    
+    // Populate form with existing product data
+    setNewProduct({
+      name: product.name || '',
+      description: product.description || '',
+      sku: product.sku || '',
+      barcode: product.barcode || '',
+      category: product.category || '',
+      subcategory: product.subcategory || '',
+      manufacturer: product.manufacturer || '',
+      material: product.material || '',
+      color: product.color || '',
+      size: product.size || '',
+      
+      // Pricing
+      price: product.price?.toString() || '',
+      compare_price: product.compare_price?.toString() || '',
+      cost_price: product.cost_price?.toString() || '',
+      on_sale: Boolean(product.on_sale),
+      sale_price: product.sale_price?.toString() || '',
+      discount_percentage: product.discount_percentage?.toString() || '',
+      sale_start_date: product.sale_start_date || '',
+      sale_end_date: product.sale_end_date || '',
+      offer_badge: product.offer_badge || '',
+      offer_description: product.offer_description || '',
+      
+      // Inventory
+      in_stock: Boolean(product.in_stock),
+      stock_quantity: product.stock_quantity?.toString() || '100',
+      weight: product.weight?.toString() || '',
+      dimensions: product.dimensions || '',
+      
+      // Images
+      image_url: product.image_url || '',
+      secondary_images: product.secondary_images || '',
+      
+      // SEO
+      meta_title: product.meta_title || '',
+      meta_description: product.meta_description || '',
+      tags: product.tags || '',
+      
+      // Shipping
+      free_shipping: Boolean(product.free_shipping),
+      shipping_price: product.shipping_price?.toString() || '',
+      delivery_days: product.delivery_days || '3-5',
+      
+      // Marketing
+      featured: Boolean(product.featured),
+      active: Boolean(product.active)
+    });
+    
+    setShowAddModal(true);
+    setFormSection('basic');
+  };
+
+  // Close modal and reset form
+  const closeAddModal = () => {
+    setShowAddModal(false);
+    setEditingProduct(null);
+    setIsEditMode(false);
+    setFormSection('basic');
+    
+    // Reset form
+    setNewProduct({
+      name: '', description: '', sku: '', barcode: '', category: '', subcategory: '',
+      manufacturer: '', material: '', color: '', size: '',
+      price: '', compare_price: '', cost_price: '',
+      on_sale: false, sale_price: '', discount_percentage: '',
+      sale_start_date: '', sale_end_date: '', offer_badge: '', offer_description: '',
+      in_stock: true, stock_quantity: '100', weight: '', dimensions: '',
+      image_url: '', secondary_images: '',
+      meta_title: '', meta_description: '', tags: '',
+      free_shipping: false, shipping_price: '', delivery_days: '3-5',
+      featured: false, active: true
+    });
+  };
+
+  // Save product (handles both add and edit)
+  const saveProduct = async () => {
     // Validation
     if (!newProduct.name || !newProduct.price || !newProduct.category) {
       setError('⚠️ Required fields: Product Name, Price, and Category');
@@ -178,7 +262,12 @@ export default function AdminProductManagementFull() {
     
     try {
       setAddingProduct(true);
-      console.log("➕ Adding COMPREHENSIVE product:", newProduct);
+      
+      if (isEditMode && editingProduct) {
+        console.log("✏️ Editing COMPREHENSIVE product:", editingProduct.name);
+      } else {
+        console.log("➕ Adding COMPREHENSIVE product:", newProduct.name);
+      }
       
       const db = (await import('@/lib/shared/kliv-database.js')).default;
       
@@ -234,34 +323,32 @@ export default function AdminProductManagementFull() {
         tags: newProduct.tags || null
       };
       
-      console.log("📦 Inserting product data:", productData);
-      await db.insert('products', productData);
+      if (isEditMode && editingProduct) {
+        // Update existing product
+        console.log("⚡ Updating product:", editingProduct._row_id);
+        await db.update('products', { _row_id: `eq.${editingProduct._row_id}` }, productData);
+        
+        console.log("✅ Product updated successfully with ALL fields");
+        setSuccess(`✅ "${newProduct.name}" updated successfully!`);
+      } else {
+        // Insert new product
+        console.log("📦 Inserting product data:", productData);
+        await db.insert('products', productData);
+        
+        console.log("✅ Product added successfully with ALL fields");
+        setSuccess(`✅ "${newProduct.name}" added successfully with comprehensive details!`);
+      }
       
-      console.log("✅ Product added successfully with ALL fields");
-      setSuccess(`✅ "${newProduct.name}" added successfully with comprehensive details!`);
       setTimeout(() => setSuccess(null), 3000);
       
-      // Reset form
-      setNewProduct({
-        name: '', description: '', sku: '', barcode: '', category: '', subcategory: '',
-        manufacturer: '', material: '', color: '', size: '',
-        price: '', compare_price: '', cost_price: '',
-        on_sale: false, sale_price: '', discount_percentage: '',
-        sale_start_date: '', sale_end_date: '', offer_badge: '', offer_description: '',
-        in_stock: true, stock_quantity: '100', weight: '', dimensions: '',
-        image_url: '', secondary_images: '',
-        meta_title: '', meta_description: '', tags: '',
-        free_shipping: false, shipping_price: '', delivery_days: '3-5',
-        featured: false, active: true
-      });
-      setShowAddModal(false);
-      setFormSection('basic');
+      // Reset form and close modal
+      closeAddModal();
       
       await loadProducts();
       setError(null);
     } catch (err: any) {
-      console.error("❌ Add failed:", err);
-      setError('❌ Add failed: ' + err.message);
+      console.error("❌ Save failed:", err);
+      setError(`❌ ${isEditMode ? 'Update' : 'Add'} failed: ` + err.message);
       setTimeout(() => setError(null), 5000);
     } finally {
       setAddingProduct(false);
@@ -431,23 +518,32 @@ export default function AdminProductManagementFull() {
                     </div>
                   </div>
 
-                  <Button 
-                    onClick={() => deleteProductDirect(product._row_id, product.name)}
-                    disabled={deleting === product._row_id}
-                    className="w-full mt-4 bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    {deleting === product._row_id ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Deleting...
-                      </>
-                    ) : (
-                      <>
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        Delete Product
-                      </>
-                    )}
-                  </Button>
+                  <div className="flex gap-2 mt-4">
+                    <Button 
+                      onClick={() => openEditModal(product)}
+                      className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      <Edit className="w-4 h-4 mr-2" />
+                      Edit
+                    </Button>
+                    <Button 
+                      onClick={() => deleteProductDirect(product._row_id, product.name)}
+                      disabled={deleting === product._row_id}
+                      className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                    >
+                      {deleting === product._row_id ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Deleting...
+                        </>
+                      ) : (
+                        <>
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          Delete Product
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
               </Card>
             ))}
@@ -475,13 +571,15 @@ export default function AdminProductManagementFull() {
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overflow-y-auto">
           <div className="bg-gray-800 rounded-lg max-w-4xl w-full p-6 relative my-8">
             <button
-              onClick={() => setShowAddModal(false)}
+              onClick={() => closeAddModal()}
               className="absolute top-4 right-4 text-gray-400 hover:text-white z-10"
             >
               <X className="w-6 h-6" />
             </button>
             
-            <h2 className="text-2xl font-bold text-white mb-6">📦 Add New Product - Full Template</h2>
+            <h2 className="text-2xl font-bold text-white mb-6">
+              {isEditMode ? `✏️ Edit Product - ${editingProduct?.name}` : '📦 Add New Product - Full Template'}
+            </h2>
             
             {/* Section Navigation */}
             <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
@@ -994,24 +1092,24 @@ export default function AdminProductManagementFull() {
             {/* Action Buttons */}
             <div className="flex gap-3 pt-6 border-t border-gray-700 mt-6">
               <Button
-                onClick={addProduct}
+                onClick={saveProduct}
                 disabled={addingProduct}
                 className="flex-1 bg-green-600 hover:bg-green-700 text-white"
               >
                 {addingProduct ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Adding Product...
+                    {isEditMode ? 'Updating Product...' : 'Adding Product...'}
                   </>
                 ) : (
                   <>
                     <Plus className="w-4 h-4 mr-2" />
-                    Add Product
+                    {isEditMode ? 'Update Product' : 'Add Product'}
                   </>
                 )}
               </Button>
               <Button
-                onClick={() => setShowAddModal(false)}
+                onClick={closeAddModal}
                 variant="outline"
                 disabled={addingProduct}
                 className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-700"
