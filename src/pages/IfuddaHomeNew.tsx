@@ -795,9 +795,6 @@ const IfuddaHomeNew = () => {
                 <li><Link to="/about" className="text-gray-400 hover:text-white text-sm">About Us</Link></li>
                 <li><Link to="/cart" className="text-gray-400 hover:text-white text-sm">Shopping Cart</Link></li>
                 <li><Link to="/contact" className="text-gray-400 hover:text-white text-sm">Contact Us</Link></li>
-                {(isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') && (
-                  <li><Link to="/admin" className="text-red-400 hover:text-red-300 text-sm font-semibold">Admin Dashboard</Link></li>
-                )}
                 <li><Link to="/login" className="text-gray-400 hover:text-white text-sm">Sign In</Link></li>
               </ul>
             </div>
@@ -831,9 +828,6 @@ const IfuddaHomeNew = () => {
                       <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">About</Link></li>
                       <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact Us</Link></li>
                       <li><Link to="/help" className="text-gray-400 hover:text-white transition-colors">Help Center</Link></li>
-                      {(isAdmin || user?.role === 'admin' || user?.metadata?.role === 'admin') && (
-                        <li><Link to="/admin" className="text-red-400 hover:text-red-300 font-semibold">Admin Dashboard</Link></li>
-                      )}
                     </ul>
                   </div>
     </div>

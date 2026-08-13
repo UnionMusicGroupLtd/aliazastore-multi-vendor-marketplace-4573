@@ -44,10 +44,12 @@ function AppContent() {
     console.log("📝 COMPLETE PRODUCT MANAGEMENT - ADD + EDIT + DELETE");
     console.log("✅ Full product template with edit mode enabled");
     console.log("🔓 PERMISSION CHECKS DISABLED - Add/Edit/Delete without restrictions");
-    console.log("🛡️ ENHANCED ADMIN NAVIGATION - Multiple fallback detection methods");
-    console.log("🛡️ ADMIN LINKS - Desktop: Gradient Button | Mobile: Gradient Button | Footer: Quick Link");
+    console.log("🚫 PUBLIC NAVIGATION CLEAN - NO ADMIN LINKS VISIBLE");
+    console.log("✅ Header: Products | About | Sign In | Cart");
+    console.log("✅ Footer: Products | About | Contact | Help");
+    console.log("🔒 Admin: Only accessible via direct URL (/admin)");
     console.log("📍 Current route:", location.pathname);
-    console.log("🚀 FRESH REBUILD " + new Date().toISOString() + " - Enhanced admin navigation active");
+    console.log("🚀 FRESH REBUILD " + new Date().toISOString() + " - Single-store platform ready");
   }, [location]);
 
   return (
@@ -100,14 +102,12 @@ function App() {
   );
 }
 
-// 🛒 DUPLICATE CART FIX - Single cart link now visible
-console.log("🛒 DUPLICATE CART FIX - " + new Date().toISOString());
-console.log("✅ Cart: Single cart icon visible for all users");
-console.log("✅ Navigation: Clean, no duplicate buttons");
-console.log("🛡️ ADMIN NAVIGATION - Multiple detection methods + localStorage backup");
-console.log("✅ Admin Desktop: Gradient button with Shield icon");
-console.log("✅ Admin Mobile: Gradient button with Shield icon");
-console.log("✅ Admin Footer: Quick Links backup access");
-console.log("✅ Admin Detection: isAdmin || user.role || user.metadata?.role || localStorage");
+// 🚫 PUBLIC NAVIGATION CLEANED - All admin links removed
+console.log("🚫 PUBLIC NAVIGATION CLEANED - " + new Date().toISOString());
+console.log("✅ Header Desktop: Products | About | Sign In | Cart");
+console.log("✅ Header Mobile: Sign In | Cart");
+console.log("✅ Footer Quick Links: Products | About | Contact | Help | Sign In");
+console.log("🔒 Admin Access: Only via direct URL (/admin)");
+console.log("✅ Single-store platform: ifudda - clean customer experience");
 
 export default App;
