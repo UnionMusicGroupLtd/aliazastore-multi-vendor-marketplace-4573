@@ -20,7 +20,7 @@ interface PaymentOptionsProps {
   onSelect: (paymentMethod: string, transactionId: string) => void;
 }
 
-const PaymentOptions: React.FC<PaymentOptionsProps> = ({ amount, orderId, onSelect }) => {
+const PaymentOptions: React.FC<PaymentOptionsProps> = ({ amount, onSelect }) => {
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

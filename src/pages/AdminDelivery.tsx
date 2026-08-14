@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
@@ -8,8 +8,6 @@ import {
 } from "lucide-react";
 
 const AdminDelivery = () => {
-  const navigate = useNavigate();
-
   // Delivery options data
   const [deliveryOptions, setDeliveryOptions] = useState([
     {

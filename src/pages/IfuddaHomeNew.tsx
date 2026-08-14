@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
-  Shield, ShoppingBag, Heart, Lock, Truck, Star, CheckCircle, 
+  Shield, ShoppingBag, Lock, Truck, Star, CheckCircle, 
   ArrowRight, TrendingUp, Clock, Flame, Award, Sparkles, LogOut 
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
@@ -24,7 +24,6 @@ interface Product {
 }
 
 const IfuddaHomeNew = () => {
-  const navigate = useNavigate();
   const [ageVerified, setAgeVerified] = useState(false);
   const [showVerification, setShowVerification] = useState(true);
   const [products, setProducts] = useState<Product[]>([]);

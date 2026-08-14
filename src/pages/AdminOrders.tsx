@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   ShoppingCart, Package, CheckCircle, XCircle, Clock, 
-  Truck, Eye, ArrowLeft, Search, Filter, Download, X, Box
+  Truck, Eye, ArrowLeft, Search, Download, X, Box
 } from "lucide-react";
 
 const AdminOrders = () => {
@@ -13,7 +13,6 @@ const AdminOrders = () => {
   const { user, isAdmin, authLoading } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<any>(null);
   const [authError, setAuthError] = useState<string | null>(null);
 
@@ -139,10 +138,7 @@ const AdminOrders = () => {
     setSelectedOrder(null);
   };
 
-  const updateOrderStatus = (orderId: string, newStatus: string) => {
-    console.log(`Updating order ${orderId} to ${newStatus}`);
-    // In a real app, this would update the database
-  };
+
 
   const getStatusBadge = (status: string) => {
     const badges = {
@@ -399,7 +395,7 @@ const AdminOrders = () => {
                 <div className="border border-gray-700 rounded-lg p-4">
                   <h3 className="text-white font-semibold mb-3">Order Items</h3>
                   <div className="space-y-3">
-                    {selectedOrder.items?.map((item, index) => (
+                    {selectedOrder.items?.map((item: any, index: number) => (
                       <div key={index} className="flex justify-between items-center p-3 bg-gray-800/30 rounded">
                         <div className="flex-1">
                           <p className="text-white font-medium">{item.name}</p>

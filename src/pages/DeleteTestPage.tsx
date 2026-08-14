@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 interface TestProduct {

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trash2, Search, Loader2, Plus, X, Package, DollarSign, Box, Image as ImageIcon, Percent, Calendar, Tag, Check, AlertCircle, Edit } from 'lucide-react';
+import { Trash2, Search, Loader2, Plus, X, Package, DollarSign, Box, Image as ImageIcon, Percent, Tag, Check, AlertCircle, Edit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';

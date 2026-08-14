@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
-  Package, ShoppingCart, Users, TrendingUp, DollarSign,
+  Package, ShoppingCart, Users, DollarSign,
   Settings, LogOut, Plus, Truck, Store, Upload, 
   CheckCircle, ChevronRight, Badge, Home, Menu, X, Wallet
 } from "lucide-react";

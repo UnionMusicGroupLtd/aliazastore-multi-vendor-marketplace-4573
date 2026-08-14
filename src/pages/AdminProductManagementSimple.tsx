@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trash2, Search, Loader2, Plus, X, Percent, Calendar, Tag } from 'lucide-react';
-import { databaseExecute } from '@/lib/shared/kliv-functions.js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -75,60 +74,39 @@ export default function AdminProductManagementSimple() {
     }
   };
 
-  // BULLETPROOF delete function - Direct SQL approach
+  // Simple delete function using database SDK
   const deleteProductDirect = async (productId: number, productName: string) => {
     console.log("🎯 DELETE CLICKED - Product ID:", productId, "Name:", productName);
-    console.log("📋 Delete function starting...");
     
     if (!confirm(`Delete "${productName}"?`)) {
       console.log("❌ User cancelled deletion");
       return;
     }
     
-    console.log("✅ User confirmed deletion");
-    
     try {
       setDeleting(productId);
-      console.log("🔄 Setting deleting state for product:", productId);
-      console.log("🗑️ Attempting DIRECT SQL deletion...");
+      console.log("🔄 Deleting product...");
       
-      // Direct SQL deletion via database_execute
-      const deleteSQL = `DELETE FROM products WHERE _row_id = ${productId};`;
-      console.log("🔍 SQL Command:", deleteSQL);
+      const db = (await import('@/lib/shared/kliv-database.js')).default;
       
-      // Execute direct deletion
-      const deleteResult = await databaseExecute(deleteSQL);
-      console.log("✅ SQL Delete executed:", deleteResult);
+      // Delete using database SDK
+      await db.delete('products', {
+        _row_id: `eq.${productId}`
+      });
       
-      // Verify deletion
-      console.log("🔍 Verifying deletion...");
-      const verifySQL = `SELECT COUNT(*) as count FROM products WHERE _row_id = ${productId};`;
-      const verifyResult = await databaseExecute(verifySQL);
-      console.log("   Verification result:", verifyResult);
+      console.log("✅ Product deleted successfully");
+      setSuccess(`"${productName}" deleted successfully!`);
+      setTimeout(() => setSuccess(null), 3000);
       
-      const remainingCount = verifyResult[0]?.count || 0;
-      if (remainingCount === 0) {
-        console.log("✅ VERIFIED: Product deleted from database");
-        setSuccess(`"${productName}" deleted successfully!`);
-        setTimeout(() => setSuccess(null), 3000);
-        
-        console.log("🔄 Reloading products...");
-        await loadProducts();
-        console.log("✅ Products reloaded - list updated");
-        setError(null);
-      } else {
-        throw new Error(`Deletion appeared to succeed but ${remainingCount} product(s) still exist`);
-      }
+      // Reload products
+      await loadProducts();
+      setError(null);
       
     } catch (err: any) {
-      console.error("❌❌❌ DELETE FAILED ❌❌❌");
-      console.error("Error:", err.message);
-      console.error("Full error:", err);
-      
+      console.error("❌ DELETE FAILED:", err);
       setError(`❌ Delete failed: ${err.message}`);
       setTimeout(() => setError(null), 5000);
     } finally {
-      console.log("🏁 Resetting deleting state");
       setDeleting(null);
     }
   };

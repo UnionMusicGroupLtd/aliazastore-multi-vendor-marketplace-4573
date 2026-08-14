@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,7 +41,6 @@ interface Product {
 }
 
 const AdminProductManagement = () => {
-  const navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<any[]>([]); // Full category objects
   const [subcategories, setSubcategories] = useState<any[]>([]); // Subcategories for selected category

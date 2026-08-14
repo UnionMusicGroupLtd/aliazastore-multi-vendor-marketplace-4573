@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowLeft, Upload, CheckCircle, AlertCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
 import db from "@/lib/shared/kliv-database.js";
 import { content } from "@/lib/shared/kliv-content.js";
 

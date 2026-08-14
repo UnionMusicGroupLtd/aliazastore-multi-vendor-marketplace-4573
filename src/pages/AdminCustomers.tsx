@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
   Users, ShoppingCart, DollarSign, Calendar, TrendingUp, 
-  ArrowLeft, Search, Filter, Download, Mail, Phone
+  ArrowLeft, Search, Download, Mail, Phone
 } from "lucide-react";
 
 const AdminCustomers = () => {
